@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:neuro_check_pro/app/modules/assessment_history/views/assessment_history_view.dart';
+import 'package:neuro_check_pro/app/modules/billing_info/views/bill_info_view.dart';
 
 import '../controllers/profile_controller.dart';
 import '../widgets/account_info.dart';
@@ -29,7 +31,11 @@ class ProfileView extends StatelessWidget {
                   Get.to(()=>AccountInfo(),);
                 },
                   child: _infoTile("Account information")),
-              _infoTile("Billing information"),
+              GestureDetector(
+                onTap: (){
+                  Get.to(()=>BillingPage());
+                },
+                  child: _infoTile("Billing information")),
               _infoTile("Privacy and Security"),
               const SizedBox(height: 24),
               _sectionTitle("User policy"),
@@ -108,7 +114,11 @@ class ProfileView extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       childAspectRatio: 1.4,
       children: [
-        _tileBox("Assessment\nhistory"),
+        GestureDetector(
+          onTap: (){
+            Get.to(()=>AssessmentHistoryView());
+          },
+            child: _tileBox("Assessment\nhistory")),
         _tileBox("Patient\nprofiles"),
       ],
     );
