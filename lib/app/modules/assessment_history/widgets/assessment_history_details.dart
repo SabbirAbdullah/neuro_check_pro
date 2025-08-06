@@ -120,7 +120,7 @@ class AssessmentHistoryDetails extends StatelessWidget {
             // Appointment details button
             SizedBox(
               width: double.infinity,
-              height: 60,
+
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF0B4A55),

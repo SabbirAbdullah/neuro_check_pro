@@ -1,11 +1,7 @@
 import 'package:logger/logger.dart';
 
 import '/app/core/values/app_values.dart';
-class AppValues {
-  static const int loggerMethodCount = 2;
-  static const int loggerErrorMethodCount = 8;
-  static const int loggerLineLength = 120;
-}
+
 class EnvConfig {
   final String appName;
   final String baseUrl;

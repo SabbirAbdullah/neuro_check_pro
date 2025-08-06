@@ -22,19 +22,19 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     // initialization();
   }
-
+  final EnvConfig _envConfig = BuildConfig.config;
 
 
   @override
   Widget build(BuildContext context) {
-    final logger = BuildConfig.config.logger;
-    logger.i("App Started");
+    // final logger = BuildConfig.config.logger;
+    // logger.i("App Started");
     return GetMaterialApp(
 
       defaultTransition: Transition.leftToRight,
       initialRoute: AppPages.INITIAL,
       initialBinding: InitialBinding(),
-      // title: _envConfig.appName,
+      title: _envConfig.appName,
       getPages: AppPages.routes,
       // localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: _getSupportedLocal(),
