@@ -1,14 +1,20 @@
 
 import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/modules/assessment/bindings/assessment_bindings.dart';
+import 'package:neuro_check_pro/app/modules/assessment_history/bindings/assessment_history_bindings.dart';
 import 'package:neuro_check_pro/app/modules/authentication/signin/bindings/signing_bindings.dart';
+import 'package:neuro_check_pro/app/modules/billing_info/bindings/bill_info_binding.dart';
+import 'package:neuro_check_pro/app/modules/billing_info/views/bill_info_view.dart';
 import 'package:neuro_check_pro/app/modules/primary_assessment/bindngs/primary_assessment_binding.dart';
+import 'package:neuro_check_pro/app/modules/privacy_security/bindings/privacy_security_binding.dart';
+import 'package:neuro_check_pro/app/modules/privacy_security/views/privacy_security_view.dart';
 import 'package:neuro_check_pro/app/modules/profile/bindings/profile_binding.dart';
 import 'package:neuro_check_pro/app/modules/profile/views/profile_view.dart';
 import 'package:neuro_check_pro/app/modules/resume_diagnosis/bindings/diagnosis_binding.dart';
 import 'package:neuro_check_pro/app/modules/resume_diagnosis/views/diagnosis_view.dart';
 
 import '../modules/assessment/views/assessment_view.dart';
+import '../modules/assessment_history/views/assessment_history_view.dart';
 import '../modules/authentication/signin/widgets/email_signin.dart';
 import '../modules/authentication/signup/bindings/signup_binding.dart';
 import '../modules/authentication/signup/views/signup_form.dart';
@@ -25,8 +31,8 @@ part 'app_routes.dart';
 
 class AppPages {
   AppPages._();
-  static const INITIAL = Routes.ON_BOARDINGS;
-  // static const INITIAL = Routes.BOTTOM_NAVIGATION;
+  // static const INITIAL = Routes.ON_BOARDINGS;
+  static const INITIAL = Routes.BOTTOM_NAVIGATION;
   static final routes = [
 
     GetPage(
@@ -81,6 +87,22 @@ class AppPages {
       name: _Paths.DIAGNOSIS,
       page: () => DiagnosisView(),
       binding: DiagnosisBinding(),
+    ),
+    GetPage(
+      name: _Paths.BILLINFO,
+      page: () => BillingPage(),
+      binding: BillInfoBinding(),
+    ),
+    GetPage(
+      name: _Paths.ASSESSMENT_HISTORY,
+      page: () => AssessmentHistoryView(),
+      binding: AssessmentHistoryBindings(),
+    ),
+
+    GetPage(
+      name: _Paths.PRIVACY_SECURITY,
+      page: () => PrivacySecurityView(),
+      binding: PrivacySecurityBinding(),
     ),
 
   ];

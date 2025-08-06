@@ -1,12 +1,15 @@
 import 'package:logger/logger.dart';
 
 import '/app/core/values/app_values.dart';
-
+class AppValues {
+  static const int loggerMethodCount = 2;
+  static const int loggerErrorMethodCount = 8;
+  static const int loggerLineLength = 120;
+}
 class EnvConfig {
   final String appName;
   final String baseUrl;
   final bool shouldCollectCrashLog;
-
   late final Logger logger;
 
   EnvConfig({
@@ -16,18 +19,13 @@ class EnvConfig {
   }) {
     logger = Logger(
       printer: PrettyPrinter(
-          methodCount: AppValues.loggerMethodCount,
-          // number of method calls to be displayed
-          errorMethodCount: AppValues.loggerErrorMethodCount,
-          // number of method calls if stacktrace is provided
-          lineLength: AppValues.loggerLineLength,
-          // width of the output
-          colors: true,
-          // Colorful log messages
-          printEmojis: true,
-          // Print an emoji for each log message
-          printTime: false // Should each log print contain a timestamp
-          ),
+        methodCount: AppValues.loggerMethodCount,
+        errorMethodCount: AppValues.loggerErrorMethodCount,
+        lineLength: AppValues.loggerLineLength,
+        colors: true,
+        printEmojis: true,
+        printTime: false,
+      ),
     );
   }
 }

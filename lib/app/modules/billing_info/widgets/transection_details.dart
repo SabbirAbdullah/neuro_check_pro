@@ -11,9 +11,9 @@ class TransactionDetailBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: DraggableScrollableSheet(
-        initialChildSize: 0.5,
+        initialChildSize: 0.4,
         maxChildSize: 0.7,
-        minChildSize: 0.4,
+        minChildSize: 0.3,
         expand: false,
         builder: (context, scrollController) => Container(
           padding: const EdgeInsets.all(24),
@@ -30,19 +30,14 @@ class TransactionDetailBottomSheet extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                     Text(
                       "Transaction Details",
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    IconButton(
-                      icon:  Icon(Icons.ios_share_outlined, size: 24),
-                      onPressed: () {
-                        // Optional: implement share functionality
-                      },
-                    ),
+                    Image.asset('assets/images/share.png',height: 25,width: 25,)
                   ],
                 ),
                 const SizedBox(height: 24),

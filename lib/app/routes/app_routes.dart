@@ -18,7 +18,9 @@ abstract class Routes {
   static const PROFILE = _Paths.PROFILE;
   static const ASSESSMENT = _Paths.ASSESSMENT;
   static const DIAGNOSIS  = _Paths.DIAGNOSIS;
-
+  static const BILLINFO  = _Paths.BILLINFO;
+  static const ASSESSMENT_HISTORY  = _Paths.ASSESSMENT_HISTORY;
+  static const PRIVACY_SECURITY  = _Paths.PRIVACY_SECURITY;
 
 }
 
@@ -35,6 +37,7 @@ abstract class _Paths {
   static const PROFILE = '/profile_view';
   static const ASSESSMENT = '/assessment_view';
   static const DIAGNOSIS = '/diagnosis_view';
-
-
+  static const BILLINFO = '/bill_info_view';
+  static const ASSESSMENT_HISTORY = '/assessment_history_view';
+  static const PRIVACY_SECURITY = '/privacy_security_view';
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/modules/assessment_history/views/assessment_history_view.dart';
 import 'package:neuro_check_pro/app/modules/billing_info/views/bill_info_view.dart';
+import 'package:neuro_check_pro/app/modules/privacy_security/views/privacy_security_view.dart';
 
 import '../controllers/profile_controller.dart';
 import '../widgets/account_info.dart';
@@ -36,12 +37,17 @@ class ProfileView extends StatelessWidget {
                   Get.to(()=>BillingPage());
                 },
                   child: _infoTile("Billing information")),
-              _infoTile("Privacy and Security"),
+              GestureDetector(
+                  onTap: (){
+                    Get.to(()=>PrivacySecurityView());
+                  },
+                  child: _infoTile("Privacy and Security")),
               const SizedBox(height: 24),
               _sectionTitle("User policy"),
-              _linkText("Privacy policy"),
-              _linkText("Terms & conditions"),
-              _linkText("About Neurocheckpro"),
+              _linkText("Privacy policy", Colors.grey),
+              _linkText("Terms & conditions", Colors.grey),
+              _linkText("About Neurocheckpro",Colors.grey),
+              _linkText("Logout",Colors.red),
               const SizedBox(height: 40),
             ],
           ),
@@ -181,14 +187,14 @@ class ProfileView extends StatelessWidget {
     );
   }
 
-  Widget _linkText(String text) {
+  Widget _linkText(String text, Color ? color) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding:  EdgeInsets.only(bottom: 8),
       child: Text(
         text,
-        style: const TextStyle(
+        style:  TextStyle(
           fontSize: 14,
-          color: Colors.grey,
+          color: color,
         ),
       ),
     );

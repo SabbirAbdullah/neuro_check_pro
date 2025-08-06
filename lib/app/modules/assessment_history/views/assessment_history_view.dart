@@ -1,0 +1,105 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:neuro_check_pro/app/core/values/text_styles.dart';
+import 'package:neuro_check_pro/app/core/widgets/custom_appbar.dart';
+import 'package:neuro_check_pro/app/modules/assessment_history/controllers/assessment_history_controller.dart';
+import 'package:neuro_check_pro/app/modules/assessment_history/widgets/assessment_history_details.dart';
+
+class AssessmentHistoryView extends StatelessWidget {
+  AssessmentHistoryView({super.key});
+final AssessmentHistoryController controller = Get.put(AssessmentHistoryController());
+@override
+  Widget build(BuildContext context) {
+
+
+    return Scaffold(
+      appBar: CustomAppBar(title: 'Assessment History'),
+      body: ListView.separated(
+        padding: const EdgeInsets.all(16),
+        itemCount: controller.assessments.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 20),
+        itemBuilder: (context, index) {
+          final item = controller.assessments[index];
+          return Container(
+            decoration: BoxDecoration(
+              color: item['bgColor'] as Color,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Title + Status Row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        item['title'] as String,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: item['statusColor'] as Color,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        item['status'] as String,
+                        style: TextStyle(
+                          color: item['status'] =='Pending'
+                            ? Colors.black  : Colors.white,
+                          fontWeight: FontWeight.w400,fontSize: 11
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                // Date and Time
+                Row(
+                  children: [
+                    const Text(
+                      'Date and Time',
+                      style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400,fontSize: 12),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      item['date'] as String,
+                      style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400,fontSize: 12),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                // View Details Button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0B4A55),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                    ),
+                    onPressed: () {
+                      // Handle button action
+                      Get.to(AssessmentHistoryDetails());
+                    },
+                    child: Text(
+                      item['buttonText'] as String,
+                      style: textButton_white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
