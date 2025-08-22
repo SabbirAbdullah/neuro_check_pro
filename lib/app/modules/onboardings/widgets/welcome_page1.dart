@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../controllers/onboarding_controller.dart';
 
 class OnboardingPage1 extends StatelessWidget {
-  const OnboardingPage1({super.key});
+   OnboardingPage1({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,26 +14,41 @@ class OnboardingPage1 extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const CircleAvatar(
+           CircleAvatar(
             radius: 80,
             backgroundColor: Colors.white,
             child: Text("N", style: TextStyle(fontSize: 100, color: Color(0xFF114854))),
           ),
-          const SizedBox(height: 30),
-          const Text(
-            "Welcome to NeuroCheckPro",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 22,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+           SizedBox(height: 30),
+           RichText(
+               textAlign: TextAlign.center,
+             text:
+           TextSpan(
+             text: 'Welcome to',style:  TextStyle(
+             fontSize: 24,
+             color: Colors.white,
+             fontWeight: FontWeight.w400,
+           ),
+             children: [
+
+               TextSpan(
+                 text: ' NeuroCheckPro',
+                 style: TextStyle(
+                   fontSize: 24,
+                   color: Colors.white,
+                   fontWeight: FontWeight.w600,
+                 ),
+               )
+             ]
+           ),
+
+           )           ,
+
           const SizedBox(height: 12),
           const Text(
             "— your trusted companion for fast, affordable screening of neurodevelopmental conditions like Autism and ADHD.",
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white70, fontSize: 16),
+            style: TextStyle(color: Colors.white70, fontSize: 24),
           ),
           const SizedBox(height: 40),
           ElevatedButton(

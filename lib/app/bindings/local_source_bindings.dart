@@ -11,5 +11,8 @@ class LocalSourceBindings implements Bindings {
       tag: (PreferenceManager).toString(),
       fenix: true,
     );
+
+
+
   }
 }

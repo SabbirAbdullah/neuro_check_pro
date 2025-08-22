@@ -38,8 +38,7 @@ class OnboardingPage3 extends StatelessWidget {
           alignment: Alignment.center,
           child: Padding(
             padding: const EdgeInsets.only(top: 80.0,left: 20,right: 20),
-            child: Flexible(
-              child: Text(
+            child:  Text(
                 "If recommended, you can proceed to a full assessment reviewed by expert clinicians for a reliable diagnosis.",
                 textAlign: TextAlign.center,
                 style: const TextStyle(
@@ -48,7 +47,7 @@ class OnboardingPage3 extends StatelessWidget {
 
                 ),
               ),
-            ),
+
           ),
 
 

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/core/values/text_styles.dart';
+import 'package:neuro_check_pro/app/modules/authentication/signin/views/signin_view.dart';
 import '../../authentication/signin/widgets/email_signin.dart';
 import '../../authentication/signup/views/signup_view.dart';
 import '../controllers/onboarding_controller.dart';
@@ -11,10 +12,10 @@ import '../widgets/welcome_page3.dart';
 import '../widgets/welcome_page4.dart';
 
 class OnboardingView extends StatelessWidget {
-  final OnboardingController controller = Get.put(OnboardingController());
+  final OnboardingController controller = Get.put(OnboardingController(),permanent: true);
 
   final List<Widget> pages = [
-    const OnboardingPage1(),
+     OnboardingPage1(),
     const OnboardingPage2(),
     const OnboardingPage3(),
     const OnboardingPage4(),
@@ -70,7 +71,7 @@ class OnboardingView extends StatelessWidget {
                     controller.nextPage();
                   if ( controller.currentPage.value == 3)
                     {
-                      Get.to(()=> EmailSignIn());
+                      Get.to(()=> SignInView());
                     }
 
                   },

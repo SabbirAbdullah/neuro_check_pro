@@ -1,6 +1,6 @@
 abstract class PreferenceManager {
   static const keyToken = "token";
-  static const keyOrgId = "org_id";
+
 
 
   Future<String> getString(String key, {String defaultValue = ""});
@@ -27,4 +27,10 @@ abstract class PreferenceManager {
   Future<bool> remove(String key);
 
   Future<bool> clear();
+
+  Future<void> saveProgress(int assessmentId, int lastAnsweredIndex);
+  Future<int> getProgress(int assessmentId);
+  Future<void> saveAnswers(int assessmentId, Map<int, String> answers);
+  Future<Map<int, String>> getAnswers(int assessmentId);
+
 }

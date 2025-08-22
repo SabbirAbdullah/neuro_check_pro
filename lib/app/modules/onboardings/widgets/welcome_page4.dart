@@ -39,8 +39,7 @@ class OnboardingPage4 extends StatelessWidget {
           alignment: Alignment.center,
           child: Padding(
             padding: const EdgeInsets.only(top: 90.0,left: 20,right: 20),
-            child: Flexible(
-              child: Text(
+            child: Text(
                 "NeuroCheckPro is developed and managed by a team of experts in neurodevelopment. We’re constantly improving with the latest research to provide you with the best care possible.To start the Quiz, Sign In first!  ",
                 textAlign: TextAlign.center,
                 style: const TextStyle(
@@ -49,7 +48,7 @@ class OnboardingPage4 extends StatelessWidget {
 
                 ),
               ),
-            ),
+
           ),
 
 

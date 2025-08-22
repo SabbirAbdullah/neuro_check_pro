@@ -1,8 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:neuro_check_pro/app/core/values/text_styles.dart';
+import 'package:neuro_check_pro/app/modules/onboardings/controllers/onboarding_controller.dart';
+
+import '../../../data/repository/pref_repository.dart';
 
 class ProfileController extends GetxController {
+
   final String email = "oliver.james@gmail.com";
   final String role = "Parent";
 
@@ -10,13 +17,37 @@ class ProfileController extends GetxController {
   var state = 'Manchester'.obs;
   var postcode = 'M14 5LT'.obs;
   var address = '42 Maple Grove'.obs;
+  final PrefRepository _prefRepository =
+  Get.find(tag: (PrefRepository).toString());
 
   TextEditingController nameController = TextEditingController();
   TextEditingController stateController = TextEditingController();
   TextEditingController postcodeController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+  final Rx<File?> selectedImage = Rx<File?>(null);
 
-  void openEditDialog() {
+  Future<void> logout() async {
+    await _prefRepository.remove('token');
+    await _prefRepository.remove('id');
+    // Get.delete<OnboardingController>();
+    // Navigate to onboarding or login screen
+    Get.offAllNamed('/signin_view');
+  }
+  /// Open image picker
+  Future<void> pickImage() async {
+    final pickedFile =
+    await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      selectedImage.value = File(pickedFile.path);
+    }
+  }
+
+  /// Delete image
+  void deleteImage() {
+    selectedImage.value = null;
+  }
+
+void openEditDialog() {
     nameController.text = name.value;
     stateController.text = state.value;
     postcodeController.text = postcode.value;

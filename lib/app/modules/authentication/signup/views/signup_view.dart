@@ -1,8 +1,10 @@
 // screens/signup_screen.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../core/values/app_colors.dart';
 import '../../../../core/values/text_styles.dart';
 import '../controllers/signup_controller.dart';
+import '../widgets/email/signup_email.dart';
 import '../widgets/phone/signup_phone.dart';
 
 class SignupView extends StatelessWidget {
@@ -56,7 +58,9 @@ final SignupController controller = Get.put(SignupController());
 
               // Email Signup Button
               ElevatedButton.icon(
-                onPressed: controller.signUpWithEmail,
+                onPressed: (){
+                  Get.to(()=> SignUpEmail());
+                },
                 icon: const Icon(Icons.email,color: Colors.white,),
                 label: const Text("Sign up with Email",style: textButton_white),
                 style: ElevatedButton.styleFrom(
@@ -87,6 +91,10 @@ final SignupController controller = Get.put(SignupController());
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
+                  side:  BorderSide(
+                    color: AppColors.borderColor, // ✅ border color here
+                    // optional thickness
+                  ),
                 ),
               ),
               const SizedBox(height: 12),
@@ -101,6 +109,10 @@ final SignupController controller = Get.put(SignupController());
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
+                  side:  BorderSide(
+                    color: AppColors.borderColor, // ✅ border color here
+                    // optional thickness
+                  ),
                 ),
               ),
               const SizedBox(height: 12),
@@ -114,6 +126,10 @@ final SignupController controller = Get.put(SignupController());
                   minimumSize: const Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
+                  ),
+                  side:  BorderSide(
+                    color: AppColors.borderColor, // ✅ border color here
+                    // optional thickness
                   ),
                 ),
               ),

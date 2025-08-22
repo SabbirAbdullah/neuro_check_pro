@@ -7,15 +7,15 @@ import '/flavors/environment.dart';
 import 'my_app.dart';
 
 void main() {
-  EnvConfig prodConfig = EnvConfig(
+  EnvConfig devConfig = EnvConfig(
     appName: "",
-    baseUrl: "",
+    baseUrl: "https://nest-backend-4z6f.onrender.com",
     shouldCollectCrashLog: true,
 
   );
   BuildConfig.instantiate(
     envType: Environment.DEVELOPMENT,
-    envConfig: prodConfig,
+    envConfig: devConfig,
   );
 
   runApp(const MyApp());

@@ -4,8 +4,7 @@ part of 'app_pages.dart';
 abstract class Routes {
   Routes._();
   //
-  // static const MAIN = _Paths.MAIN;
-  // static const STUDENT_MAIN = _Paths.STUDENT_MAIN;
+
   static const HOME = _Paths.HOME;
   static const WELCOME = _Paths.WElCOME;
   static const SIGNUP = _Paths.SIGNUP;
@@ -21,6 +20,7 @@ abstract class Routes {
   static const BILLINFO  = _Paths.BILLINFO;
   static const ASSESSMENT_HISTORY  = _Paths.ASSESSMENT_HISTORY;
   static const PRIVACY_SECURITY  = _Paths.PRIVACY_SECURITY;
+  static const PATIENT_PROFILE  = _Paths.PATIENT_PROFILE;
 
 }
 
@@ -29,7 +29,7 @@ abstract class _Paths {
   static const WElCOME = '/welcome_view';
   static const HOME = '/home_view';
   static const SIGNUP = '/signup_view';
-  static const SIGNIN = '/email_signin';
+  static const SIGNIN = '/signin_view';
   static const SIGNUP_FORM = '/signup_form';
   static const DASHBOARD = '/dashboard_view';
   static const PRIMARY_ASSESSMENT = '/hero_page';
@@ -40,4 +40,5 @@ abstract class _Paths {
   static const BILLINFO = '/bill_info_view';
   static const ASSESSMENT_HISTORY = '/assessment_history_view';
   static const PRIVACY_SECURITY = '/privacy_security_view';
+  static const PATIENT_PROFILE  = '/patient_profile_view';
 }

@@ -5,6 +5,7 @@ import 'package:neuro_check_pro/app/modules/assessment_history/bindings/assessme
 import 'package:neuro_check_pro/app/modules/authentication/signin/bindings/signing_bindings.dart';
 import 'package:neuro_check_pro/app/modules/billing_info/bindings/bill_info_binding.dart';
 import 'package:neuro_check_pro/app/modules/billing_info/views/bill_info_view.dart';
+import 'package:neuro_check_pro/app/modules/patient_profile/views/patient_profile_view.dart';
 import 'package:neuro_check_pro/app/modules/primary_assessment/bindngs/primary_assessment_binding.dart';
 import 'package:neuro_check_pro/app/modules/privacy_security/bindings/privacy_security_binding.dart';
 import 'package:neuro_check_pro/app/modules/privacy_security/views/privacy_security_view.dart';
@@ -15,6 +16,7 @@ import 'package:neuro_check_pro/app/modules/resume_diagnosis/views/diagnosis_vie
 
 import '../modules/assessment/views/assessment_view.dart';
 import '../modules/assessment_history/views/assessment_history_view.dart';
+import '../modules/authentication/signin/views/signin_view.dart';
 import '../modules/authentication/signin/widgets/email_signin.dart';
 import '../modules/authentication/signup/bindings/signup_binding.dart';
 import '../modules/authentication/signup/views/signup_form.dart';
@@ -25,16 +27,16 @@ import '../modules/dashboard/bindings/dashboard_bindings.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
 import '../modules/onboardings/bindings/onboarding_binding.dart';
 import '../modules/onboardings/views/onboarding_view.dart';
+import '../modules/patient_profile/bindings/patient_profile_binding.dart';
 import '../modules/primary_assessment/widgets/hero_page.dart';
 
 part 'app_routes.dart';
 
 class AppPages {
   AppPages._();
-  // static const INITIAL = Routes.ON_BOARDINGS;
-  static const INITIAL = Routes.BOTTOM_NAVIGATION;
+  static const INITIAL = Routes.ON_BOARDINGS;
+  // static const INITIAL = Routes.SIGNUP_FORM;
   static final routes = [
-
     GetPage(
       name: _Paths.ON_BOARDINGS,
       page: () => OnboardingView(),
@@ -47,7 +49,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.SIGNIN,
-      page: () => EmailSignIn(),
+      page: () => SignInView(),
       binding: SignInBinding(),
     ),
     GetPage(
@@ -103,6 +105,11 @@ class AppPages {
       name: _Paths.PRIVACY_SECURITY,
       page: () => PrivacySecurityView(),
       binding: PrivacySecurityBinding(),
+    ),
+    GetPage(
+      name: _Paths.PATIENT_PROFILE,
+      page: () => PatientProfileView(),
+      binding: PatientProfileBinding(),
     ),
 
   ];

@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/modules/assessment_history/views/assessment_history_view.dart';
 import 'package:neuro_check_pro/app/modules/billing_info/views/bill_info_view.dart';
+import 'package:neuro_check_pro/app/modules/patient_profile/views/patient_profile_view.dart';
 import 'package:neuro_check_pro/app/modules/privacy_security/views/privacy_security_view.dart';
 
+import '../../onboardings/controllers/onboarding_controller.dart';
 import '../controllers/profile_controller.dart';
 import '../widgets/account_info.dart';
 
 
 class ProfileView extends StatelessWidget {
   final ProfileController controller = Get.put(ProfileController());
-
+  final OnboardingController onboardingController = Get.find<OnboardingController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +49,11 @@ class ProfileView extends StatelessWidget {
               _linkText("Privacy policy", Colors.grey),
               _linkText("Terms & conditions", Colors.grey),
               _linkText("About Neurocheckpro",Colors.grey),
-              _linkText("Logout",Colors.red),
+              GestureDetector(
+                onTap: (){
+                  controller.logout();
+                },
+                  child: _linkText("Logout",Colors.red)),
               const SizedBox(height: 40),
             ],
           ),
@@ -74,7 +80,7 @@ class ProfileView extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
-                controller.role,
+                onboardingController.user.value!.role,
                 style: const TextStyle(fontSize: 12, color: Colors.black),
               ),
             )
@@ -93,14 +99,14 @@ class ProfileView extends StatelessWidget {
               ),
             ),
             Text(
-             "${ controller.name}",
+             "${onboardingController.user.value!.name}",
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
-              controller.email,
+    onboardingController.user.value!.email,
               style: const TextStyle(
                 color: Colors.black54,
               ),
@@ -125,7 +131,11 @@ class ProfileView extends StatelessWidget {
             Get.to(()=>AssessmentHistoryView());
           },
             child: _tileBox("Assessment\nhistory")),
-        _tileBox("Patient\nprofiles"),
+        GestureDetector(
+            onTap: (){
+              Get.to(()=>PatientProfileView());
+            },
+            child: _tileBox("Patient\nprofiles")),
       ],
     );
   }

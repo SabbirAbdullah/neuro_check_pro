@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:neuro_check_pro/app/core/values/app_colors.dart';
 import 'package:neuro_check_pro/app/core/values/text_styles.dart';
 
 import '../controllers/primary_assessment_controller.dart';
@@ -172,9 +173,14 @@ class QuizSummaryPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextButton(
-                  onPressed: () => Get.back(),
-                  child: const Text("< Previous", style: TextStyle(color: Color(0xFF0D4D54))),
+                Row(
+                  children: [
+                    Icon(Icons.arrow_back_ios_new,size: 20,color: AppColors.appBarColor,),
+                    TextButton(
+                      onPressed: () => Get.back(),
+                      child: const Text("Previous", style: TextStyle(color: Color(0xFF0D4D54))),
+                    ),
+                  ],
                 ),
                 ElevatedButton(
                   onPressed: (){ Get.snackbar("Submitted", "Your answers have been submitted.");

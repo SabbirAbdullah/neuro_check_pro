@@ -1,14 +1,20 @@
 // screens/dashboard_home.dart
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+
 import 'package:neuro_check_pro/app/modules/primary_assessment/widgets/hero_page.dart';
 import 'package:neuro_check_pro/app/modules/resume_diagnosis/views/diagnosis_view.dart';
+import '../../bottom_navigation/controllers/bottom_navigation_controller.dart';
+import '../../onboardings/controllers/onboarding_controller.dart';
 import '../controllers/dashboard_controller.dart';
 class DashboardView extends StatelessWidget {
   DashboardView({super.key});
 
   final DashboardController controller = Get.put(DashboardController());
+  final OnboardingController onboardingController = Get.find<OnboardingController>();
+  final BottomNavigationController bottomNavController = Get.find<BottomNavigationController>();
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +48,9 @@ class DashboardView extends StatelessWidget {
                     const SizedBox(width: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children:  [
                         Text("Welcome!", style: TextStyle(color: Colors.grey)),
-                        Text("John Doe",
+                        Text("${onboardingController.user.value!.name}",
                             style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -52,14 +58,14 @@ class DashboardView extends StatelessWidget {
                       ],
                     ),
                     const Spacer(),
-                    const CircleAvatar(
+                     CircleAvatar(
                       radius: 16,
-                      backgroundColor: Colors.grey,
+                      child:Icon(Icons.notifications_active_outlined,color: Colors.grey
+                        ,),backgroundColor: Colors.white,
                     ),
                   ],
                 ),
                 const SizedBox(height: 20),
-
                 // Carousel
                 CarouselSlider(
                   options: CarouselOptions(
@@ -98,12 +104,17 @@ class DashboardView extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
 
-                _assessmentCard(
-                  title: "Clinical Assessment",
-                  desc:
-                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
-                  color: const Color(0xFFFFE6E1),
-                  icon: 'assets/images/clinical_assessment.png',
+                GestureDetector(
+                  onTap: (){
+                    bottomNavController.changeTab(1);
+                  },
+                  child: _assessmentCard(
+                    title: "Clinical Assessment",
+                    desc:
+                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+                    color: const Color(0xFFFFE6E1),
+                    icon: 'assets/images/clinical_assessment.png',
+                  ),
                 ),
                 const SizedBox(height: 12),
 

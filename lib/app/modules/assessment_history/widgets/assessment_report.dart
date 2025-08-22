@@ -9,6 +9,7 @@ class AssessmentReport extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         title: const Text('Assessment Report'),
         backgroundColor: const Color(0xFF0B4A55),
@@ -18,7 +19,7 @@ class AssessmentReport extends StatelessWidget {
         ),
         actions: [
           TextButton(
-            child: Text("more",style: textButton_white,),
+            child: Text("More",style: textButton_white,),
             onPressed: () {
               showCupertinoModalPopup(
                 context: context,
@@ -79,7 +80,7 @@ class AssessmentReport extends StatelessWidget {
             const Text(
               'Full Assessment Report',
               style: TextStyle(
-                fontSize: 26,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -87,13 +88,12 @@ class AssessmentReport extends StatelessWidget {
             const Text(
               'This report contains your full assessment results, reviewed and finalised by our clinical team. You can explore your scores, clinical notes, and recommended actions in detail',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 12,
                 color: Colors.grey,
               ),
             ),
             const SizedBox(height: 30),
-            Expanded(
-              child: Container(
+             Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -111,8 +111,8 @@ class AssessmentReport extends StatelessWidget {
                           child: Text(
                             'ADHD Diagnosis',
                             style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
@@ -127,7 +127,7 @@ class AssessmentReport extends StatelessWidget {
                             'Completed',
                             style: TextStyle(
                               color: Colors.black,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w500,fontSize: 12
                             ),
                           ),
                         ),
@@ -145,15 +145,15 @@ class AssessmentReport extends StatelessWidget {
                                 'Assessment date',
                                 style: TextStyle(
                                   color: Colors.grey,
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                               SizedBox(height: 4),
                               Text(
                                 '25th July, 2025',
                                 style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
@@ -168,15 +168,15 @@ class AssessmentReport extends StatelessWidget {
                                 'Reviewed by',
                                 style: TextStyle(
                                   color: Colors.grey,
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                               SizedBox(height: 4),
                               Text(
                                 'Dr. Oliver Bernett',
                                 style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
@@ -188,7 +188,6 @@ class AssessmentReport extends StatelessWidget {
                     // View Report button
                     SizedBox(
                       width: double.infinity,
-                      height: 60,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF0B4A55),
@@ -208,7 +207,7 @@ class AssessmentReport extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
+
           ],
         ),
       ),

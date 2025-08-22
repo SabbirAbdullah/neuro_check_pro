@@ -6,6 +6,7 @@ import 'package:neuro_check_pro/app/modules/profile/views/profile_view.dart';
 
 import '../../assessment/views/assessment_view.dart';
 import '../../dashboard/views/dashboard_view.dart';
+import '../../onboardings/controllers/onboarding_controller.dart';
 import '../controllers/bottom_navigation_controller.dart';
 
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class BottomNavigationView extends StatelessWidget {
   BottomNavigationView({super.key});
 
   final BottomNavigationController controller = Get.put(BottomNavigationController());
-
+  final OnboardingController onboardingController = Get.find<OnboardingController>();
   final pages = [
     DashboardView(),
     AssessmentView(),

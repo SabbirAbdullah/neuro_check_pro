@@ -1,9 +1,11 @@
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/core/values/text_styles.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_appbar.dart';
 
+import '../../../core/values/app_colors.dart';
 import '../controllers/primary_assessment_controller.dart';
 import 'child_profile.dart';
 
@@ -16,15 +18,16 @@ class NewProfileView extends StatelessWidget {
     return Scaffold(
       appBar:CustomAppBar(title: 'New Profile'),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.only(right: 20,left: 20),
         child: ListView(
           children: [
+            SizedBox(height: 20,),
             const Text("Fill out this form",
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             const Text(
               "Start your journey with NeuroCheckPro to clarity and expert insights. Creating your profile takes just a minute!",
-              style: TextStyle(color: Colors.grey),
+              style: TextStyle(color: Colors.grey,fontSize: 12),
             ),
             const SizedBox(height: 30),
 
@@ -42,23 +45,34 @@ class NewProfileView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
+            Text('Gender:',style: TextStyle(fontSize: 14,color: Colors.grey),),
+            Obx(() {
+              return CustomDropdown<String>(
+                decoration: CustomDropdownDecoration(closedBorder: Border.all(color: AppColors.borderColor,),
+                    closedBorderRadius: BorderRadius.circular(30)
+                ),
+                hintText: "Select Gender",
+                items: ["Male", "Female", "Other"],
+                initialItem: controller.gender.value.isEmpty
+                    ? null
+                    : controller.gender.value,
+                onChanged: (val) {
+                  controller.gender.value = val!;
+                },
 
-            Obx(() => DropdownButtonFormField<String>(
-              decoration: _inputDecoration("Gender:"),
-              value: controller.gender.value.isEmpty ? null : controller.gender.value,
-              items: ["Male", "Female", "Other"]
-                  .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                  .toList(),
-              onChanged: (val) => controller.gender.value = val ?? '',
-            )),
+              );
+            }),
+
             const SizedBox(height: 20),
+            Text('Relationship to User',style: TextStyle(fontSize: 14,color: Colors.grey),),
+            Obx(() => CustomDropdown<String>(
+              decoration: CustomDropdownDecoration(closedBorder: Border.all(color: AppColors.borderColor,),
+                  closedBorderRadius: BorderRadius.circular(30)
+              ),
+              initialItem: controller.relationship.value.isEmpty ? null : controller.relationship.value ,
 
-            Obx(() => DropdownButtonFormField<String>(
-              decoration: _inputDecoration("Relationship to User"),
-              value: controller.relationship.value.isEmpty ? null : controller.relationship.value,
-              items: ["Parent", "Guardian", "Relative"]
-                  .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                  .toList(),
+              items: ["Parent", "Guardian", "Relative"],
+
               onChanged: (val) => controller.relationship.value = val ?? '',
             )),
             const SizedBox(height: 20),
@@ -73,7 +87,7 @@ class NewProfileView extends StatelessWidget {
 
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 60),
+                padding: EdgeInsets.only(top: 20,bottom: 20),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
                 foregroundColor: Colors.white,
                 backgroundColor: const Color(0xFF0C4956),
@@ -84,6 +98,8 @@ class NewProfileView extends StatelessWidget {
               },
               child: const Text("Submit",style: textButton_white,),
             ),
+            SizedBox(height: 20,),
+
           ],
         ),
       ),
@@ -95,14 +111,22 @@ class NewProfileView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(color: Colors.grey, fontSize: 16)),
+        Text(label, style: const TextStyle(color: Colors.grey, fontSize: 14)),
         const SizedBox(height: 6),
         TextField(
           controller: controller,
           decoration: InputDecoration(
             hintText: hint,
             contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(40)),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30),
+                borderSide: BorderSide(color: AppColors.borderColor)
+
+            ),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30),
+                borderSide: BorderSide(color: AppColors.borderColor)
+            ),
             suffixIcon: suffixIcon,
           ),
         ),
@@ -112,6 +136,15 @@ class NewProfileView extends StatelessWidget {
 
   InputDecoration _inputDecoration(String label) => InputDecoration(
     contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-    border: OutlineInputBorder(borderRadius: BorderRadius.circular(40)),
+
+    enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(30),
+        borderSide: BorderSide(color: AppColors.borderColor)
+
+    ),
+    focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(30),
+        borderSide: BorderSide(color: AppColors.borderColor)
+    ),
   );
 }

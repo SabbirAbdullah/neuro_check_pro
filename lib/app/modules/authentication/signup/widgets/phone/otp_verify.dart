@@ -4,39 +4,40 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/core/values/app_colors.dart';
 import 'package:neuro_check_pro/app/core/values/text_styles.dart';
+import 'package:neuro_check_pro/app/core/widgets/custom_loading.dart';
 
 import '../../controllers/signup_controller.dart';
 
-
 class OtpPhone extends StatelessWidget {
-  final SignupController controller = Get.put(SignupController());
+  final SignupController controller = Get.find<SignupController>();
 
-  final List<FocusNode> focusNodes = List.generate(6, (_) => FocusNode());
-  final List<TextEditingController> textControllers = List.generate(6, (_) => TextEditingController());
+  final List<FocusNode> focusNodes = List.generate(4, (_) => FocusNode());
+  final List<TextEditingController> textControllers = List.generate(4, (_) => TextEditingController());
 
   OtpPhone({super.key});
 
   void _onOtpChanged(int index, String value) {
     if (value.isNotEmpty) {
-      // Move to next field
-      if (index < 5) {
+      if (index < focusNodes.length - 1) {
         focusNodes[index + 1].requestFocus();
       } else {
         focusNodes[index].unfocus();
       }
     } else {
-      // Move to previous field on delete
       if (index > 0) {
         focusNodes[index - 1].requestFocus();
       }
     }
-
-    // Build the OTP code from all controllers
-    controller.otpCode.value = textControllers.map((c) => c.text).join();
+    // Always update OTP code after the text change
+    controller.otpCode.value =
+        textControllers.map((c) => c.text).join().trim();
   }
 
   @override
   Widget build(BuildContext context) {
+    final id = Get.arguments; // passed from Send OTP page
+    controller.identifier.value = id;
+
     return Scaffold(
       appBar: AppBar(title: const Text('Signup')),
       body: Padding(
@@ -46,14 +47,14 @@ class OtpPhone extends StatelessWidget {
           children: [
             const Text('Verification', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            const Text(
-              'An OTP has been sent to your phone number. Enter OTP here for verification.',
-              style: TextStyle(color: Colors.grey),
+            Text(
+              'An OTP has been sent to $id. Enter OTP here for verification.',
+              style: const TextStyle(color: Colors.grey),
             ),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List.generate(6, (index) {
+              children: List.generate(4, (index) {
                 return SizedBox(
                   width: 50,
                   child: TextField(
@@ -66,14 +67,12 @@ class OtpPhone extends StatelessWidget {
                     onChanged: (value) => _onOtpChanged(index, value),
                     decoration: InputDecoration(
                       counterText: '',
-                     focusedBorder: OutlineInputBorder(
-                         borderRadius: BorderRadius.circular(12),
-                         borderSide: const BorderSide(color: AppColors.appBarColor)),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: AppColors.appBarColor)),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(color: AppColors.borderColor)),
-
-
                     ),
                   ),
                 );
@@ -90,7 +89,9 @@ class OtpPhone extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
+            Obx(() => controller.isLoading.value
+                ? const Center(child:CustomLoading())
+                : ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF0A4C5F),
                 minimumSize: const Size.fromHeight(50),
@@ -98,10 +99,11 @@ class OtpPhone extends StatelessWidget {
               ),
               onPressed: controller.verifyOtp,
               child: const Text('Verify', style: textButton_white),
-            ),
+            )),
           ],
         ),
       ),
     );
   }
 }
+

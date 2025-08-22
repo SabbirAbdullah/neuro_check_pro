@@ -80,7 +80,6 @@ class PrimaryAssessmentController extends GetxController {
       Get.to(() => QuizSummaryPage());
     }
   }
-
   void goToPreviousQuestion() {
     if (currentQuestionIndex > 0) {
       currentQuestionIndex--;
@@ -120,34 +119,43 @@ class PrimaryAssessmentController extends GetxController {
 
   void showCupertinoDatePicker(BuildContext context) {
     showModalBottomSheet(
+     backgroundColor: Colors.white,
       context: context,
       builder: (_) {
-        return  Column(
-            children: [
-              Expanded(
-                child: CupertinoDatePicker(
-                  mode: CupertinoDatePickerMode.date,
-                  initialDateTime: selectedDate.value ?? DateTime.now(),
-                  maximumDate: DateTime.now(),
-                  onDateTimeChanged: (date) {
-                    selectedDate.value = date;
-                    dobController.text =
-                    "${date.day} ${_monthName(date.month)} ${date.year}";
-                  },
+        return Column(
+              children: [
+                Container(
+                  color: Colors.grey.shade200,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () => Get.back(),
+                      child: const Text("Next", style: TextStyle(color: Colors.blue)),
+                    ),
+                  ),
                 ),
-              ),
-              TextButton(
-                onPressed: () => Get.back(),
-                child: const Text("Done", style: TextStyle(color: Colors.blue)),
-              )
-            ],
-          );
+                Expanded(
+
+                  child: CupertinoDatePicker(
+                    mode: CupertinoDatePickerMode.date,backgroundColor: Colors.white,
+                    initialDateTime: selectedDate.value ?? DateTime.now(),
+                    maximumDate: DateTime.now(),
+                    onDateTimeChanged: (date) {
+                      selectedDate.value = date;
+                      dobController.text =
+                      "${date.day} ${_monthName(date.month)} ${date.year}";
+                    },
+                  ),
+                ),
+
+              ],
+            );
+
       },
     );
   }
 
   Future<void> submit() async {
-
     await Future.delayed(Duration(seconds: 1));
     Get.back();
     Get.snackbar(

@@ -5,7 +5,7 @@ import 'request_headers.dart';
 import '/flavors/build_config.dart';
 
 class DioProvider {
-  static final String baseUrl = BuildConfig.config.baseUrl;
+  static final String baseUrl = BuildConfig.instance.config.baseUrl;
 
   static Dio? _instance;
 
@@ -21,8 +21,8 @@ class DioProvider {
 
   static final BaseOptions _options = BaseOptions(
     baseUrl: baseUrl,
-    connectTimeout: const Duration(seconds: 60),
-    receiveTimeout: const Duration(seconds: 60),
+    connectTimeout: const Duration(seconds: 120),
+    receiveTimeout: const Duration(seconds: 120),
   );
 
   static Dio get httpDio {

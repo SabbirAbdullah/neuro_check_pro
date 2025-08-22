@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/core/values/text_styles.dart';
+import 'package:neuro_check_pro/app/modules/assessment_history/widgets/appointment_details.dart';
 import 'package:neuro_check_pro/app/modules/assessment_history/widgets/assessment_report.dart';
 
 import '../../../core/widgets/custom_appbar.dart';
@@ -29,14 +30,14 @@ class AssessmentHistoryDetails extends StatelessWidget {
                         'Assessment Info',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                          fontSize: 18,
                         ),
                       ),
                       SizedBox(height: 8),
                       Text(
                         'Child Autism Diagnosis',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,fontWeight: FontWeight.w500,
                           color: Colors.black87,
                         ),
                       ),
@@ -60,8 +61,8 @@ class AssessmentHistoryDetails extends StatelessWidget {
                   child: const Text(
                     'Completed',
                     style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
+                      color: Colors.black,fontSize: 12,
+
                     ),
                   ),
                 ),
@@ -73,7 +74,7 @@ class AssessmentHistoryDetails extends StatelessWidget {
               'Assessment Report',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 20,
+                fontSize: 14,
               ),
             ),
             const SizedBox(height: 8),
@@ -81,7 +82,7 @@ class AssessmentHistoryDetails extends StatelessWidget {
               'Report has been reviewed',
               style: TextStyle(
                 color: Colors.grey,
-                fontSize: 15,
+                fontSize: 12,
               ),
             ),
             const SizedBox(height: 30),
@@ -109,7 +110,7 @@ class AssessmentHistoryDetails extends StatelessWidget {
             // Appointment Details
             const Text(
               'Appointment Details',
-              style:TextStyle()
+              style:TextStyle(fontSize: 18,fontWeight: FontWeight.w500)
             ),
             const SizedBox(height: 16),
             buildDetailRow('Clinician Name', 'Sarah Mitchell'),
@@ -129,7 +130,7 @@ class AssessmentHistoryDetails extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  // Handle Appointment details button click
+                  Get.to(()=>AppointmentDetailsPage());
                 },
                 child: const Text(
                   'Appointment details',
@@ -153,7 +154,7 @@ class AssessmentHistoryDetails extends StatelessWidget {
               label,
               style: const TextStyle(
                 color: Colors.grey,
-                fontSize: 16,
+                fontSize: 14,
               ),
             ),
           ),
@@ -161,7 +162,7 @@ class AssessmentHistoryDetails extends StatelessWidget {
             value,
             style: const TextStyle(
               color: Colors.black54,
-              fontSize: 16,
+              fontSize: 14,
             ),
           ),
         ],

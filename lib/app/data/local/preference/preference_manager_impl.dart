@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'preference_manager.dart';
@@ -70,5 +72,29 @@ class PreferenceManagerImpl implements PreferenceManager {
   @override
   Future<bool> clear() {
     return _preference.then((preference) => preference.clear());
+  }
+
+
+  @override
+  Future<void> saveProgress(int assessmentId, int lastAnsweredIndex) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt("progress_$assessmentId", lastAnsweredIndex);
+  }
+  @override
+  Future<int> getProgress(int assessmentId) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt("progress_$assessmentId") ?? 0;
+  }
+  @override
+  Future<void> saveAnswers(int assessmentId, Map<int, String> answers) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("answers_$assessmentId", jsonEncode(answers));
+  }
+  @override
+  Future<Map<int, String>> getAnswers(int assessmentId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final data = prefs.getString("answers_$assessmentId");
+    if (data == null) return {};
+    return Map<int, String>.from(jsonDecode(data));
   }
 }

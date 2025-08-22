@@ -36,8 +36,7 @@ class OnboardingPage2 extends StatelessWidget {
           alignment: Alignment.center,
           child: Padding(
             padding: const EdgeInsets.only(top: 50.0,left: 20,right: 20),
-            child: Flexible(
-                  child: Text(
+            child: Text(
                     "Start with a quick screening quiz. Based on your answers, we’ll let you know if a full assessment is recommended.",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
@@ -46,7 +45,7 @@ class OnboardingPage2 extends StatelessWidget {
 
                     ),
                   ),
-                ),
+
           ),
 
 

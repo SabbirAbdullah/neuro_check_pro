@@ -1,13 +1,41 @@
 
 import 'package:get/get.dart';
 
+import '../data/repository/assessment_repository.dart';
+import '../data/repository/assessment_repository_impl.dart';
+import '../data/repository/auth_repository.dart';
+import '../data/repository/auth_repository_impl.dart';
+import '../data/repository/patient_repository.dart';
+import '../data/repository/patient_repository_impl.dart';
+import '../data/repository/pref_repository.dart';
+import '../data/repository/pref_repository_impl.dart';
+
 class RepositoryBindings implements Bindings {
   @override
   void dependencies() {
-    // Get.lazyPut<ParentsRepository>(
-    //         () => ParentsRepositoryImpl(),
-    //     tag: (ParentsRepository).toString(),
-    //     fenix: true
-    // );
+      Get.lazyPut<AuthenticationRepository>(
+              () => AuthenticationRepositoryImpl(),
+          tag: (AuthenticationRepository).toString(),
+          fenix: true
+      );
+
+      Get.lazyPut<PrefRepository>(
+              () => PrefRepositoryImpl(),
+          tag: (PrefRepository).toString(),
+          fenix: true
+      );
+
+      Get.lazyPut<PatientRepository>(
+            () => PatientRepositoryImpl(),
+        tag: (PatientRepository).toString(),
+        fenix: true,
+      );
+      Get.lazyPut<AssessmentRepository>(
+            () => AssessmentRepositoryImpl(),
+        tag: (AssessmentRepository).toString(),
+        fenix: true,
+      );
   }
 }
+
+

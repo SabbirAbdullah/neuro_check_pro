@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/core/values/text_styles.dart';
@@ -19,10 +20,35 @@ class AccountInfo extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            CircleAvatar(
-              radius: 45,
-              backgroundImage: AssetImage("assets/images/user.png"), // Use correct image path
-            ),
+
+
+          Obx(() {
+            return Stack(
+              children: [
+                CircleAvatar(
+                  radius: 45,
+                  backgroundImage: controller.selectedImage.value != null
+                      ? FileImage(controller.selectedImage.value!)
+                      : AssetImage("assets/images/user.png") as ImageProvider,
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: () => _showImageOptions(context),
+                    child: Container(
+                      padding: EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Icons.edit, color: Colors.white, size: 18),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }),
             const SizedBox(height: 10),
             Text(controller.name.value, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
             const SizedBox(height: 6),
@@ -147,7 +173,39 @@ class AccountInfo extends StatelessWidget {
       ),
     );
   }
+// Show iOS style action sheet
+  void _showImageOptions(BuildContext context) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (_) => CupertinoActionSheet(
+        title: Text("Profile Picture"),
+        actions: [
+          CupertinoActionSheetAction(
+            onPressed: () {
 
-
+              controller.pickImage();
+            },
+            child: Text("Upload Image",style: textButton_blue,),
+          ),
+          CupertinoActionSheetAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              Get.back();
+              controller.deleteImage();
+            },
+            child: Text("Delete Image",style: textButton_red,),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: () => Get.back(),
+          child: Text("Cancel",style: textButton_blue,),
+        ),
+      ),
+    );
+  }
 
 }
+
+
+
+

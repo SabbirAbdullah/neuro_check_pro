@@ -1,9 +1,12 @@
 
 // pages/assessment_detail_page.dart
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/core/values/text_styles.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_appbar.dart';
+import '../../primary_assessment/widgets/child_profile.dart';
 import '../models/assessment_model.dart';
+import 'child_profile.dart';
 
 class AssessmentDetailPage extends StatelessWidget {
   final AssessmentModel model;
@@ -27,19 +30,17 @@ class AssessmentDetailPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            Text(model.title, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            Text(model.name, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
             Row(
               children: [
-                _infoTag(Icons.description, model.questionCount),
+                _infoTag(Icons.description, model.type),
                 const SizedBox(width: 16),
-                _infoTag(Icons.access_time, model.duration),
+                _infoTag(Icons.access_time, model.totalTime!),
               ],
             ),
             const SizedBox(height: 20),
-            const Text(
-              "This comprehensive assessment is designed to evaluate Attention-Deficit/Hyperactivity Disorder (ADHD) symptoms in children. Through a series of structured questions and behavioral observations, it helps identify patterns related to inattention, hyperactivity, and impulsivity.\n\nThe assessment is carefully developed based on clinical guidelines and is reviewed by expert professionals in child psychology and neurodevelopment. Upon completion, you\u2019ll receive a detailed report highlighting your child\u2019s strengths, challenges, and whether further clinical evaluation or support may be recommended. This tool aims to provide clarity and early insights to support your child\u2019s development and well-being.",
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+             Text(model.description,style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
             const Spacer(),
             SizedBox(
@@ -52,7 +53,9 @@ class AssessmentDetailPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(40),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Get.to(()=>ChildProfile(model: model,));
+                },
                 child: const Text("Start assessment", style: textButton_white),
               ),
             )
@@ -73,7 +76,9 @@ class AssessmentDetailPage extends StatelessWidget {
         children: [
           Icon(icon, size: 16),
           const SizedBox(width: 6),
-          Text(label, style: const TextStyle(fontSize: 13)),
+          Text(label,
+            style: const TextStyle(fontSize: 13),
+          ),
         ],
       ),
     );

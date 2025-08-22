@@ -44,13 +44,13 @@ class AssessmentView extends StatelessWidget {
                           margin: const EdgeInsets.only(bottom: 16),
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Color(item.bgColor),
+                            // color: Color(item.bgColor),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(item.title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                              Text(item.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                               const SizedBox(height: 4),
                               Text(item.description, style: const TextStyle(color: Colors.grey)),
                             ],
