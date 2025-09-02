@@ -4,27 +4,76 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:neuro_check_pro/app/core/values/text_styles.dart';
+import 'package:neuro_check_pro/app/data/repository/profile_repository.dart';
 import 'package:neuro_check_pro/app/modules/onboardings/controllers/onboarding_controller.dart';
 
+import '../../../data/model/user_info_model.dart';
+import '../../../data/repository/auth_repository.dart';
 import '../../../data/repository/pref_repository.dart';
 
 class ProfileController extends GetxController {
 
-  final String email = "oliver.james@gmail.com";
-  final String role = "Parent";
 
-  var name = 'Oliver James Bennett'.obs;
-  var state = 'Manchester'.obs;
-  var postcode = 'M14 5LT'.obs;
-  var address = '42 Maple Grove'.obs;
   final PrefRepository _prefRepository =
   Get.find(tag: (PrefRepository).toString());
+  final ProfileRepository _repository =
+  Get.find(tag: (ProfileRepository).toString());
+
+  final AuthenticationRepository authenticationRepository =
+  Get.find(tag: (AuthenticationRepository).toString());
 
   TextEditingController nameController = TextEditingController();
   TextEditingController stateController = TextEditingController();
   TextEditingController postcodeController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   final Rx<File?> selectedImage = Rx<File?>(null);
+
+  var isLoading = false.obs;
+  var user = Rxn<UserInfoModel>();
+
+  Future<void> updateUserInfo(Map<String, dynamic> data) async {
+    final token = await _prefRepository.getString('token');
+    final userId = await _prefRepository.getInt('id');
+    isLoading.value = true;
+    try {
+
+      final updatedUser = await _repository.updateUser(userId, data, token);
+      user.value = updatedUser;
+
+      Get.back();
+      Get.snackbar("Success", "Profile updated successfully");
+
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+
+  // Future<bool> fetchUserInfo() async {
+  //   final token = await _prefRepository.getString('token');
+  //   final id = await _prefRepository.getInt('id');
+  //   if (token.isEmpty || id == null) return false;
+  //
+  //   try {
+  //     isLoading.value = true;
+  //     final response = await authenticationRepository.getUserById(id, token);
+  //
+  //     if (response.statusCode == 201) {
+  //       user.value = response.payload;
+  //       return true;
+  //     } else {
+  //       Get.snackbar("Error", response.message);
+  //       return false;
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar("Error", e.toString());
+  //     return false;
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
 
   Future<void> logout() async {
     await _prefRepository.remove('token');
@@ -33,6 +82,7 @@ class ProfileController extends GetxController {
     // Navigate to onboarding or login screen
     Get.offAllNamed('/signin_view');
   }
+
   /// Open image picker
   Future<void> pickImage() async {
     final pickedFile =
@@ -45,83 +95,5 @@ class ProfileController extends GetxController {
   /// Delete image
   void deleteImage() {
     selectedImage.value = null;
-  }
-
-void openEditDialog() {
-    nameController.text = name.value;
-    stateController.text = state.value;
-    postcodeController.text = postcode.value;
-    addressController.text = address.value;
-
-    Get.dialog(
-      Center(
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            width: Get.width * 0.9,
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Edit Profile",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
-                  buildTextField("Name", nameController),
-                  buildTextField("State", stateController),
-                  buildTextField("Post code", postcodeController),
-                  buildTextField("Street address", addressController),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF0C4A5B),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      minimumSize: const Size(double.infinity, 50),
-                    ),
-                    onPressed: () {
-                      name.value = nameController.text;
-                      state.value = stateController.text;
-                      postcode.value = postcodeController.text;
-                      address.value = addressController.text;
-                      Get.back();
-                    },
-                    child: const Text("Save",style: textButton_white,),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildTextField(String label, TextEditingController controller) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-
-        SizedBox(height: 10,),
-        Text(label, style: const TextStyle(fontSize: 14,color: Colors.grey)),
-        const SizedBox(height: 8),
-        TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.grey[100],
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
-              borderSide: BorderSide.none,
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-      ],
-    );
   }
 }

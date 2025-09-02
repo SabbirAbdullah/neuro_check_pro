@@ -6,6 +6,8 @@ import '../flavors/build_config.dart';
 import '../flavors/env_config.dart';
 import 'app/bindings/initial_binding.dart';
 import 'app/core/values/app_colors.dart';
+import 'app/data/repository/auth_repository.dart';
+import 'app/data/repository/pref_repository.dart';
 import 'app/routes/app_pages.dart';
 
 class MyApp extends StatefulWidget {
@@ -16,12 +18,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
   @override
    void initState()  {
+
     //  _getTokenData();
     super.initState();
+
     // initialization();
   }
+
 
 
   @override
@@ -56,7 +62,7 @@ class _MyAppState extends State<MyApp> {
             fontWeight: FontWeight.w600,
           ),
         ),
-        fontFamily: 'Roboto',
+
       ),
       debugShowCheckedModeBanner: false,
 

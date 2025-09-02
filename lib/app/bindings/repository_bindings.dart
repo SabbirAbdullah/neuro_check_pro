@@ -1,5 +1,7 @@
 
 import 'package:get/get.dart';
+import 'package:neuro_check_pro/app/data/repository/profile_repository.dart';
+import 'package:neuro_check_pro/app/data/repository/profile_repository_impl.dart';
 
 import '../data/repository/assessment_repository.dart';
 import '../data/repository/assessment_repository_impl.dart';
@@ -33,6 +35,12 @@ class RepositoryBindings implements Bindings {
       Get.lazyPut<AssessmentRepository>(
             () => AssessmentRepositoryImpl(),
         tag: (AssessmentRepository).toString(),
+        fenix: true,
+      );
+
+      Get.lazyPut<ProfileRepository>(
+            () => ProfileRepositoryImpl(),
+        tag: (ProfileRepository).toString(),
         fenix: true,
       );
   }

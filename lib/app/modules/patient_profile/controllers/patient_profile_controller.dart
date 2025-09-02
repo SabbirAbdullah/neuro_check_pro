@@ -42,6 +42,7 @@ class PatientProfileController extends GetxController {
       final response = await _repository.addPatient(patient, token);
 
       if (response.statusCode == 201) {
+        fetchPatients();
         await Future.delayed(Duration(seconds: 1));
         Get.back();
         // ✅ Success snackbar
@@ -63,6 +64,21 @@ class PatientProfileController extends GetxController {
       }
     } catch (e) {
       Get.snackbar("Error", e.toString(),);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> updatePatient(int id, Map<String, dynamic> updatedData) async {
+    final token = await _prefRepository.getString('token');
+    try {
+      isLoading.value = true;
+      final updatedPatient = await _repository.updatePatientInfo(id, updatedData, token);
+      // patients.value = updatedPatient;
+      Get.snackbar("Success", "Patient updated successfully");
+      fetchPatients();
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
     } finally {
       isLoading.value = false;
     }

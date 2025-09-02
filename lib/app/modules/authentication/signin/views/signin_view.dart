@@ -13,7 +13,8 @@ import '../widgets/toggle_email_phone.dart';
 
 class SignInView extends StatelessWidget {
   SignInView({super.key});
-  final SignInController controller = Get.put(SignInController());
+  final SignInController controller = Get.put(SignInController(), permanent: true);
+
 
   @override
   Widget build(BuildContext context) {

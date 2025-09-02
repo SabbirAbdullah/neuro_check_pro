@@ -1,6 +1,8 @@
 // controllers/signin_controller.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:neuro_check_pro/app/modules/bottom_navigation/controllers/bottom_navigation_controller.dart';
+import 'package:neuro_check_pro/app/modules/welcome/controllers/splash_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../data/local/preference/preference_manager.dart';
 import '../../../../data/model/user_info_model.dart';
@@ -52,7 +54,7 @@ class SignInController extends GetxController {
          await _prefRepository.setInt('id', response.user.id );
         Get.snackbar("Success", response.message);
 
-        final user = Get.put(OnboardingController());
+        final user = Get.put(SplashController());
         await user.fetchUserInfo();
 
         Get.offAllNamed("/bottom_navigation_view"); // Navigate to Dashboard
@@ -66,6 +68,13 @@ class SignInController extends GetxController {
     }
   }
 
+  @override
+  void onClose() {
+    emailOrPhoneController.dispose();
+    passwordController.dispose();
+    dialNumberController.dispose();
+    super.onClose();
+  }
 
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
@@ -95,12 +104,6 @@ class SignInController extends GetxController {
     Get.toNamed('/signup_form');
   }
 
-  @override
-  void onClose() {
-    emailOrPhoneController.dispose();
-    passwordController.dispose();
-    dialNumberController.dispose();
-    super.onClose();
-  }
+
 
 }

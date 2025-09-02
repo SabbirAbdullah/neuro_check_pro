@@ -13,6 +13,8 @@ import 'package:neuro_check_pro/app/modules/profile/bindings/profile_binding.dar
 import 'package:neuro_check_pro/app/modules/profile/views/profile_view.dart';
 import 'package:neuro_check_pro/app/modules/resume_diagnosis/bindings/diagnosis_binding.dart';
 import 'package:neuro_check_pro/app/modules/resume_diagnosis/views/diagnosis_view.dart';
+import 'package:neuro_check_pro/app/modules/welcome/bindings/splash_binding.dart';
+import 'package:neuro_check_pro/app/modules/welcome/views/splash_screen.dart';
 
 import '../modules/assessment/views/assessment_view.dart';
 import '../modules/assessment_history/views/assessment_history_view.dart';
@@ -34,9 +36,14 @@ part 'app_routes.dart';
 
 class AppPages {
   AppPages._();
-  static const INITIAL = Routes.ON_BOARDINGS;
+  static const INITIAL = Routes.WELCOME;
   // static const INITIAL = Routes.SIGNUP_FORM;
   static final routes = [
+    GetPage(
+      name: _Paths.WELCOME,
+      page: () => SplashView(),
+      binding: SplashBinding(),
+    ),
     GetPage(
       name: _Paths.ON_BOARDINGS,
       page: () => OnboardingView(),

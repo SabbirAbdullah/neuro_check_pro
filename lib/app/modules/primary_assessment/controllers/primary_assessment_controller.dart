@@ -4,108 +4,141 @@ import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/modules/primary_assessment/models/child_profile_model.dart';
 import 'package:neuro_check_pro/app/modules/primary_assessment/widgets/add_child.dart';
 
+import '../../../data/model/answer_submission_model.dart';
+import '../../../data/repository/assessment_repository.dart';
+import '../../../data/repository/pref_repository.dart';
+import '../../assessment/models/assessment_model.dart';
+import '../../assessment/models/question_model.dart';
 import '../views/primary_assessment.dart';
 import '../widgets/child_profile.dart';
 import '../widgets/quiz_results.dart';
 
+
+
 class PrimaryAssessmentController extends GetxController {
 
-  RxList<ChildProfileModel> children = <ChildProfileModel>[
-    ChildProfileModel(name: 'Oliver', imagePath: 'assets/images/user.png'),
-    ChildProfileModel(name: 'Amelia', imagePath: 'assets/images/user.png'),
-    ChildProfileModel(name: 'George', imagePath: 'assets/images/user.png'),
+  final AssessmentRepository _repository =
+  Get.find(tag: (AssessmentRepository).toString());
+  final PrefRepository _prefRepository =
+  Get.find(tag: (PrefRepository).toString());
 
-  ].obs;
+  var questions = <QuestionModel>[].obs;
+  var answers = <int, dynamic>{}.obs; // {questionId: "Yes"/"No"/"Text"/["A","B"]}
+  var currentIndex = 0.obs;
+  var isLoading = false.obs;
 
-  var currentQuestionIndex = 0.obs;
-  var selectedOptionIndex = (-1).obs;
-  RxList<String> selectedAnswers = List.filled(10, '').obs;
+  @override
+  void onInit() {
+    super.onInit();
+    initialAssessment();
+  }
+  var assessments = <AssessmentModel>[].obs;
+  Future<void> initialAssessment() async {
+    final token = await _prefRepository.getString('token');
+    final userId = await _prefRepository.getInt('id');
 
-  // Scoring rule mapping
-  final Set<int> scoreIfAgree = {1, 7, 8, 10}; // 1-based index
-  final Set<int> scoreIfDisagree = {2, 3, 4, 5, 6, 9};
-
-  List<Map<String, dynamic>> questions = [
-    {
-      'question': "I often notice small sounds when others do not.",
-      'options': ['Definitely agree', 'Slightly agree', 'Slightly disagree', 'Definitely disagree']
-    },
-    {
-      'question': "I usually concentrate more on the whole picture, rather than the small details.",
-      'options': ['Definitely agree', 'Slightly agree', 'Slightly disagree', 'Definitely disagree']
-    },
-    {
-      'question': "I find it easy to do more than one thing at once.",
-      'options': ['Definitely agree', 'Slightly agree', 'Slightly disagree', 'Definitely disagree']
-    },
-    {
-      'question': "If there is an interruption, I can switch back to what I was doing very quickly.",
-      'options': ['Definitely agree', 'Slightly agree', 'Slightly disagree', 'Definitely disagree']
-    },
-    {
-      'question': "I find it easy to 'read between the lines' when someone is talking to me.",
-      'options': ['Definitely agree', 'Slightly agree', 'Slightly disagree', 'Definitely disagree']
-    },
-    {
-      'question': "I know how to tell if someone listening to me is getting bored.",
-      'options': ['Definitely agree', 'Slightly agree', 'Slightly disagree', 'Definitely disagree']
-    },
-    {
-      'question': "When I'm reading a story I find it difficult to work out the characters’ intentions.",
-      'options': ['Definitely agree', 'Slightly agree', 'Slightly disagree', 'Definitely disagree']
-    },
-    {
-      'question': "I like to collect information about categories of things (e.g. types of car, bird, train, plant etc.)",
-      'options': ['Definitely agree', 'Slightly agree', 'Slightly disagree', 'Definitely disagree']
-    },
-    {
-      'question': "I find it easy to work out what someone is thinking or feeling just by looking at their face.",
-      'options': ['Definitely agree', 'Slightly agree', 'Slightly disagree', 'Definitely disagree']
-    },
-    {
-      'question': "I find it difficult to work out people’s intentions",
-      'options': ['Definitely agree', 'Slightly agree', 'Slightly disagree', 'Definitely disagree']
-    },
-  ];
-
-  void selectAnswer(int index, String answer) {
-    selectedAnswers[index] = answer;
+    try {
+      isLoading.value = true;
+      final response =
+      await _repository.getAssessments(userId, token, "free");
+      assessments.assignAll(response.payload);
+      if (response.payload.isNotEmpty) {
+        await loadQuestions(response.payload[0].id);
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isLoading.value = false;
+    }
   }
 
-  void goToNextQuestion() {
-    if (currentQuestionIndex < 9) {
-      currentQuestionIndex++;
+  Future<void> loadQuestions(int assessmentId) async {
+    isLoading.value = true;
+    final token = await _prefRepository.getString('token');
+    questions.value =
+    await _repository.getQuestionsByAssessment(assessmentId, token);
+    currentIndex.value = 0;
+    answers.clear();
+    isLoading.value = false;
+  }
+
+  /// ✅ Save selected answer
+  void selectAnswer(dynamic answer) {
+    if (questions.isEmpty || currentIndex.value >= questions.length) return;
+    final q = questions[currentIndex.value];
+    final questionId = q.id;
+    final answerType = q.answerType;
+
+    if (questionId == null) return;
+
+    if (answerType == "MultipleChoice") {
+      final current = (answers[questionId] ?? <String>[]).cast<String>();
+      if (current.contains(answer)) {
+        current.remove(answer);
+      } else {
+        current.add(answer);
+      }
+      answers[questionId] = current;
     } else {
-      final score = calculateScore();
-      Get.to(() => QuizSummaryPage());
+      answers[questionId] = answer;
+    }
+
+    update(["textField_$questionId"]);
+  }
+
+  void goToNextQuestion(int patientId) {
+    if (currentIndex.value < questions.length - 1) {
+      currentIndex.value++;
+    } else {
+      Get.to(() =>
+          QuestionSummary(controller: this, patientId: patientId));
     }
   }
+
   void goToPreviousQuestion() {
-    if (currentQuestionIndex > 0) {
-      currentQuestionIndex--;
+    if (currentIndex.value > 0) currentIndex.value--;
+  }
+  var submission = <SubmissionResponse>[].obs;
+  /// ✅ Submission payload
+  Future<void> submitAllAnswers(int patientId) async {
+    isLoading.value = true;
+    try {
+
+      final token = await _prefRepository.getString('token');
+      final userId = await _prefRepository.getInt('id');
+      final int assessmentId = assessments[0].id; // replace with actual ID
+
+      final answersList = questions.map((q) {
+        final ans = answers[q.id] ?? "";
+        return AnswerSubmission(
+          questionId: q.id,
+          userId: userId,
+          patientId: patientId,
+          assessmentId: assessmentId,
+          answer: ans,
+        );
+      }).toList();
+
+      final request = SubmissionRequest(
+        patientId: patientId,
+        assessmentId: assessmentId,
+        userId: userId,
+        score: 0,
+        summary: "",
+        answers: answersList,
+      );
+
+      final response= await _repository.submitAnswers(request, token!);
+
+      Get.offAll(() => PrimaryQuizResultView(response: response,question: questions.length));
+    } catch (e) {
+      Get.snackbar("Error", "Submission failed: $e");
+    }
+    finally{
+      isLoading.value = false;
     }
   }
 
-  int calculateScore() {
-    int score = 0;
-
-    for (int i = 0; i < selectedAnswers.length; i++) {
-      final ans = selectedAnswers[i];
-      final qNum = i + 1; // 1-based
-
-      if (scoreIfAgree.contains(qNum) &&
-          (ans == 'Definitely agree' || ans == 'Slightly agree')) {
-        score++;
-      }
-
-      if (scoreIfDisagree.contains(qNum) &&
-          (ans == 'Definitely disagree' || ans == 'Slightly disagree')) {
-        score++;
-      }
-    }
-
-    return score;
-  }
 
 
   final nameController = TextEditingController();
@@ -119,55 +152,39 @@ class PrimaryAssessmentController extends GetxController {
 
   void showCupertinoDatePicker(BuildContext context) {
     showModalBottomSheet(
-     backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       context: context,
       builder: (_) {
         return Column(
-              children: [
-                Container(
-                  color: Colors.grey.shade200,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () => Get.back(),
-                      child: const Text("Next", style: TextStyle(color: Colors.blue)),
-                    ),
-                  ),
+          children: [
+            Container(
+              color: Colors.grey.shade200,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () => Get.back(),
+                  child: const Text("Next", style: TextStyle(color: Colors.blue)),
                 ),
-                Expanded(
+              ),
+            ),
+            Expanded(
 
-                  child: CupertinoDatePicker(
-                    mode: CupertinoDatePickerMode.date,backgroundColor: Colors.white,
-                    initialDateTime: selectedDate.value ?? DateTime.now(),
-                    maximumDate: DateTime.now(),
-                    onDateTimeChanged: (date) {
-                      selectedDate.value = date;
-                      dobController.text =
-                      "${date.day} ${_monthName(date.month)} ${date.year}";
-                    },
-                  ),
-                ),
+              child: CupertinoDatePicker(
+                mode: CupertinoDatePickerMode.date,backgroundColor: Colors.white,
+                initialDateTime: selectedDate.value ?? DateTime.now(),
+                maximumDate: DateTime.now(),
+                onDateTimeChanged: (date) {
+                  selectedDate.value = date;
+                  dobController.text =
+                  "${date.day} ${_monthName(date.month)} ${date.year}";
+                },
+              ),
+            ),
 
-              ],
-            );
+          ],
+        );
 
       },
-    );
-  }
-
-  Future<void> submit() async {
-    await Future.delayed(Duration(seconds: 1));
-    Get.back();
-    Get.snackbar(
-      "Success",
-      "A new patient has been added",
-      snackPosition: SnackPosition.BOTTOM,
-      margin: EdgeInsets.only(
-        bottom: Get.height / 2 - 40,
-        left: 20,
-        right: 20,
-      ),
-      // Show for 2 seconds
     );
   }
 
@@ -179,5 +196,5 @@ class PrimaryAssessmentController extends GetxController {
     ];
     return months[month];
   }
-}
 
+}

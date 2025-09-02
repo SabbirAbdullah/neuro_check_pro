@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/modules/assessment_history/views/assessment_history_view.dart';
 import 'package:neuro_check_pro/app/modules/billing_info/views/bill_info_view.dart';
+import 'package:neuro_check_pro/app/modules/bottom_navigation/controllers/bottom_navigation_controller.dart';
 import 'package:neuro_check_pro/app/modules/patient_profile/views/patient_profile_view.dart';
 import 'package:neuro_check_pro/app/modules/privacy_security/views/privacy_security_view.dart';
+import 'package:neuro_check_pro/app/modules/welcome/controllers/splash_controller.dart';
 
 import '../../onboardings/controllers/onboarding_controller.dart';
 import '../controllers/profile_controller.dart';
@@ -12,50 +14,54 @@ import '../widgets/account_info.dart';
 
 class ProfileView extends StatelessWidget {
   final ProfileController controller = Get.put(ProfileController());
-  final OnboardingController onboardingController = Get.find<OnboardingController>();
+  final SplashController splashController = Get.find<SplashController>();
+
+  // final BottomNavigationController bottomNavigationController = Get.find<BottomNavigationController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: ListView(
-            children: [
-              const SizedBox(height: 24),
-              _buildHeader(context),
-              const SizedBox(height: 28),
-              _quickAccessTiles(),
-              const SizedBox(height: 24),
-              _sectionTitle("User information"),
-              GestureDetector(
-                onTap: (){
-                  Get.to(()=>AccountInfo(),);
-                },
-                  child: _infoTile("Account information")),
-              GestureDetector(
-                onTap: (){
-                  Get.to(()=>BillingPage());
-                },
-                  child: _infoTile("Billing information")),
-              GestureDetector(
+      body: RefreshIndicator(
+        onRefresh:splashController.fetchUserInfo,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ListView(
+              children: [
+                const SizedBox(height: 24),
+                _buildHeader(context),
+                const SizedBox(height: 28),
+                _quickAccessTiles(),
+                const SizedBox(height: 24),
+                _sectionTitle("User information"),
+                GestureDetector(
                   onTap: (){
-                    Get.to(()=>PrivacySecurityView());
+                    Get.to(()=>AccountInfo(user: splashController.user.value!,),);
                   },
-                  child: _infoTile("Privacy and Security")),
-              const SizedBox(height: 24),
-              _sectionTitle("User policy"),
-              _linkText("Privacy policy", Colors.grey),
-              _linkText("Terms & conditions", Colors.grey),
-              _linkText("About Neurocheckpro",Colors.grey),
-              GestureDetector(
-                onTap: (){
-                  controller.logout();
-                },
-                  child: _linkText("Logout",Colors.red)),
-              const SizedBox(height: 40),
-            ],
+                    child: _infoTile("Account information")),
+                GestureDetector(
+                  onTap: (){
+                    Get.to(()=>BillingPage());
+                  },
+                    child: _infoTile("Billing information")),
+                GestureDetector(
+                    onTap: (){
+                      Get.to(()=>PrivacySecurityView());
+                    },
+                    child: _infoTile("Privacy and Security")),
+                const SizedBox(height: 24),
+                _sectionTitle("User policy"),
+                _linkText("Privacy policy", Colors.grey),
+                _linkText("Terms & conditions", Colors.grey),
+                _linkText("About Neurocheckpro",Colors.grey),
+                GestureDetector(
+                  onTap: (){
+                    controller.logout();
+                  },
+                    child: _linkText("Logout",Colors.red)),
+                const SizedBox(height: 40),
+              ],
+            ),
           ),
         ),
       ),
@@ -80,7 +86,7 @@ class ProfileView extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
-                onboardingController.user.value!.role,
+                splashController.user.value!.role,
                 style: const TextStyle(fontSize: 12, color: Colors.black),
               ),
             )
@@ -99,14 +105,14 @@ class ProfileView extends StatelessWidget {
               ),
             ),
             Text(
-             "${onboardingController.user.value!.name}",
+             "${splashController.user.value!.name}",
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
-    onboardingController.user.value!.email,
+             splashController.user.value!.email,
               style: const TextStyle(
                 color: Colors.black54,
               ),

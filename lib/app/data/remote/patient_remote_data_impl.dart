@@ -55,4 +55,25 @@ class PatientRemoteDataSourceImpl implements PatientRemoteDataSource {
   }
 
 
+  @override
+  Future<PatientModel> updatePatient(int id, Map<String, dynamic> data, String token) async {
+    try {
+      final response = await _dio.put(
+        '/patient/$id',
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+        return PatientModel.fromJson(response.data['payload']);
+      } on DioException catch (dioError) {
+      throw handleDioError(dioError);
+    } catch (e) {
+      throw handleError(e.toString());
+    }
+  }
 }

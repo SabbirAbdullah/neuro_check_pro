@@ -51,6 +51,7 @@ class PreferenceManagerImpl implements PreferenceManager {
     return _preference.then((preference) => preference.setBool(key, value));
   }
 
+
   @override
   Future<List<String>> getStringList(String key,
       {List<String> defaultValue = const []}) {

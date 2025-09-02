@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/modules/profile/views/profile_view.dart';
+import 'package:neuro_check_pro/app/modules/welcome/controllers/splash_controller.dart';
 
 import '../../assessment/views/assessment_view.dart';
 import '../../dashboard/views/dashboard_view.dart';
@@ -15,9 +16,9 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 
 class BottomNavigationView extends StatelessWidget {
   BottomNavigationView({super.key});
-
+  final SplashController splashController = Get.find<SplashController>();
   final BottomNavigationController controller = Get.put(BottomNavigationController());
-  final OnboardingController onboardingController = Get.find<OnboardingController>();
+
   final pages = [
     DashboardView(),
     AssessmentView(),

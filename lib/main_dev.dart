@@ -9,7 +9,7 @@ import 'my_app.dart';
 void main() {
   EnvConfig devConfig = EnvConfig(
     appName: "",
-    baseUrl: "https://nest-backend-4z6f.onrender.com",
+    baseUrl: "http://192.168.0.219:3000",
     shouldCollectCrashLog: true,
 
   );

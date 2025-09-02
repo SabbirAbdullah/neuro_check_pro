@@ -3,9 +3,11 @@ import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_appbar.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_loading.dart';
 import 'package:neuro_check_pro/app/modules/assessment/widgets/assessment_payment_page.dart';
+import 'package:neuro_check_pro/app/modules/assessment/widgets/paymet_checkout.dart';
 
 import '../../patient_profile/controllers/patient_profile_controller.dart';
 import '../../patient_profile/widgets/add_patient_form.dart';
+import '../../primary_assessment/views/primary_assessment.dart';
 import '../../primary_assessment/widgets/add_child.dart';
 import '../controllers/assessment_controller.dart';
 import '../models/assessment_model.dart';
@@ -13,10 +15,10 @@ import '../models/assessment_model.dart';
 
 
 class ChildProfile extends StatelessWidget {
-  final AssessmentModel model;
+  final AssessmentModel ? model;
 
-  ChildProfile({super.key, required this.model});
-  final AssessmentController controller = Get.put(AssessmentController());
+  ChildProfile({super.key,  this.model});
+final AssessmentController controller = Get.put(AssessmentController());
   final PatientProfileController patientProfileController = Get.put(PatientProfileController());
   @override
   Widget build(BuildContext context) {
@@ -52,24 +54,37 @@ class ChildProfile extends StatelessWidget {
                  itemBuilder: (context, index) {
 
                    if (index < patientProfileController.patients.length ) {
-                     final child = patientProfileController.patients[index];
+                     final patient = patientProfileController.patients[index];
                      return GestureDetector(
-                       onTap: () {
-                         Get.snackbar('Selected', 'You selected ${child.name}');
-                         Get.to(()=> AssessmentPaymentPage(child: child,model: model,));
+                       onTap: () async{
+                         // Show snackbar immediately
+                         Get.snackbar('Selected', 'You selected ${patient.name}');
+
+
+                         // Check assessment
+                         bool hasAssessment = await controller.checkAssessmentForUI(patient.id,model!.id);
+
+
+                         // Navigate based on result
+                         if (hasAssessment) {
+                           Get.to(() => PaymentSuccessPage(patient: patient, model: model!));
+                         } else {
+                           Get.to(() => AssessmentPaymentPage(patient: patient, model: model!));
+                         }
+
                        },
                        child: Column(
                          children: [
                            CircleAvatar(
                                radius: 40,
-                               child: child.imageUrl == null
-                                   ?Text(child.initials('child'), style:  TextStyle(fontSize: 18, color: Colors.white))
-                                   :Image.network(child.imageUrl!)
+                               child: patient.imageUrl == null
+                                   ?Text(patient.initials('child'), style:  TextStyle(fontSize: 18, color: Colors.white))
+                                   :Image.network(patient.imageUrl!)
 
                            ),
                            const SizedBox(height: 8),
                            Text(
-                             child.name,
+                             patient.name,
                              style: const TextStyle(
                                fontSize: 16,
                                fontWeight: FontWeight.w500,

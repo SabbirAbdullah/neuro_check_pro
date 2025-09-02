@@ -12,7 +12,7 @@ import '../widgets/welcome_page3.dart';
 import '../widgets/welcome_page4.dart';
 
 class OnboardingView extends StatelessWidget {
-  final OnboardingController controller = Get.put(OnboardingController(),permanent: true);
+  final OnboardingController controller = Get.put(OnboardingController());
 
   final List<Widget> pages = [
      OnboardingPage1(),

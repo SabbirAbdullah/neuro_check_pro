@@ -36,7 +36,7 @@ class AssessmentDetailPage extends StatelessWidget {
               children: [
                 _infoTag(Icons.description, model.type),
                 const SizedBox(width: 16),
-                _infoTag(Icons.access_time, model.totalTime!),
+                _infoTag(Icons.access_time, "${model.totalTime}"),
               ],
             ),
             const SizedBox(height: 20),

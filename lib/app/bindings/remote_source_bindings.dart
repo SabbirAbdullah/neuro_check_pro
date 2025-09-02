@@ -1,5 +1,7 @@
 
 import 'package:get/get.dart';
+import 'package:neuro_check_pro/app/data/remote/profile_remote_data_impl.dart';
+import 'package:neuro_check_pro/app/data/remote/profile_remote_data_source.dart';
 
 import '../data/remote/assessment_remote_data_impl.dart';
 import '../data/remote/assessment_remote_data_source.dart';
@@ -29,5 +31,13 @@ class RemoteSourceBindings implements Bindings {
       tag: (AssessmentRemoteDataSource).toString(),
       fenix: true,
     );
+
+    Get.lazyPut<ProfileRemoteDataSource>(
+          () => ProfileRemoteDataImpl(),
+      tag: (ProfileRemoteDataSource).toString(),
+      fenix: true,
+    );
+
   }
+
 }

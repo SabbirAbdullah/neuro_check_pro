@@ -8,7 +8,7 @@ import 'my_app.dart';
 void main() {
   EnvConfig prodConfig = EnvConfig(
     appName: "",
-    baseUrl: "https://nest-backend-4z6f.onrender.com",
+    baseUrl: "http://192.168.0.105:3000",
     shouldCollectCrashLog: true,
   );
   BuildConfig.instantiate(

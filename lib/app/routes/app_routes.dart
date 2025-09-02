@@ -6,7 +6,7 @@ abstract class Routes {
   //
 
   static const HOME = _Paths.HOME;
-  static const WELCOME = _Paths.WElCOME;
+
   static const SIGNUP = _Paths.SIGNUP;
   static const ON_BOARDINGS = _Paths.ON_BOARDINGS;
   static const SIGNIN = _Paths.SIGNIN;
@@ -21,12 +21,13 @@ abstract class Routes {
   static const ASSESSMENT_HISTORY  = _Paths.ASSESSMENT_HISTORY;
   static const PRIVACY_SECURITY  = _Paths.PRIVACY_SECURITY;
   static const PATIENT_PROFILE  = _Paths.PATIENT_PROFILE;
+  static const WELCOME  = _Paths.WELCOME;
 
 }
 
 abstract class _Paths {
+  static const WELCOME  = '/splash_screen';
   static const ON_BOARDINGS = '/onboarding_view';
-  static const WElCOME = '/welcome_view';
   static const HOME = '/home_view';
   static const SIGNUP = '/signup_view';
   static const SIGNIN = '/signin_view';
@@ -41,4 +42,5 @@ abstract class _Paths {
   static const ASSESSMENT_HISTORY = '/assessment_history_view';
   static const PRIVACY_SECURITY = '/privacy_security_view';
   static const PATIENT_PROFILE  = '/patient_profile_view';
+
 }

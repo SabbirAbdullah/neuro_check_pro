@@ -1,15 +1,30 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/core/values/app_colors.dart';
 import 'package:neuro_check_pro/app/core/values/text_styles.dart';
+import 'package:neuro_check_pro/app/core/widgets/custom_appbar.dart';
+import 'package:neuro_check_pro/app/modules/patient_profile/models/patient_profile_model.dart';
 
+import '../../../core/widgets/custom_button.dart';
+import '../../../core/widgets/custom_loading.dart';
+import '../../../core/widgets/expended_text.dart';
+import '../../../data/model/answer_submission_model.dart';
+import '../../assessment/views/assessment_view.dart';
+import '../../bottom_navigation/views/bottom_navigation_view.dart';
+import '../../onboardings/controllers/onboarding_controller.dart';
 import '../controllers/primary_assessment_controller.dart';
 import '../widgets/quiz_results.dart';
 
 
-class PrimaryAssessmentView extends StatelessWidget {
-   PrimaryAssessmentView({super.key});
+class InitialAssessmentQuestion extends StatelessWidget {
+  final int patient;
   final PrimaryAssessmentController controller = Get.put(PrimaryAssessmentController());
+
+  InitialAssessmentQuestion({
+    super.key, required this.patient,
+  });
+
   @override
   Widget build(BuildContext context) {
 
@@ -23,79 +38,204 @@ class PrimaryAssessmentView extends StatelessWidget {
         elevation: 0,
       ),
       body: Obx(() {
-        final questionData = controller.questions[controller.currentQuestionIndex.value];
-        final selected = controller.selectedAnswers[controller.currentQuestionIndex.value];
+        if (controller.isLoading.value) {
+          return const Scaffold(
+            body: Center(child: CustomLoading()),
+          );
+        }
 
-        return Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              LinearProgressIndicator(
-                value: (controller.currentQuestionIndex.value + 1) / controller.questions.length,
-                backgroundColor: Colors.grey.shade300,
-                color: const Color(0xFF0D4D54),
-              ),
-              const SizedBox(height: 8),
-              Text("${controller.currentQuestionIndex.value + 1} / 10",
-                  style: const TextStyle(fontWeight: FontWeight.w600)),
-              const SizedBox(height: 32),
-              Center(
-                child: Text(
-                  questionData['question'],
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+        if (controller.questions.isEmpty) {
+          return const Scaffold(
+            body: Center(child: Text("No questions found")),
+          );
+        }
+
+        final question = controller.questions[controller.currentIndex.value];
+        final dynamic selected = controller.answers[question.id] ??
+            (question.answerType == "MultipleChoice" ? <String>[] : "");
+
+
+        return Scaffold(
+          backgroundColor: Colors.white,
+          body: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                // Progress indicator
+                LinearProgressIndicator(
+                  value: (controller.currentIndex.value + 1) /
+                      controller.questions.length,
+                  backgroundColor: Colors.grey.shade200,
+                  color: const Color(0xFF0D4D54),
                 ),
-              ),
-              const SizedBox(height: 24),
-              ...List.generate(questionData['options'].length, (i) {
-                final option = questionData['options'][i];
-                final isSelected = selected == option;
+                Text(
+                    "${controller.currentIndex.value + 1} / ${controller.questions.length}",
+                    style: const TextStyle(fontWeight: FontWeight.w600)),
+                const SizedBox(height: 32),
+                const SizedBox(height: 20),
 
-                return GestureDetector(
-                  onTap: () => controller.selectAnswer(controller.currentQuestionIndex.value, option),
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                    decoration: BoxDecoration(
-                      color: isSelected ? const Color(0xFF0D4D54).withOpacity(0.05) : Colors.white,
-                      border: Border.all(
-                        color: isSelected ? const Color(0xFF0D4D54) : Colors.grey.shade300,
-                      ),
-                      borderRadius: BorderRadius.circular(30),
+                // Question text
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    question.questions,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
-                    child: Center(
-                      child: Text(
-                        option,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: isSelected ? const Color(0xFF0D4D54) : Colors.black87,
+                  ),
+                ),
+
+                // Answer options
+                // Answer options
+                if (question.answerType == "Yes/No") ...[
+                  ...["Yes", "No"].map((option) {
+                    final isSelected = selected == option;
+                    return GestureDetector(
+                      onTap: () => controller.selectAnswer(option),
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 16),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 16),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? const Color(0xFF0D4D54).withOpacity(0.05)
+                              : Colors.white,
+                          border: Border.all(
+                            color: isSelected
+                                ? const Color(0xFF0D4D54)
+                                : Colors.grey.shade300,
+                          ),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Center(
+                          child: Text(
+                            option,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: isSelected
+                                  ? const Color(0xFF0D4D54)
+                                  : Colors.black87,
+                            ),
+                          ),
                         ),
                       ),
+                    );
+                  }),
+                ] else if (question.answerType == "MultipleChoice") ...[
+                  ...question.options!.map((option) {
+                    final selectedList =
+                    (selected is List<String>) ? selected : <String>[];
+                    final isSelected = selectedList.contains(option);
+
+                    return GestureDetector(
+                      onTap: () => controller.selectAnswer(option),
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 16),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 16),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? const Color(0xFF0D4D54).withOpacity(0.05)
+                              : Colors.white,
+                          border: Border.all(
+                            color: isSelected
+                                ? const Color(0xFF0D4D54)
+                                : Colors.grey.shade300,
+                          ),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Center(
+                          child: Text(
+                            option,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: isSelected
+                                  ? const Color(0xFF0D4D54)
+                                  : Colors.black87,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                ] else if (question.answerType == "Text") ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: GetBuilder<PrimaryAssessmentController>(
+                      id: "textField_${question.id}", // unique id for rebuilds
+                      builder: (_) {
+                        final textController = TextEditingController(
+                          text: controller.answers[question.id] ?? "",
+                        );
+
+                        // Keep cursor at the end
+                        textController.selection = TextSelection.fromPosition(
+                          TextPosition(offset: textController.text.length),
+                        );
+
+                        return TextField(
+                          controller: textController,
+                          cursorColor: AppColors.appBarColor,
+                          maxLines: 5,
+                          onChanged: (value) => controller.selectAnswer(value),
+                          decoration: InputDecoration(
+                            hintText: "Write your answer here...",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: AppColors.borderColor),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: AppColors.borderColor),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: AppColors.borderColor),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
-                );
-              }),
-              const Spacer(),
-              SizedBox(
-                width: double.infinity,
-                height: 54,
-                child: ElevatedButton(
-                  onPressed: selected.isNotEmpty ? controller.goToNextQuestion : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0D4D54),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                  ),
-                  child: Text(
-                    controller.currentQuestionIndex.value == 9 ? 'Submit' : 'Continue',
-                    style: textButton_white
+                ],
+
+                Spacer(),
+
+                // Navigation buttons
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (controller.currentIndex.value > 0)
+                        ElevatedButton(
+                          onPressed: controller.goToPreviousQuestion,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey.shade300,
+                            foregroundColor: Colors.black,
+                          ),
+                          child: const Text("Previous"),
+                        )
+                      else
+                        const SizedBox(),
+
+
+
+                      ElevatedButton( onPressed: controller.answers[question.id] == null
+                          ? null : ()=>controller.goToNextQuestion(patient),
+                        style: ElevatedButton.styleFrom( backgroundColor: const Color(0xFF0D4D54), foregroundColor: Colors.white, ),
+                        child: Text( controller.currentIndex.value + 1 < controller.questions.length
+                            ? "Next" : "Finish", ), ),
+                    ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 16),
-            ],
+              ],
+            ),
           ),
         );
       }),
@@ -103,39 +243,25 @@ class PrimaryAssessmentView extends StatelessWidget {
   }
 }
 
-class QuizSummaryPage extends StatelessWidget {
+class QuestionSummary extends StatelessWidget {
+  final PrimaryAssessmentController controller;
+  final int  patientId;
+  const QuestionSummary({super.key, required this.controller,  required this.patientId});
 
-  final PrimaryAssessmentController controller = Get.put(PrimaryAssessmentController());
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Get.back(),
-        ),
-        title: const Text("", style: TextStyle(color: Colors.black)),
-      ),
+      appBar: CustomAppBar(title: 'Summary'),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 16),
-            const Text(
-              "Take final glance on your answers and then\nSubmit to get score",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
                 itemCount: controller.questions.length,
                 itemBuilder: (context, index) {
+                  final q = controller.questions[index];
+                  final ans = controller.answers[q.id] ?? "Not answered";
                   return Container(
                     margin: const EdgeInsets.only(bottom: 12),
                     padding: const EdgeInsets.all(16),
@@ -147,63 +273,48 @@ class QuizSummaryPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          controller.questions[index]['question'],
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                          ),
-                        ),
+                        Text(q.questions,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 15)),
                         const SizedBox(height: 8),
                         Row(
                           children: [
-                            const Icon(Icons.circle, size: 10, color: Color(0xFF0D4D54)),
+                            Icon(Icons.circle, color: AppColors.appBarColor,size: 12,),
                             const SizedBox(width: 6),
-                            Text(controller.selectedAnswers[index]),
-                            const Spacer(),
-                            Text("${index + 1}", style: const TextStyle(fontWeight: FontWeight.w600)),
+                            Expanded(
+                              child: ExpandableText(formatAnswer(ans)), // ✅ always string
+                            ),
+
                           ],
-                        )
+                        ),
                       ],
                     ),
                   );
                 },
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.arrow_back_ios_new,size: 20,color: AppColors.appBarColor,),
-                    TextButton(
-                      onPressed: () => Get.back(),
-                      child: const Text("Previous", style: TextStyle(color: Color(0xFF0D4D54))),
-                    ),
-                  ],
-                ),
-                ElevatedButton(
-                  onPressed: (){ Get.snackbar("Submitted", "Your answers have been submitted.");
-                  final score = controller.calculateScore();
-                  Get.to(() => PrimaryQuizResultView(score: score));
+            Obx((){
+              if (controller.isLoading.value) {
+                return Center(child: CustomLoading());
+              }
+              return  CustomButton(text: "Submit All", onPressed:  () async {
+
+                    await controller.submitAllAnswers(patientId);
+              },);
+            })
 
 
-                  },
-                  
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0D4D54),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    child: Text("Submit",style: textButton_white,),
-                  ),
-                )
-              ],
-            )
           ],
         ),
       ),
     );
   }
+  String formatAnswer(dynamic ans) {
+    if (ans is List) {
+      return ans.join(", "); // join list items with comma or space
+    } else {
+      return ans.toString(); // if already a string
+    }
+  }
+
 }

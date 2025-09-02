@@ -17,7 +17,8 @@ abstract class PrefRepository{
   Future<bool> getBool(String key, {bool defaultValue = false});
 
   Future<bool> setBool(String key, bool value);
-
+  Future<void> setOnboardingShown();
+  Future<bool> isOnboardingShown();
   Future<List<String>> getStringList(String key,
       {List<String> defaultValue = const []});
 
@@ -26,4 +27,7 @@ abstract class PrefRepository{
   Future<bool> remove(String key);
 
   Future<bool> clear();
+
+
+
 }

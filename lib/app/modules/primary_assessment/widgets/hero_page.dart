@@ -4,6 +4,7 @@ import 'package:neuro_check_pro/app/core/values/text_styles.dart';
 import 'package:neuro_check_pro/app/modules/primary_assessment/views/primary_assessment.dart';
 
 import '../../../core/widgets/custom_appbar.dart';
+import '../../assessment/widgets/child_profile.dart';
 import 'child_profile.dart';
 
 class HeroPage extends StatelessWidget {

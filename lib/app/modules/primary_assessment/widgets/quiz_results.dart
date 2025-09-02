@@ -2,15 +2,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/core/values/text_styles.dart';
+import 'package:neuro_check_pro/app/modules/bottom_navigation/controllers/bottom_navigation_controller.dart';
+
+import 'package:neuro_check_pro/app/modules/onboardings/controllers/onboarding_controller.dart';
 import 'dart:math' as math;
 
-class PrimaryQuizResultView extends StatelessWidget {
-  final int score;
+import '../../../data/model/answer_submission_model.dart';
 
-  const PrimaryQuizResultView({super.key, required this.score});
+class PrimaryQuizResultView extends StatelessWidget {
+    final SubmissionResponse response;
+    int question;
+   PrimaryQuizResultView({super.key, required this.response,required this.question});
+
 
   @override
   Widget build(BuildContext context) {
+    final int score = response.score;
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -32,7 +40,7 @@ class PrimaryQuizResultView extends StatelessWidget {
                   CustomPaint(
                     painter: CircularProgressPainter(
                       currentProgress: score,
-                      totalValue: 10,
+                      totalValue: question,
                       // Colors closely matching the image
                       backgroundColor: const Color(0x8c98c1e4), // Lighter, desaturated blue
                       progressGradientColors: const [
@@ -101,12 +109,12 @@ class PrimaryQuizResultView extends StatelessWidget {
                   minimumSize: const Size.fromHeight(55),
                 ),
                 onPressed: () {
+                  Get.put(BottomNavigationController());
                   if (score <= 5) {
-                    // Navigate to Dashboard
-                    Get.offAllNamed("/bottom_navigation_view");
+                    Get.offNamed("/bottom_navigation_view");
                   } else {
                     // Navigate to full assessment
-                    Get.toNamed("/fullAssessment");
+                    Get.offNamed("/assessment_view");
                   }
                 },
                 child: Text(
@@ -237,54 +245,5 @@ class CircularProgressPainter extends CustomPainter {
           oldDelegate.gradientEnd != gradientEnd;
     }
     return true;
-  }
-}
-class ScoreCircle extends StatelessWidget {
-  final int score;
-
-  const ScoreCircle({Key? key, required this.score}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final double percentage = score / 10;
-
-    return TweenAnimationBuilder<double>(
-      tween: Tween<double>(begin: 0, end: percentage),
-      duration: const Duration(milliseconds: 800),
-      builder: (context, value, _) {
-        return SizedBox(
-          height: 140,
-          width: 140,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Container(
-                height: 140,
-                width: 140,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.grey.shade200,
-                ),
-              ),
-              CircularProgressIndicator(
-                value: value,
-                strokeWidth: 10,
-                backgroundColor: Colors.grey.shade300,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  score > 5 ? const Color(0xFF104E59) : const Color(0xFFB4D9EF),
-                ),
-              ),
-              Text(
-                '$score/10',
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
   }
 }

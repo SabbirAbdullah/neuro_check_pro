@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_appbar.dart';
 
+import '../../../core/widgets/custom_loading.dart';
+import '../../assessment/controllers/assessment_controller.dart';
+import '../../assessment/models/assessment_model.dart';
+import '../../patient_profile/controllers/patient_profile_controller.dart';
+import '../../patient_profile/widgets/add_patient_form.dart';
 import '../controllers/primary_assessment_controller.dart';
 import '../views/primary_assessment.dart';
 import 'add_child.dart';
@@ -9,18 +14,18 @@ import 'add_child.dart';
 
 
 class AssessmentChildSelectPage extends StatelessWidget {
-  const AssessmentChildSelectPage({super.key});
+  final AssessmentModel ? model;
 
+  AssessmentChildSelectPage({super.key,  this.model});
+  final AssessmentController controller = Get.put(AssessmentController());
+  final PatientProfileController patientProfileController = Get.put(PatientProfileController());
   @override
   Widget build(BuildContext context) {
-    final PrimaryAssessmentController controller = Get.put(PrimaryAssessmentController());
 
     return Scaffold(
-      appBar: CustomAppBar(
-        title:'Assessment'),
-
-      body: Obx(() => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      appBar: CustomAppBar(title: 'Assessment'),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           children: [
             const SizedBox(height: 40),
@@ -30,74 +35,83 @@ class AssessmentChildSelectPage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 40),
-            Expanded(
-              child: GridView.builder(
-                padding: const EdgeInsets.only(bottom: 10),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 2,
-                  crossAxisSpacing: 2,
-                  childAspectRatio: 1,
-                ),
-                itemCount: controller.children.length + 1,
-                itemBuilder: (context, index) {
-                  if (index < controller.children.length) {
-                    final child = controller.children[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Get.snackbar('Selected', 'You selected ${child.name}');
-                        Get.to(()=>PrimaryAssessmentView());
-                        // Proceed to next page
-                      },
-                      child: Column(
-                        children: [
-                          CircleAvatar(
-                            radius: 50,
-                            backgroundImage: AssetImage(child.imagePath),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            child.name,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else {
-                    return GestureDetector(
-                      onTap: (){
 
-                        Get.to(()=>NewProfileView());
+            Obx((){
+              if(patientProfileController.isLoading.value){
+                return CustomLoading();
+              }
+              return  Expanded(
+                child: GridView.builder(
+                  padding:  EdgeInsets.only(bottom: 40),
+                  gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 2,
+                    crossAxisSpacing: 2,
+                    childAspectRatio: 1.2,
+                  ),
+                  itemCount:patientProfileController.patients.length + 1,
+                  itemBuilder: (context, index) {
 
+                    if (index < patientProfileController.patients.length ) {
+                      final patient = patientProfileController.patients[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Get.snackbar('Selected', 'You selected ${patient.name}');
+                          Get.to(()=>InitialAssessmentQuestion(   patient: patient.id,));
+                          // Get.to(()=>AssessmentPaymentPage(patient: patient, model: model!,));
                         },
-                      child: Column(
-                        children: [
-                          const CircleAvatar(
-                            radius: 50,
-                            backgroundColor: Color(0xFFE1E8EA),
-                            child: Icon(Icons.add, size: 32, color: Colors.black45),
-                          ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            'Add new',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
+                        child: Column(
+                          children: [
+                            CircleAvatar(
+                                radius: 40,
+                                child: patient.imageUrl == null
+                                    ?Text(patient.initials('child'), style:  TextStyle(fontSize: 18, color: Colors.white))
+                                    :Image.network(patient.imageUrl!)
+
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                },
-              ),
-            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              patient.name,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      return GestureDetector(
+                        onTap: (){
+                          Get.to(()=>AddPatientForm());
+                        },
+                        child: Column(
+                          children: [
+                            const CircleAvatar(
+                              radius: 40,
+                              backgroundColor: Color(0xFFE1E8EA),
+                              child: Icon(Icons.add, size: 32, color: Colors.black45),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'Add new',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                ),
+              );
+            })
           ],
         ),
-      )),
+      ),
     );
   }
 }
+

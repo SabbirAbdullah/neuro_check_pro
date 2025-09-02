@@ -48,6 +48,18 @@ class PrefRepositoryImpl implements PrefRepository{
     throw UnimplementedError();
   }
 
+
+  @override
+  Future<void> setOnboardingShown() async {
+    await _prefSource.setBool('onboarding_shown', true);
+  }
+
+  @override
+  Future<bool> isOnboardingShown() async {
+    return await _prefSource.getBool('onboarding_shown', defaultValue: false);
+  }
+
+
   @override
   Future<bool> setBool(String key, bool value) {
     // TODO: implement setBool

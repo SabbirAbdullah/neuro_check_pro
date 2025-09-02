@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/core/values/text_styles.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_appbar.dart';
+import 'package:neuro_check_pro/app/modules/assessment/widgets/paymet_checkout.dart';
 import 'package:neuro_check_pro/app/modules/assessment/widgets/question_page.dart';
 
 import '../../patient_profile/models/patient_profile_model.dart';
@@ -11,10 +12,10 @@ import '../models/assessment_model.dart';
 
 
 class AssessmentPaymentPage extends StatelessWidget {
- final PatientModel child;
+ final PatientModel patient;
  final AssessmentModel model;
-
-  const AssessmentPaymentPage({super.key, required this.child, required this.model});
+ final AssessmentController controller = Get.put(AssessmentController());
+   AssessmentPaymentPage({super.key, required this.patient, required this.model});
   @override
   Widget build(BuildContext context) {
 
@@ -37,17 +38,17 @@ class AssessmentPaymentPage extends StatelessWidget {
               children: [
                 CircleAvatar(
                     radius: 40,
-                    child: child.imageUrl == null
-                        ?Text(child.initials('child'), style:  TextStyle(fontSize: 18, color: Colors.white))
-                        :Image.network(child.imageUrl!)
+                    child: patient.imageUrl == null
+                        ?Text(patient.initials('child'), style:  TextStyle(fontSize: 18, color: Colors.white))
+                        :Image.network(patient.imageUrl!)
 
                 ),
                 const SizedBox(width: 16),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(child.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
-                    Text("${child.dateOfBirth} Years", style: const TextStyle(color: Colors.grey,fontSize: 12)),
+                    Text(patient.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
+                    Text("${patient.dateOfBirth} Years", style: const TextStyle(color: Colors.grey,fontSize: 12)),
                   ],
                 )
               ],
@@ -55,9 +56,17 @@ class AssessmentPaymentPage extends StatelessWidget {
             const SizedBox(height: 32),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text("Child ADHD Diagnosis", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                Text("£39.99", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600)),
+              children:  [
+                Text(model.name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                model.stripeInfo == null
+                    ? const SizedBox.shrink()
+                    : Flexible(
+                  child: Text(
+                    "${model.stripeInfo!.unitAmount}",
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                  ),
+                )
               ],
             ),
             const SizedBox(height: 8),
@@ -101,7 +110,12 @@ class AssessmentPaymentPage extends StatelessWidget {
                 ),
                 onPressed: ()async {
                   await Get.snackbar("Payment", "Proceeding to Stripe...");
-                  Get.to(()=> QuestionPage(model: model,));
+                  // controller.loadQuestions(model.id);
+                  // Get.to(()=> QuestionPage(patient: patient,));
+
+                  //
+                  Get.to(()=>CheckoutPage(model: model,patient: patient,));
+                  controller.startCheckout("${model.priceId}");
                 },
                 child: const Text("Proceed to Payment", style: textButton_white),
               ),

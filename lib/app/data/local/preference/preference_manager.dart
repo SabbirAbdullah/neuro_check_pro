@@ -1,8 +1,6 @@
 abstract class PreferenceManager {
   static const keyToken = "token";
 
-
-
   Future<String> getString(String key, {String defaultValue = ""});
 
   Future<bool> setString(String key, String value);
@@ -27,6 +25,7 @@ abstract class PreferenceManager {
   Future<bool> remove(String key);
 
   Future<bool> clear();
+
 
   Future<void> saveProgress(int assessmentId, int lastAnsweredIndex);
   Future<int> getProgress(int assessmentId);
