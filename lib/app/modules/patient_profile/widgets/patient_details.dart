@@ -2,8 +2,6 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:neuro_check_pro/app/core/values/text_styles.dart';
-import 'package:neuro_check_pro/app/modules/patient_profile/widgets/update_patient_profile.dart';
 
 import '../../../core/values/app_colors.dart';
 import '../../../core/widgets/custom_appbar.dart';
@@ -18,9 +16,9 @@ import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
 
-class ChildDetailPage extends StatelessWidget {
-  final PatientModel child;
-  const ChildDetailPage({super.key, required this.child});
+class PatientDetailPage extends StatelessWidget {
+  final PatientModel patient;
+  const PatientDetailPage({super.key, required this.patient});
 
   @override
   Widget build(BuildContext context) {
@@ -79,11 +77,11 @@ class ChildDetailPage extends StatelessWidget {
                       backgroundColor: Colors.blueAccent.shade100,
                       backgroundImage: pickedImage.value != null
                           ? FileImage(pickedImage.value!)
-                          : (child.imageUrl != null
-                          ? NetworkImage(child.imageUrl!) as ImageProvider
+                          : (patient.imageUrl != null
+                          ? NetworkImage(patient.imageUrl!) as ImageProvider
                           : null),
-                      child: (pickedImage.value == null && child.imageUrl == null)
-                          ? Text(child.initials('child'),
+                      child: (pickedImage.value == null && patient.imageUrl == null)
+                          ? Text(patient.initials('child'),
                           style: const TextStyle(fontSize: 28, color: Colors.white))
                           : null,
                     );
@@ -108,7 +106,7 @@ class ChildDetailPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            Text(child.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+            Text(patient.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
 
             const SizedBox(height: 12),
              TabBar(
@@ -128,56 +126,125 @@ class ChildDetailPage extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  // Basic Info Tab
+                  // --- Basic Info Tab ---
                   SingleChildScrollView(
                     padding: const EdgeInsets.all(16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        // Header with Edit button
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                          Text("Edit Patient Profile",style: textButton_blue,),
-                          IconButton(onPressed: (){
-                            showEditPatientDialog( child);
-                          }, icon: Icon(Icons.edit)),
-                        ],),
-                        InfoRow(label: 'Name', value: child.name),
-                        const SizedBox(height: 10),
-                        InfoRow(
-                          label: 'Age',
-                          value: '${calculateAge (child.dateOfBirth)} years',
+                            Text(
+                              "Patient Profile",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: (){
+                                showEditPatientDialog(patient);
+                              },
+                              child: Row(
+
+                                children: [
+                                  Text(
+                                    "Edit",
+                                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12,color: AppColors.appBarColor),
+                                  ),
+
+                                    Image.asset(
+                                      "assets/images/edit.png",
+                                      width: 20,
+                                      height: 20,
+                                      fit: BoxFit.contain,
+                                    ),
+
+
+                                ],
+                              ),
+                            ),
+
+                          ],
                         ),
 
-                        const SizedBox(height: 10),
-                        InfoRow(
-                          label: 'Date Of Birth',
-                          value: child.dateOfBirth == null
-                              ? 'Not set'
-                              : '${child.dateOfBirth.split('T').first}',
+                        // Info Section as Cards
+                        Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          elevation: 0,
+                          color: Colors.grey[100],
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                            child: Column(
+                              children: [
+                                InfoRow(label: "Name", value:patient.name),
+                                const Divider(),
+                                InfoRow(label: "Age",value:  "${calculateAge(patient.dateOfBirth)} years"),
+                                const Divider(),
+                                InfoRow(
+                                 label:  "Date of Birth",
+                                 value:  patient.dateOfBirth == null
+                                      ? "Not set"
+                                      : patient.dateOfBirth.split('T').first,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                        const SizedBox(height: 20),
-                        const Text('Notes', style: TextStyle(fontWeight: FontWeight.w600)),
-                        const SizedBox(height: 8),
+
+                        const SizedBox(height: 24),
                         const Text(
-                          'No notes yet. Use this area to write therapy notes, assessments or observations.',
+                          'Notes',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[50],
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.grey.shade300),
+                          ),
+                          child: const Text(
+                            'No notes yet. Use this area to write therapy notes, assessments or observations.',
+                            style: TextStyle(fontSize: 14, color: Colors.black54),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  // Assessment History Tab
+
+                  // --- Assessment History Tab ---
                   SingleChildScrollView(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        const SizedBox(height: 40),
+                        Icon(
+                          CupertinoIcons.calendar_badge_plus,
+                          size: 72,
+                          color: Colors.blueGrey[300],
+                        ),
                         const SizedBox(height: 20),
-                        Icon(CupertinoIcons.calendar_badge_plus,
-                            size: 64, color: Colors.blueGrey[200]),
-                        const SizedBox(height: 12),
-                        const Text('No appointments yet',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                        const Text(
+                          'No appointments yet',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                        ),
                         const SizedBox(height: 8),
-                        const Text('Schedule therapy sessions and follow-ups here.'),
+                        const Text(
+                          'Schedule therapy sessions and follow-ups here.',
+                          style: TextStyle(fontSize: 14, color: Colors.black54),
+                          textAlign: TextAlign.center,
+                        ),
                       ],
                     ),
                   ),
@@ -246,6 +313,12 @@ class ChildDetailPage extends StatelessWidget {
                 const Text('Gender', style: TextStyle(fontSize: 14, color: Colors.grey)),
                 Obx(() {
                   return CustomDropdown<String>(
+                    decoration: CustomDropdownDecoration(
+                        closedBorder: Border.all(
+                          color: AppColors.borderColor,
+                        ),
+                        closedBorderRadius: BorderRadius.circular(30)
+                    ),
                     items: ["Male", "Female", "Other"],
                     initialItem: controller.gender.value,
                     onChanged: (val) => controller.gender.value = val!,
@@ -256,6 +329,12 @@ class ChildDetailPage extends StatelessWidget {
                     style: TextStyle(fontSize: 14, color: Colors.grey)),
                 Obx(() {
                   return CustomDropdown<String>(
+                    decoration: CustomDropdownDecoration(
+                        closedBorder: Border.all(
+                          color: AppColors.borderColor,
+                        ),
+                        closedBorderRadius: BorderRadius.circular(30)
+                    ),
                     items: ["Parent", "Guardian", "Relative"],
                     initialItem: controller.relationship.value,
                     onChanged: (val) => controller.relationship.value = val ?? '',
@@ -281,7 +360,7 @@ class ChildDetailPage extends StatelessWidget {
                       if (controller.tagController.text.isNotEmpty) updatedData['profileTag'] = controller.tagController.text;
 
                       await controller.updatePatient(patient.id, updatedData);
-                      Get.back(); // close dialog
+                      // close dialog
                     },
                   );
                 }),
@@ -305,7 +384,15 @@ class ChildDetailPage extends StatelessWidget {
           decoration: InputDecoration(
             hintText: hint,
             contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30),
+                borderSide: BorderSide(color: AppColors.borderColor)),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30),
+                borderSide: BorderSide(color: AppColors.borderColor)),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30),
+                borderSide: BorderSide(color: AppColors.borderColor)),
             suffixIcon: suffixIcon,
           ),
         ),

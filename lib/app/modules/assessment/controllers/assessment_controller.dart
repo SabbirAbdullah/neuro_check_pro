@@ -68,11 +68,11 @@ class AssessmentController extends GetxController {
 
   var checkoutUrl = ''.obs;
 
-  Future<void> startCheckout(String priceId) async {
+  Future<void> startCheckout(String priceId, int assessmentId, int patientId) async {
     final token = await _prefRepository.getString('token');
     try {
       isLoading.value = true;
-      final response = await _repository.getCheckoutUrl(priceId, token);
+      final response = await _repository.getCheckoutUrl(priceId, assessmentId, patientId, token);
       checkoutUrl.value = response.url;
     } catch (e) {
       Get.snackbar("Error", e.toString());
@@ -143,6 +143,7 @@ class AssessmentController extends GetxController {
 
 
   Future<void> submitAllAnswers( int patientId) async {
+    isLoading.value = true;
     final token = await _prefRepository.getString('token');
     final userId = await _prefRepository.getInt('id');
     final assessmentId = 27;
@@ -173,42 +174,10 @@ class AssessmentController extends GetxController {
       Get.offAll(() =>  SubmitSuccessPage());
     } catch (e) {
       Get.snackbar("Error", "Submission failed: $e");
+    }finally{
+      isLoading.value = false;
     }
   }
-  //
-  // Future<void> submitAllAnswers( int patientId) async {
-  //   final token = await _prefRepository.getString('token');
-  //   final userId = await _prefRepository.getInt('id');
-  //   final assessmentId = questions.first.assessmentId;
-  //
-  //   for (var q in questions) {
-  //     final ans = answers[q.id];
-  //     if (ans == null || ans.toString().isEmpty) continue;
-  //
-  //     final answerModel = AnswerModel(
-  //       questionId: q.id,
-  //       userId: userId,
-  //       patientId: patientId,
-  //       assessmentId: assessmentId,
-  //       answer: ans,
-  //     );
-  //
-  //     try {
-  //       // ✅ Skip if already submitted
-  //       if (q.isSubmitted == true) continue;
-  //
-  //       await _repository.submitAnswer(answerModel, token);
-  //
-  //       // Optionally mark as submitted
-  //       q.isSubmitted = true;
-  //     } catch (e) {
-  //       Get.snackbar("Error", "Failed to submit answer for Q${q.id}");
-  //     }
-  //   }
-  //
-  //   Get.back(); // go back after submitting all
-  //   Get.snackbar("Success", "All answers submitted!");
-  // }
 
 
   @override

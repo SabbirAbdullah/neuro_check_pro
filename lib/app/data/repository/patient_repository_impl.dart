@@ -21,7 +21,7 @@ class PatientRepositoryImpl implements PatientRepository {
     return _remote.fetchPatients(id,token);
   }
 
-  Future<PatientModel> updatePatientInfo(int id, Map<String, dynamic> data, String token) {
+  Future<PatientModel> updatePatient(int id, Map<String, dynamic> data, String token) {
     return _remote.updatePatient(id, data, token);
   }
 }

@@ -87,7 +87,7 @@ class ChildCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.to(() => ChildDetailPage(child: patient)),
+      onTap: () => Get.to(() => PatientDetailPage(patient: patient)),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
@@ -112,6 +112,7 @@ class ChildCard extends StatelessWidget {
                     patient.name,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
+
                   const SizedBox(height: 6),
                   Text(
                       '${calculateAge (patient.dateOfBirth)} years',

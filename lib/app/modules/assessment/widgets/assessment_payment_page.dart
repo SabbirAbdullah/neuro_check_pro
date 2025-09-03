@@ -115,7 +115,7 @@ class AssessmentPaymentPage extends StatelessWidget {
 
                   //
                   Get.to(()=>CheckoutPage(model: model,patient: patient,));
-                  controller.startCheckout("${model.priceId}");
+                  controller.startCheckout("${model.priceId}",model.id, patient.id);
                 },
                 child: const Text("Proceed to Payment", style: textButton_white),
               ),

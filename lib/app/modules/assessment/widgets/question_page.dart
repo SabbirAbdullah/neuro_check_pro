@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:neuro_check_pro/app/core/widgets/custom_appbar.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_button.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_loading.dart';
 
 import '../../../core/values/app_colors.dart';
 import '../../../core/widgets/expended_text.dart';
 import '../../bottom_navigation/controllers/bottom_navigation_controller.dart';
+import '../../bottom_navigation/views/bottom_navigation_view.dart';
 import '../../onboardings/controllers/onboarding_controller.dart';
 import '../../patient_profile/models/patient_profile_model.dart';
 import '../controllers/assessment_controller.dart';
@@ -246,7 +248,7 @@ class QuestionSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Summary")),
+      appBar: CustomAppBar(title: "Summary"),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -288,9 +290,16 @@ class QuestionSummary extends StatelessWidget {
                 },
               ),
             ),
-            CustomButton(text: "Submit All", onPressed:  () async {
-              controller.submitAllAnswers(patientId);
-            },)
+            Obx((){
+              if (controller.isLoading.value) {
+                return Center(child: CustomLoading());
+              }
+              return  CustomButton(text: "Submit All", onPressed:  () async {
+
+                await controller.submitAllAnswers(patientId);
+              },);
+            })
+
             // ElevatedButton(
             //   onPressed: () async {
             //     controller.submitAllAnswers(patientId:patient.id );
@@ -321,8 +330,7 @@ class QuestionSummary extends StatelessWidget {
 
 class SubmitSuccessPage extends StatelessWidget {
    SubmitSuccessPage({super.key});
-   final BottomNavigationController bottomNavigationController = Get.put(BottomNavigationController());
-  @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -340,7 +348,7 @@ class SubmitSuccessPage extends StatelessWidget {
               child:  Text("Go To Dashboard",style: TextStyle(color: Colors.black),),
               onPressed: () {
 
-                Get.offNamed("/bottom_navigation_view");
+                Get.offAll(()=>BottomNavigationView());
               },
             ),
           ],

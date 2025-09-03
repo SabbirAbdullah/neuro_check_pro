@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../../data/model/user_info_model.dart';
 import '../../../data/repository/auth_repository.dart';
 import '../../../data/repository/pref_repository.dart';
+import '../../bottom_navigation/views/bottom_navigation_view.dart';
 
 class SplashController extends GetxController {
   var currentPage = 0.obs;
@@ -29,10 +30,12 @@ class SplashController extends GetxController {
     final id = await _prefRepo.getInt('id');
 
     if (token.isNotEmpty && id != null) {
+
       // logged in
       final success = await fetchUserInfo();
       if (success) {
-        Get.offNamed('/bottom_navigation_view');
+        Get.offAll(() => BottomNavigationView());
+
       } else {
         await _prefRepo.clear();
         Get.offAllNamed('/signin_view');

@@ -8,8 +8,9 @@ import '../controllers/splash_controller.dart';
 
 class SplashView extends StatelessWidget {
    SplashView({super.key});
-final SplashController controller = Get.put(SplashController(),permanent: true);
-@override
+final SplashController splashController = Get.put(SplashController(), permanent: true);
+
+   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,

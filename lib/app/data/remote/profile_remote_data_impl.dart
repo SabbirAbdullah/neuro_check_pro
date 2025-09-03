@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:neuro_check_pro/app/data/remote/profile_remote_data_source.dart';
 import 'package:neuro_check_pro/app/modules/assessment_history/models/assessment_history_model.dart';
@@ -31,7 +30,8 @@ class ProfileRemoteDataImpl implements ProfileRemoteDataSource {
   }
 
   @override
-  Future<AssessmentHistoryModel> getSubmissions(int userId, String token) async {
+  Future<AssessmentHistoryModel> getSubmissions(int userId,
+      String token) async {
     try {
       final response = await _dio.get(
         "/submissions",
@@ -42,10 +42,48 @@ class ProfileRemoteDataImpl implements ProfileRemoteDataSource {
       );
 
       return AssessmentHistoryModel.fromJson(response.data);
+    } on DioException catch (dioError) {
+      throw handleDioError(dioError);
     } catch (e) {
-      rethrow;
+      throw handleError(e.toString());
     }
   }
 
+  @override
+  Future<List<dynamic>> getBlogs(String token) async {
+    try {
+      final response = await _dio.get(
+        "/blogs",
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        ),
+      );
 
+      return response.data['payload'];
+    } on DioException catch (dioError) {
+      throw handleDioError(dioError);
+    } catch (e) {
+      throw handleError(e.toString());
+    }
+  }
+
+  @override
+  Future<List<dynamic>> getBillingInfo(String token,int userId) async {
+    try {
+      final response = await _dio.get(
+        "/payment",
+        queryParameters: {"userId": userId},
+        options: Options(
+          headers: {"Authorization": "Bearer $token"},
+        ),
+      );
+      return response.data['payload'];
+    } on DioException catch (dioError) {
+      throw handleDioError(dioError);
+    } catch (e) {
+      throw handleError(e.toString());
+    }
+  }
 }

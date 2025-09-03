@@ -17,7 +17,7 @@ class BottomNavigationController extends GetxController {
   void onInit() {
     super.onInit();
     // checkLoginStatus();
-    // fetchUserInfo();
+    //  fetchUserInfo();
   }
   final PrefRepository _prefRepo = Get.find(tag: (PrefRepository).toString());
   final AuthenticationRepository _repository =
@@ -26,28 +26,28 @@ class BottomNavigationController extends GetxController {
   var user = Rxn<UserInfoModel>();
   var isLoading = false.obs;
   //
-  Future<bool> fetchUserInfo() async {
-    final token = await _prefRepo.getString('token');
-    final id = await _prefRepo.getInt('id');
-    if (token.isEmpty || id == null) return false;
-
-    try {
-      isLoading.value = true;
-      final response = await _repository.getUserById(id, token);
-
-      if (response.statusCode == 201) {
-        user.value = response.payload;
-        return true; // ✅ success
-      } else {
-        Get.snackbar("Error", response.message);
-        return false;
-      }
-    } catch (e) {
-      Get.snackbar("Error", e.toString());
-      return false;
-    } finally {
-      isLoading.value = false;
-    }
-  }
+  // Future<bool> fetchUserInfo() async {
+  //   final token = await _prefRepo.getString('token');
+  //   final id = await _prefRepo.getInt('id');
+  //   if (token.isEmpty || id == null) return false;
+  //
+  //   try {
+  //     isLoading.value = true;
+  //     final response = await _repository.getUserById(id, token);
+  //
+  //     if (response.statusCode == 201) {
+  //       user.value = response.payload;
+  //       return true; // ✅ success
+  //     } else {
+  //       Get.snackbar("Error", response.message);
+  //       return false;
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar("Error", e.toString());
+  //     return false;
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
 
 }

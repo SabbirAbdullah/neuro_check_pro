@@ -130,7 +130,7 @@ class PrimaryAssessmentController extends GetxController {
 
       final response= await _repository.submitAnswers(request, token!);
 
-      Get.offAll(() => PrimaryQuizResultView(response: response,question: questions.length));
+      Get.off(() => PrimaryQuizResultView(response: response,question: questions.length));
     } catch (e) {
       Get.snackbar("Error", "Submission failed: $e");
     }

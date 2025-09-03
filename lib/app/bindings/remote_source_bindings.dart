@@ -9,11 +9,14 @@ import '../data/remote/auth_remote_data_impl.dart';
 import '../data/remote/auth_remote_data_source.dart';
 import '../data/remote/patient_remote_data_impl.dart';
 import '../data/remote/patient_remote_data_source.dart';
+import '../modules/welcome/controllers/splash_controller.dart';
 
 
 class RemoteSourceBindings implements Bindings {
   @override
   void dependencies() {
+    Get.lazyPut<SplashController>(() => SplashController(), fenix: true);
+
     Get.lazyPut<AuthenticationRemoteDataSource>(
           () => AuthenticationRemoteDataImpl(),
       tag: (AuthenticationRemoteDataSource).toString(),

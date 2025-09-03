@@ -2,18 +2,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/core/values/text_styles.dart';
+import 'package:neuro_check_pro/app/modules/assessment/views/assessment_view.dart';
 import 'package:neuro_check_pro/app/modules/bottom_navigation/controllers/bottom_navigation_controller.dart';
+import 'package:neuro_check_pro/app/modules/bottom_navigation/views/bottom_navigation_view.dart';
 
 import 'package:neuro_check_pro/app/modules/onboardings/controllers/onboarding_controller.dart';
 import 'dart:math' as math;
 
 import '../../../data/model/answer_submission_model.dart';
+import '../../welcome/controllers/splash_controller.dart';
 
 class PrimaryQuizResultView extends StatelessWidget {
     final SubmissionResponse response;
     int question;
    PrimaryQuizResultView({super.key, required this.response,required this.question});
-
+    final SplashController splashController = Get.find<SplashController>();
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +60,7 @@ class PrimaryQuizResultView extends StatelessWidget {
                     child: Container(), // Empty container as child for CustomPaint
                   ),
                   Text(
-                    '$score/10',
+                    '$score/$question',
                     style: const TextStyle(
                       color: Color(0xFF8F9BAD), // Dark grey for the text
                       fontSize: 24,
@@ -109,12 +112,12 @@ class PrimaryQuizResultView extends StatelessWidget {
                   minimumSize: const Size.fromHeight(55),
                 ),
                 onPressed: () {
-                  Get.put(BottomNavigationController());
+
                   if (score <= 5) {
-                    Get.offNamed("/bottom_navigation_view");
+                    Get.offAll(()=>BottomNavigationView());
                   } else {
                     // Navigate to full assessment
-                    Get.offNamed("/assessment_view");
+                    Get.to(()=>AssessmentView());
                   }
                 },
                 child: Text(

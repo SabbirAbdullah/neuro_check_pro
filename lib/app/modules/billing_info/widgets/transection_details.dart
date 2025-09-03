@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:neuro_check_pro/app/core/values/app_colors.dart';
+import 'package:neuro_check_pro/app/modules/billing_info/models/billing_info_model.dart';
 
 class TransactionDetailBottomSheet extends StatelessWidget {
-  final Map<String, dynamic> item;
+  final BillingInfoModel item;
 
   const TransactionDetailBottomSheet({super.key, required this.item});
 
@@ -42,13 +43,13 @@ class TransactionDetailBottomSheet extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 // Child name & Title
-                _buildDetailRow("Child name", item['child'], "Title", item['title']),
+                _buildDetailRow("Child name", item.patient!.name, "Title", item.assessment!.name),
                  Divider(height: 32, color: AppColors.dividerColor,),
                 // Type of Assessment & Paid Amount
-                _buildDetailRow("Type of Assessment", item['subtitle'], "Paid Amount", item['amount']),
+                _buildDetailRow("Type of Assessment", item.assessment!.category, "Paid Amount", item.amount),
                 const Divider(height: 32),
                 // Transaction Time & ID
-                _buildDetailRow("Transaction Time", item['time'], "Transaction ID", item['trxId']),
+                _buildDetailRow("Transaction Time", item.createdAt, "Transaction ID", item.sessionId),
               ],
             ),
           ),

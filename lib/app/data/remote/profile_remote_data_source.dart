@@ -5,4 +5,6 @@ import '../model/user_info_model.dart';
 abstract class ProfileRemoteDataSource {
   Future<UserInfoModel> updateUser(int id, Map<String, dynamic> data, String token);
   Future<AssessmentHistoryModel> getSubmissions(int userId, String token);
+  Future<List<dynamic>> getBlogs(String token);
+  Future<List<dynamic>> getBillingInfo(String token,int userId);
 }

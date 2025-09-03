@@ -9,6 +9,8 @@ import 'package:neuro_check_pro/app/modules/assessment/widgets/question_page.dar
 import 'package:neuro_check_pro/app/modules/patient_profile/models/patient_profile_model.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../../bottom_navigation/controllers/bottom_navigation_controller.dart';
+import '../../bottom_navigation/views/bottom_navigation_view.dart';
+import '../../welcome/controllers/splash_controller.dart';
 import '../controllers/assessment_controller.dart';
 import '../models/assessment_model.dart';
 
@@ -58,10 +60,10 @@ class PaymentSuccessPage extends StatelessWidget {
   final AssessmentModel model;
    final PatientModel patient;
 
-
+   final AssessmentController controller = Get.put(AssessmentController());
   @override
   Widget build(BuildContext context) {
-    final AssessmentController controller = Get.put(AssessmentController());
+
     return Scaffold(
       // appBar: CustomAppBar(title: "Payment Success",),
       body: Center(
@@ -99,9 +101,9 @@ class PaymentSuccessPage extends StatelessWidget {
               color: Colors.grey.shade200,
               borderRadius: BorderRadius.all(Radius.circular(12)),
               child:  Text("Go To Dashboard",style: TextStyle(color: Colors.black),),
-              onPressed: () {
-                Get.put(BottomNavigationController());
-                Get.offNamed("/bottom_navigation_view");
+              onPressed: ()  {
+
+                Get.offAll(()=>BottomNavigationView());
               },
             ),
             Spacer(flex: 1,),

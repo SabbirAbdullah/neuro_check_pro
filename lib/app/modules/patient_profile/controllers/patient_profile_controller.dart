@@ -73,7 +73,8 @@ class PatientProfileController extends GetxController {
     final token = await _prefRepository.getString('token');
     try {
       isLoading.value = true;
-      final updatedPatient = await _repository.updatePatientInfo(id, updatedData, token);
+      final updatedPatient = await _repository.updatePatient(id, updatedData, token);
+      Get.back();
       // patients.value = updatedPatient;
       Get.snackbar("Success", "Patient updated successfully");
       fetchPatients();

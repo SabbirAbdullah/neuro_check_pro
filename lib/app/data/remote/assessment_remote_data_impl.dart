@@ -55,11 +55,16 @@ class AssessmentRemoteDataSourceImpl implements AssessmentRemoteDataSource {
   }
 
   @override
-  Future<CheckoutResponse> createCheckout(String priceId, String token) async {
+  Future<CheckoutResponse> createCheckout(String priceId,int assessmentId, int patientId, String token) async {
     try {
       final response = await _dio.post(
         "/payment/checkout",
-        data: {"priceId": priceId},
+        data: {
+          "priceId": priceId,
+          "assessmentId":assessmentId,
+          "patientId":patientId
+
+        },
         options: Options(
           headers: {
             "Authorization": "Bearer $token",

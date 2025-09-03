@@ -32,8 +32,8 @@ class AssessmentRepositoryImpl implements AssessmentRepository {
     return filtered;
   }
   @override
-  Future<CheckoutResponse> getCheckoutUrl(String priceId, String token) {
-    return _remote.createCheckout(priceId, token);
+  Future<CheckoutResponse> getCheckoutUrl(String priceId,int assessmentId, int patientId, String token){
+    return _remote.createCheckout(priceId, assessmentId, patientId, token);
   }
   @override
   Future<SubmissionResponse> submitAnswers(SubmissionRequest request, String token) {

@@ -16,7 +16,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 
 class BottomNavigationView extends StatelessWidget {
   BottomNavigationView({super.key});
-  final SplashController splashController = Get.find<SplashController>();
+
   final BottomNavigationController controller = Get.put(BottomNavigationController());
 
   final pages = [
