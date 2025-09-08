@@ -14,15 +14,15 @@ import '../widgets/account_info.dart';
 
 class ProfileView extends StatelessWidget {
   final ProfileController controller = Get.put(ProfileController());
-  final SplashController splashController = Get.find<SplashController>();
+  // final SplashController splashController = Get.find<SplashController>();
 
-  // final BottomNavigationController bottomNavigationController = Get.find<BottomNavigationController>();
+   final OnboardingController onboardingController = Get.find<OnboardingController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: RefreshIndicator(
-        onRefresh:splashController.fetchUserInfo,
+        onRefresh:onboardingController.fetchUserInfo,
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -36,7 +36,7 @@ class ProfileView extends StatelessWidget {
                 _sectionTitle("User information"),
                 GestureDetector(
                   onTap: (){
-                    Get.to(()=>AccountInfo(user: splashController.user.value!,),);
+                    Get.to(()=>AccountInfo(user: onboardingController.user.value!,),);
                   },
                     child: _infoTile("Account information")),
                 GestureDetector(
@@ -74,10 +74,41 @@ class ProfileView extends StatelessWidget {
         Stack(
           alignment: Alignment.bottomCenter,
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 40,
-              backgroundImage: AssetImage('assets/images/user.png'), // Your image
+              backgroundColor: Colors.blueAccent.shade100,
+              child: onboardingController.user.value!.image != null
+                  ? ClipOval(
+                child: Image.network(
+                  onboardingController.user.value!.image!,
+                  fit: BoxFit.cover,
+                  width: 80,
+                  height: 80,
+                  errorBuilder: (context, error, stackTrace) {
+                    // If image fails to load, show initials
+                    return Center(
+                      child: Text(
+                        onboardingController.user.value!.name[0].toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              )
+                  : Text(
+                onboardingController.user.value!.name[0].toUpperCase(),
+                style: const TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
             ),
+
             Container(
               margin: const EdgeInsets.only(bottom: 4),
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -86,7 +117,7 @@ class ProfileView extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
-                splashController.user.value!.role,
+                onboardingController.user.value!.role,
                 style: const TextStyle(fontSize: 12, color: Colors.black),
               ),
             )
@@ -105,14 +136,14 @@ class ProfileView extends StatelessWidget {
               ),
             ),
             Text(
-             "${splashController.user.value!.name}",
+             "${onboardingController.user.value!.name}",
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
-             splashController.user.value!.email,
+              onboardingController.user.value!.email,
               style: const TextStyle(
                 color: Colors.black54,
               ),
@@ -145,7 +176,11 @@ class ProfileView extends StatelessWidget {
       ],
     );
   }
-
+  String initials(String name) {
+    final parts = name.split(' ');
+    if (parts.length == 1) return parts[0][0].toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
   Widget _tileBox(String text) {
     return Container(
       padding: const EdgeInsets.all(12),

@@ -12,13 +12,13 @@ import '../widgets/welcome_page3.dart';
 import '../widgets/welcome_page4.dart';
 
 class OnboardingView extends StatelessWidget {
-  final OnboardingController controller = Get.put(OnboardingController());
+  final OnboardingController controller = Get.find<OnboardingController>();
 
   final List<Widget> pages = [
      OnboardingPage1(),
-    const OnboardingPage2(),
-    const OnboardingPage3(),
-    const OnboardingPage4(),
+     OnboardingPage2(),
+     OnboardingPage3(),
+     OnboardingPage4(),
   ];
 
   @override

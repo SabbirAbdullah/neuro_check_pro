@@ -6,9 +6,10 @@ import '/flavors/environment.dart';
 import 'my_app.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   EnvConfig prodConfig = EnvConfig(
     appName: "",
-    baseUrl: "http://192.168.0.105:3000",
+    baseUrl: "https://neurocheckpro.com/api",
     shouldCollectCrashLog: true,
   );
   BuildConfig.instantiate(

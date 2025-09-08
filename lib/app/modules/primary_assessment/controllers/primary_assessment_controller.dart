@@ -123,7 +123,7 @@ class PrimaryAssessmentController extends GetxController {
         patientId: patientId,
         assessmentId: assessmentId,
         userId: userId,
-        score: 0,
+        // score: 0,
         summary: "",
         answers: answersList,
       );

@@ -15,12 +15,12 @@ import '../controllers/assessment_controller.dart';
 import '../models/assessment_model.dart';
 
 class QuestionPage extends StatelessWidget {
-
+  final AssessmentModel model;
   final PatientModel patient;
   final AssessmentController controller = Get.put(AssessmentController());
 
   QuestionPage({
-    super.key, required this.patient,
+    super.key, required this.patient, required this.model,
   });
 
   @override
@@ -224,7 +224,7 @@ class QuestionPage extends StatelessWidget {
 
 
                       ElevatedButton( onPressed: controller.answers[question.id] == null
-                          ? null : ()=>controller.goToNextQuestion(patient.id),
+                          ? null : ()=>controller.goToNextQuestion(patient.id,model.id),
                         style: ElevatedButton.styleFrom( backgroundColor: const Color(0xFF0D4D54), foregroundColor: Colors.white, ),
                         child: Text( controller.currentIndex.value + 1 < controller.questions.length
                             ? "Next" : "Finish", ), ),
@@ -243,7 +243,8 @@ class QuestionPage extends StatelessWidget {
 class QuestionSummary extends StatelessWidget {
   final AssessmentController controller;
   final int  patientId;
-  const QuestionSummary({super.key, required this.controller,  required this.patientId});
+  final int assessmentId;
+  const QuestionSummary({super.key, required this.controller,  required this.patientId, required this.assessmentId});
 
   @override
   Widget build(BuildContext context) {
@@ -296,7 +297,7 @@ class QuestionSummary extends StatelessWidget {
               }
               return  CustomButton(text: "Submit All", onPressed:  () async {
 
-                await controller.submitAllAnswers(patientId);
+                await controller.submitAllAnswers(patientId, assessmentId);
               },);
             })
 

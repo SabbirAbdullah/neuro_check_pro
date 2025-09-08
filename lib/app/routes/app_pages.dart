@@ -36,14 +36,14 @@ part 'app_routes.dart';
 
 class AppPages {
   AppPages._();
-  static const INITIAL = Routes.WELCOME;
+  static const INITIAL = Routes.ON_BOARDINGS;
   // static const INITIAL = Routes.SIGNUP_FORM;
   static final routes = [
-    GetPage(
-      name: _Paths.WELCOME,
-      page: () => SplashView(),
-      binding: SplashBinding(),
-    ),
+    // GetPage(
+    //   name: _Paths.WELCOME,
+    //   page: () => SplashView(),
+    //   binding: SplashBinding(),
+    // ),
     GetPage(
       name: _Paths.ON_BOARDINGS,
       page: () => OnboardingView(),

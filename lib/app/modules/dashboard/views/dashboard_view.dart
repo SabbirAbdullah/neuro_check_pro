@@ -17,7 +17,7 @@ class DashboardView extends StatelessWidget {
   DashboardView({super.key});
 
   final DashboardController controller = Get.put(DashboardController());
-  final SplashController splashController = Get.find<SplashController>();
+  final OnboardingController onBoardingController = Get.find<OnboardingController>();
 
 
   @override
@@ -35,9 +35,9 @@ class DashboardView extends StatelessWidget {
         elevation: 0,
       ),
       body: RefreshIndicator(
-        onRefresh: splashController.fetchUserInfo,
+        onRefresh: onBoardingController.fetchUserInfo,
         child:  Obx((){
-          final user = splashController.user.value;
+          final user = onBoardingController.user.value;
           if (user == null) {
             return Center(child: CustomLoading());
           }
@@ -50,10 +50,42 @@ class DashboardView extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const CircleAvatar(
-                      radius: 28,
-                      backgroundImage: AssetImage('assets/images/user.png'),
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Colors.blueAccent.shade100,
+                      child: onBoardingController.user.value!.image != null
+                          ? ClipOval(
+                        child: Image.network(
+                          onBoardingController.user.value!.image!,
+                          fit: BoxFit.cover,
+                          width: 80,
+                          height: 80,
+                          errorBuilder: (context, error, stackTrace) {
+                            // If image fails to load, show initials
+                            return Center(
+                              child: Text(
+                                onBoardingController.user.value!.name[0].toUpperCase(),
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                          : Text(
+                        onBoardingController.user.value!.name[0].toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
+
+
                     const SizedBox(width: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +163,8 @@ class DashboardView extends StatelessWidget {
 
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => DiagnosisView());
+                    // Get.to(() => DiagnosisView());
+                    Get.snackbar("Soon!!", "Coming Soon");
                   },
                   child: _assessmentCard(
                     title: "Resume Diagnosis",

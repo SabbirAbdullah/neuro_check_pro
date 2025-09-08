@@ -43,6 +43,12 @@ class SignupForm extends StatelessWidget {
             _buildTextField(controller.ageController,
                 keyboardType: TextInputType.number),
             const SizedBox(height: 16),
+            const Text("Phone Number", style: TextStyle(color: Colors.grey)),
+            // _buildTextField(
+            //   controller.phoneController,
+            //   keyboardType: TextInputType.phone,
+            // ),
+            const SizedBox(height: 16),
 
             // Country Picker (fixed UK)
             const Text("Country", style: TextStyle(color: Colors.grey)),

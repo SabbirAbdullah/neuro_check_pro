@@ -129,9 +129,9 @@ class AssessmentController extends GetxController {
 
 
 
-  void goToNextQuestion(int patientId) { if (currentIndex.value < questions.length - 1) { currentIndex.value++; } else {
+  void goToNextQuestion(int patientId, int assessmentId) { if (currentIndex.value < questions.length - 1) { currentIndex.value++; } else {
     // Finished -> go to summary page
-    Get.to(() => QuestionSummary(controller: this,patientId: patientId,));
+    Get.to(() => QuestionSummary(controller: this,patientId: patientId,assessmentId: assessmentId,));
   } }
 
   void goToPreviousQuestion() {
@@ -142,11 +142,11 @@ class AssessmentController extends GetxController {
 
 
 
-  Future<void> submitAllAnswers( int patientId) async {
+  Future<void> submitAllAnswers( int patientId, int assessmentId) async {
     isLoading.value = true;
     final token = await _prefRepository.getString('token');
     final userId = await _prefRepository.getInt('id');
-    final assessmentId = 27;
+
 
     final answersList = questions.map((q) {
       final ans = answers[q.id] ?? "";
@@ -163,7 +163,7 @@ class AssessmentController extends GetxController {
       patientId: patientId,
       assessmentId: assessmentId,
       userId: userId,
-      score: 0,
+      // score: 0,
       summary: "",
       answers: answersList,
     );

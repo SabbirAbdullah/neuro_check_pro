@@ -11,8 +11,7 @@ import '../../network/dio_provider.dart';
 import '../repository/pref_repository.dart';
 
 class PatientRemoteDataSourceImpl implements PatientRemoteDataSource {
-  final Dio _dio =
-      DioProvider.dioWithHeaderToken; // we’ll inject token manually
+  final Dio _dio = DioProvider.dioWithHeaderToken; // we’ll inject token manually
 
   @override
   Future<PatientResponseModel> addPatient(

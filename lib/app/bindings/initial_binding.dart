@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:neuro_check_pro/app/modules/onboardings/controllers/onboarding_controller.dart';
+import '../modules/welcome/controllers/splash_controller.dart';
 import 'local_source_bindings.dart';
 import 'remote_source_bindings.dart';
 import 'repository_bindings.dart';
@@ -9,6 +11,7 @@ class InitialBinding implements Bindings {
     RepositoryBindings().dependencies();
     RemoteSourceBindings().dependencies();
     LocalSourceBindings().dependencies();
+    Get.lazyPut<OnboardingController>(() => OnboardingController(), fenix: true);
 
   }
 }

@@ -5,7 +5,7 @@ class PatientRequestModel {
   final String relationshipToUser;
   final String aboutGp;
   final String profileTag;
-  final String userId;
+  final int userId;
 
   PatientRequestModel({
     required this.name,
@@ -55,7 +55,7 @@ class PatientPayload {
   final String relationshipToUser;
   final String aboutGp;
   final String profileTag;
-  final String userId;
+  final int userId;
   final int id;
 
   PatientPayload({

@@ -93,7 +93,7 @@ class PaymentSuccessPage extends StatelessWidget {
               child:  Text("Start Your Assessment"),
               onPressed: () {
                 controller.loadQuestions(model.id);
-                Get.off(()=>QuestionPage(patient: patient));
+                Get.off(()=>QuestionPage(patient: patient, model: model));
               },
             ),
             SizedBox(height: 16,),

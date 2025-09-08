@@ -54,7 +54,7 @@ class SignInController extends GetxController {
          await _prefRepository.setInt('id', response.user.id );
         Get.snackbar("Success", response.message);
 
-        final user = Get.put(SplashController());
+        final user = Get.put(OnboardingController());
         await user.fetchUserInfo();
 
         Get.offAllNamed("/bottom_navigation_view"); // Navigate to Dashboard

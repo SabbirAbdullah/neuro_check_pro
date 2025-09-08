@@ -44,6 +44,8 @@ dependencies:
   country_picker: ^2.0.27
   animated_toggle_switch: ^0.8.5
   webview_flutter: ^4.13.0
+  flutter_native_splash: ^2.4.6
+  flutter_launcher_icons: ^0.14.4
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -59,6 +61,28 @@ dev_dependencies:
   shared_preferences: 2.2.2
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+flutter_native_splash:
+  color: "#FFFFFF"         # This is the teal-like background from your image.
+  image: assets/logo.png
+  android: true
+  ios: true
+  fullscreen: true
+  android_12:
+    color: "#FFFFFF"                      # Background color for Android 12+
+    image: assets/logo.png
+    icon_background_color: "#0B4C5F"     # Optional, safe to keep same
+    branding: null                       # Optional branding image (bottom)
+
+  # Dark mode support
+  color_dark: "#FFFFFF"
+  image_dark: assets/logo.png
+
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo.png"
+  remove_alpha_ios: true
 
 # The following section is specific to Flutter packages.
 flutter:

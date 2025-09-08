@@ -36,14 +36,13 @@ class PatientProfileController extends GetxController {
         relationshipToUser: relationship.value,
         aboutGp: gpController.text.trim(),
         profileTag: tagController.text.trim(),
-        userId: id.toString(),
+        userId: id,
       );
 
       final response = await _repository.addPatient(patient, token);
 
       if (response.statusCode == 201) {
         fetchPatients();
-        await Future.delayed(Duration(seconds: 1));
         Get.back();
         // ✅ Success snackbar
         Get.snackbar(

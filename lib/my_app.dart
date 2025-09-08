@@ -20,15 +20,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
 
   @override
-   void initState()  {
-
-    //  _getTokenData();
+   void initState() {
     super.initState();
-
-    // initialization();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +34,6 @@ class _MyAppState extends State<MyApp> {
       initialBinding: InitialBinding(),
       title: envConfig.appName,
       getPages: AppPages.routes,
-
-      supportedLocales: _getSupportedLocal(),
 
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
@@ -68,10 +60,5 @@ class _MyAppState extends State<MyApp> {
 
     );
   }
-  List<Locale> _getSupportedLocal() {
-    return [
-      const Locale('en', ''),
-      const Locale('bn', ''),
-    ];
-  }
+
 }

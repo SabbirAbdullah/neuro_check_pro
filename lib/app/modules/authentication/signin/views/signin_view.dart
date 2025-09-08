@@ -217,60 +217,60 @@ class SignInView extends StatelessWidget {
             const Center(child: Text("Or", style: TextStyle(color: Colors.grey))),
             const SizedBox(height: 20),
 
-            // Google Sign In
-            OutlinedButton.icon(
-              onPressed: controller.signInWithGoogle,
-              icon: Image.asset('assets/google.png', height: 20),
-              label: const Text("Sign in with Google",style: signInOptionTextButton,),
-              style: OutlinedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30,),
-                  ),
-                  side: BorderSide(color: AppColors.borderColor)
-              ),
-            ),
-            const SizedBox(height: 12),
-
-            // Apple Sign In
-            OutlinedButton.icon(
-              onPressed: controller.signInWithApple,
-              icon: const Icon(Icons.apple, color: Colors.black),
-              label: const Text("Sign in with Apple",style: signInOptionTextButton,),
-              style: OutlinedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                side:  BorderSide(
-                  color: AppColors.borderColor, // ✅ border color here
-                  // optional thickness
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-
-            // Facebook Sign In
-            OutlinedButton.icon(
-              onPressed: controller.signInWithFacebook,
-              icon: const Icon(Icons.facebook, color: Colors.blue),
-              label: const Text(
-                "Sign in with Facebook",
-                style: signInOptionTextButton,
-              ),
-              style: OutlinedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50),
-                side:  BorderSide(
-                  color: AppColors.borderColor, // ✅ border color here
-                  // optional thickness
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 30),
+            // // Google Sign In
+            // OutlinedButton.icon(
+            //   onPressed: controller.signInWithGoogle,
+            //   icon: Image.asset('assets/google.png', height: 20),
+            //   label: const Text("Sign in with Google",style: signInOptionTextButton,),
+            //   style: OutlinedButton.styleFrom(
+            //       minimumSize: const Size(double.infinity, 50),
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(30,),
+            //       ),
+            //       side: BorderSide(color: AppColors.borderColor)
+            //   ),
+            // ),
+            // const SizedBox(height: 12),
+            //
+            // // Apple Sign In
+            // OutlinedButton.icon(
+            //   onPressed: controller.signInWithApple,
+            //   icon: const Icon(Icons.apple, color: Colors.black),
+            //   label: const Text("Sign in with Apple",style: signInOptionTextButton,),
+            //   style: OutlinedButton.styleFrom(
+            //     minimumSize: const Size(double.infinity, 50),
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(30),
+            //     ),
+            //     side:  BorderSide(
+            //       color: AppColors.borderColor, // ✅ border color here
+            //       // optional thickness
+            //     ),
+            //   ),
+            // ),
+            // const SizedBox(height: 12),
+            //
+            // // Facebook Sign In
+            // OutlinedButton.icon(
+            //   onPressed: controller.signInWithFacebook,
+            //   icon: const Icon(Icons.facebook, color: Colors.blue),
+            //   label: const Text(
+            //     "Sign in with Facebook",
+            //     style: signInOptionTextButton,
+            //   ),
+            //   style: OutlinedButton.styleFrom(
+            //     minimumSize: const Size(double.infinity, 50),
+            //     side:  BorderSide(
+            //       color: AppColors.borderColor, // ✅ border color here
+            //       // optional thickness
+            //     ),
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(30),
+            //     ),
+            //   ),
+            // ),
+            //
+            // const SizedBox(height: 30),
 
             // Sign Up navigation
             Row(

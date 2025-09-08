@@ -16,11 +16,11 @@ class PrimaryQuizResultView extends StatelessWidget {
     final SubmissionResponse response;
     int question;
    PrimaryQuizResultView({super.key, required this.response,required this.question});
-    final SplashController splashController = Get.find<SplashController>();
+
 
   @override
   Widget build(BuildContext context) {
-    final int score = response.score;
+    final int score = response.score!;
 
     return Scaffold(
       body: SafeArea(

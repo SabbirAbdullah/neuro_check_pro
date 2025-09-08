@@ -15,7 +15,6 @@ import '../modules/welcome/controllers/splash_controller.dart';
 class RemoteSourceBindings implements Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<SplashController>(() => SplashController(), fenix: true);
 
     Get.lazyPut<AuthenticationRemoteDataSource>(
           () => AuthenticationRemoteDataImpl(),

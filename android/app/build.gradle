@@ -1,14 +1,64 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    // Flutter plugin must be applied last
     id("dev.flutter.flutter-gradle-plugin")
+}
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file("neuro_key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
 android {
     namespace = "com.example.neuro_check_pro"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    compileSdk = 36
+
+    defaultConfig {
+        applicationId = "com.example.neuro_check_pro"
+        minSdk = 26
+        targetSdk = 36
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+        multiDexEnabled = true
+    }
+
+    flavorDimensions += "env"
+    productFlavors {
+        dev {
+            dimension = "env"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            resValue("string", "app_name", "TestApp Dev")
+        }
+        prod {
+            dimension = "env"
+            resValue("string", "app_name", "TestApp")
+        }
+    }
+
+    signingConfigs {
+        release {
+            keyAlias = keystoreProperties['keyAlias']
+            keyPassword = keystoreProperties['keyPassword']
+            storeFile = keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword = keystoreProperties['storePassword']
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.release
+            minifyEnabled = false
+            shrinkResources = false
+            // Optional: enable proguard if needed
+            // proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            // Optional: enable debug signing if needed
+            signingConfig = signingConfigs.release
+        }
+    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -16,46 +66,12 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
-    }
-
-    defaultConfig {
-        applicationId = "com.example.neuro_check_pro"
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
-    }
-
-    // 🔥 Add product flavors
-    flavorDimensions += "env"
-    productFlavors {
-        create("dev") {
-            dimension = "env"
-            applicationIdSuffix = ".dev"
-            versionNameSuffix = "-dev"
-            resValue("string", "neuro_check_pro", "TestApp Dev")
-        }
-        create("prod") {
-            dimension = "env"
-            resValue("string", "neuro_check_pro", "TestApp")
-        }
-    }
-
-    buildTypes {
-        release {
-            signingConfig = signingConfigs.getByName("debug")
-//            isMinifyEnabled = false
-        }
+        jvmTarget = "11"
     }
 }
 
 flutter {
     source = "../.."
-}
-
-flutter {
-    source "../.."
 }
 
 dependencies {

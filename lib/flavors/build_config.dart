@@ -23,13 +23,13 @@ class BuildConfig {
   }
 }
 
+
 // class BuildConfig {
-//   static final BuildConfig instance = BuildConfig._internal();
 //
 //   late final Environment environment;
 //   late final EnvConfig _config;
 //   bool _lock = false;
-//
+//   static final BuildConfig instance = BuildConfig._internal();
 //   BuildConfig._internal();
 //
 //   /// Call this once to initialize
@@ -52,3 +52,4 @@ class BuildConfig {
 //     return instance._config;
 //   }
 // }
+

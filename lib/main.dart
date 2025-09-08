@@ -2,14 +2,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'flavors/build_config.dart';
+import 'flavors/env_config.dart';
+import 'flavors/environment.dart';
 import 'my_app.dart';
 
 
-void main()  {
-  // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  // //FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  // final welcomeController = Get.put(WelcomeController());
-  // await welcomeController.checkLoginStatus();
+  EnvConfig prodConfig = EnvConfig(
+    appName: "",
+    baseUrl: "https://neurocheckpro.com/api",
+    shouldCollectCrashLog: true,
+  );
+  BuildConfig.instantiate(
+    envType: Environment.PRODUCTION,
+    envConfig: prodConfig,
+  );
+
   runApp(const MyApp());
 }

@@ -18,7 +18,7 @@ class BottomNavigationView extends StatelessWidget {
   BottomNavigationView({super.key});
 
   final BottomNavigationController controller = Get.put(BottomNavigationController());
-
+  final OnboardingController onboardingController = Get.find<OnboardingController>();
   final pages = [
     DashboardView(),
     AssessmentView(),

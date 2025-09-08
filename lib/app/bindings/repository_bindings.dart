@@ -11,10 +11,12 @@ import '../data/repository/patient_repository.dart';
 import '../data/repository/patient_repository_impl.dart';
 import '../data/repository/pref_repository.dart';
 import '../data/repository/pref_repository_impl.dart';
+import '../modules/welcome/controllers/splash_controller.dart';
 
 class RepositoryBindings implements Bindings {
   @override
   void dependencies() {
+
       Get.lazyPut<AuthenticationRepository>(
               () => AuthenticationRepositoryImpl(),
           tag: (AuthenticationRepository).toString(),

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../controllers/onboarding_controller.dart';
 
 class OnboardingPage1 extends StatelessWidget {
+  final OnboardingController controller = Get.put(OnboardingController());
    OnboardingPage1({super.key});
 
   @override
