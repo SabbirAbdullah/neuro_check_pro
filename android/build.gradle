@@ -16,13 +16,19 @@
 //tasks.register("clean", Delete) {
 //    delete rootProject.buildDir
 //}
-
-allprojects {
+buildscript {
     repositories {
         google()
         mavenCentral()
     }
+    dependencies {
+        // 🔑 Firebase/Google Services plugin add korte hobe
+        classpath 'com.google.gms:google-services:4.4.3'
+
+    }
 }
+
+
 
 def newBuildDir = rootProject.layout.buildDirectory.dir("../../build").get()
 rootProject.layout.buildDirectory.set(newBuildDir)

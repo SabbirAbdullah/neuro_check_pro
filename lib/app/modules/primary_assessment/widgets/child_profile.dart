@@ -14,9 +14,9 @@ import 'add_child.dart';
 
 
 class AssessmentChildSelectPage extends StatelessWidget {
-  final AssessmentModel ? model;
+  final int assessmentId;
 
-  AssessmentChildSelectPage({super.key,  this.model});
+  AssessmentChildSelectPage({super.key,  required this.assessmentId});
   final AssessmentController controller = Get.put(AssessmentController());
   final PatientProfileController patientProfileController = Get.put(PatientProfileController());
   @override
@@ -57,7 +57,7 @@ class AssessmentChildSelectPage extends StatelessWidget {
                       return GestureDetector(
                         onTap: () {
                           Get.snackbar('Selected', 'You selected ${patient.name}');
-                          Get.to(()=>InitialAssessmentQuestion(   patient: patient.id,));
+                          Get.to(()=>InitialAssessmentQuestion(   patient: patient.id,assessmentId: assessmentId));
                           // Get.to(()=>AssessmentPaymentPage(patient: patient, model: model!,));
                         },
                         child: Column(

@@ -71,14 +71,9 @@ class PrimaryAssessmentController extends GetxController {
 
     if (questionId == null) return;
 
-    if (answerType == "MultipleChoice") {
-      final current = (answers[questionId] ?? <String>[]).cast<String>();
-      if (current.contains(answer)) {
-        current.remove(answer);
-      } else {
-        current.add(answer);
-      }
-      answers[questionId] = current;
+    if (answerType == "MultipleChoice" || answerType == "Yes/No") {
+      // Replace the previous answer with the new one
+      answers[questionId] = answer;
     } else {
       answers[questionId] = answer;
     }
@@ -86,12 +81,12 @@ class PrimaryAssessmentController extends GetxController {
     update(["textField_$questionId"]);
   }
 
-  void goToNextQuestion(int patientId) {
+  void goToNextQuestion(int patientId, int assessmentId) {
     if (currentIndex.value < questions.length - 1) {
       currentIndex.value++;
     } else {
       Get.to(() =>
-          QuestionSummary(controller: this, patientId: patientId));
+          InitialQuestionSummary(controller: this, patientId: patientId, assessmentId:assessmentId ,));
     }
   }
 

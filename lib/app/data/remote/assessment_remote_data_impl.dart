@@ -43,7 +43,7 @@ class AssessmentRemoteDataSourceImpl implements AssessmentRemoteDataSource {
     try {
       final response = await _dio.get(
         "/questionnaires",
-        queryParameters: {"assessmentId": assessmentId},
+        queryParameters: {"assessmentId": assessmentId, "limit": 100},
         options: Options(headers: {"Authorization": "Bearer $token"}),
       );
       return QuestionResponseModel.fromJson(response.data);

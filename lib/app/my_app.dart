@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 
-import '../flavors/build_config.dart';
-import '../flavors/env_config.dart';
-import 'app/bindings/initial_binding.dart';
-import 'app/core/values/app_colors.dart';
-import 'app/data/repository/auth_repository.dart';
-import 'app/data/repository/pref_repository.dart';
-import 'app/routes/app_pages.dart';
+import '../../flavors/build_config.dart';
+import '../../flavors/env_config.dart';
+import 'bindings/initial_binding.dart';
+import 'core/values/app_colors.dart';
+import 'data/repository/auth_repository.dart';
+import 'data/repository/pref_repository.dart';
+import 'routes/app_pages.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final EnvConfig envConfig = BuildConfig.instance.config;
+    final EnvConfig envConfig = BuildConfig.config;
     return GetMaterialApp(
 
       defaultTransition: Transition.leftToRight,

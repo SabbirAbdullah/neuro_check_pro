@@ -32,7 +32,6 @@ class QuestionModel {
   }
 }
 
-
 class QuestionResponseModel {
   final String message;
   final int statusCode;

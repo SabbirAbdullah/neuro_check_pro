@@ -92,8 +92,8 @@ class PaymentSuccessPage extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(12)),
               child:  Text("Start Your Assessment"),
               onPressed: () {
-                controller.loadQuestions(model.id);
-                Get.off(()=>QuestionPage(patient: patient, model: model));
+                controller.loadQuestions(model.id, patient.id);
+                Get.off(()=>QuestionPage(patientId: patient.id, model: model));
               },
             ),
             SizedBox(height: 16,),

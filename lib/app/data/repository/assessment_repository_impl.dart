@@ -4,7 +4,6 @@ import '../../modules/assessment/models/answer_model.dart';
 import '../../modules/assessment/models/assessment_model.dart';
 import '../../modules/assessment/models/patient_info.dart';
 import '../../modules/assessment/models/question_model.dart';
-import '../local/db/question_local_data_source.dart';
 import '../local/preference/preference_manager.dart';
 import '../model/answer_submission_model.dart';
 import '../model/payment_model.dart';
@@ -47,19 +46,5 @@ class AssessmentRepositoryImpl implements AssessmentRepository {
   //   return _remote.submitAnswer(answer, token);
   // }
   //
-  @override
-  Future<int> getSavedProgress(int assessmentId) =>
-      localDataSource.getProgress(assessmentId);
 
-  @override
-  Future<void> saveProgress(int assessmentId, int lastAnsweredIndex) =>
-      localDataSource.saveProgress(assessmentId, lastAnsweredIndex);
-
-  @override
-  Future<void> saveAnswers(int assessmentId, Map<int, String> answers) =>
-      localDataSource.saveAnswers(assessmentId, answers);
-
-  @override
-  Future<Map<int, String>> getAnswers(int assessmentId) =>
-      localDataSource.getAnswers(assessmentId);
 }

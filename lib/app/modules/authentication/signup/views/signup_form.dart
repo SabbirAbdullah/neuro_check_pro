@@ -44,10 +44,10 @@ class SignupForm extends StatelessWidget {
                 keyboardType: TextInputType.number),
             const SizedBox(height: 16),
             const Text("Phone Number", style: TextStyle(color: Colors.grey)),
-            // _buildTextField(
-            //   controller.phoneController,
-            //   keyboardType: TextInputType.phone,
-            // ),
+            _buildTextField(
+              controller.phoneController,
+              keyboardType: TextInputType.phone,
+            ),
             const SizedBox(height: 16),
 
             // Country Picker (fixed UK)
@@ -117,26 +117,26 @@ class SignupForm extends StatelessWidget {
             const SizedBox(height: 16),
 
             // Dropdown Role
-            const Text("Are you a Parent or Carer?",
-                style: TextStyle(color: Colors.grey)),
-            const SizedBox(height: 6),
-            Obx(() => DropdownButtonFormField<String>(
-                  dropdownColor: Colors.white,
-                  value: controller.selectedRole.value,
-                  hint: const Text("Choose your role"),
-                  items: controller.roleList
-                      .map((role) => DropdownMenuItem(
-                          value: role,
-                          child: Text(
-                            role,
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w500),
-                          )))
-                      .toList(),
-                  onChanged: (val) => controller.selectedRole.value = val,
-                  decoration: _dropdownDecoration(),
-                )),
-            const SizedBox(height: 16),
+            // const Text("Are you a Parent or Carer?",
+            //     style: TextStyle(color: Colors.grey)),
+            // const SizedBox(height: 6),
+            // Obx(() => DropdownButtonFormField<String>(
+            //       dropdownColor: Colors.white,
+            //       value: controller.selectedRole.value,
+            //       hint: const Text("Choose your role"),
+            //       items: controller.roleList
+            //           .map((role) => DropdownMenuItem(
+            //               value: role,
+            //               child: Text(
+            //                 role,
+            //                 style: TextStyle(
+            //                     fontSize: 14, fontWeight: FontWeight.w500),
+            //               )))
+            //           .toList(),
+            //       onChanged: (val) => controller.selectedRole.value = val,
+            //       decoration: _dropdownDecoration(),
+            //     )),
+            // const SizedBox(height: 16),
 
             // Dropdown How did you know?
             const Text("How did you know about us?",

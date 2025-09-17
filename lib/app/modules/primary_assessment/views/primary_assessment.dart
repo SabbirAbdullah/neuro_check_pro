@@ -10,24 +10,27 @@ import '../../../core/widgets/custom_button.dart';
 import '../../../core/widgets/custom_loading.dart';
 import '../../../core/widgets/expended_text.dart';
 import '../../../data/model/answer_submission_model.dart';
+import '../../assessment/models/assessment_model.dart';
 import '../../assessment/views/assessment_view.dart';
 import '../../bottom_navigation/views/bottom_navigation_view.dart';
 import '../../onboardings/controllers/onboarding_controller.dart';
 import '../controllers/primary_assessment_controller.dart';
 import '../widgets/quiz_results.dart';
 
-
 class InitialAssessmentQuestion extends StatelessWidget {
   final int patient;
-  final PrimaryAssessmentController controller = Get.put(PrimaryAssessmentController());
+  final int assessmentId;
+  final PrimaryAssessmentController controller =
+  Get.put(PrimaryAssessmentController());
 
   InitialAssessmentQuestion({
-    super.key, required this.patient,
+    super.key,
+    required this.patient,
+    required this.assessmentId,
   });
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -39,141 +42,68 @@ class InitialAssessmentQuestion extends StatelessWidget {
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Scaffold(
-            body: Center(child: CustomLoading()),
-          );
+          return const Center(child: CustomLoading());
         }
 
         if (controller.questions.isEmpty) {
-          return const Scaffold(
-            body: Center(child: Text("No questions found")),
-          );
+          return const Center(child: Text("No questions found"));
         }
 
         final question = controller.questions[controller.currentIndex.value];
-        final dynamic selected = controller.answers[question.id] ??
-            (question.answerType == "MultipleChoice" ? <String>[] : "");
+        final selected = controller.answers[question.id] ?? "";
 
+        return Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Progress indicator
+              LinearProgressIndicator(
+                value: (controller.currentIndex.value + 1) /
+                    controller.questions.length,
+                backgroundColor: Colors.grey.shade200,
+                color: const Color(0xFF0D4D54),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                "${controller.currentIndex.value + 1} / ${controller.questions.length}",
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 32),
 
-        return Scaffold(
-          backgroundColor: Colors.white,
-          body: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-
-                // Progress indicator
-                LinearProgressIndicator(
-                  value: (controller.currentIndex.value + 1) /
-                      controller.questions.length,
-                  backgroundColor: Colors.grey.shade200,
-                  color: const Color(0xFF0D4D54),
-                ),
-                Text(
-                    "${controller.currentIndex.value + 1} / ${controller.questions.length}",
-                    style: const TextStyle(fontWeight: FontWeight.w600)),
-                const SizedBox(height: 32),
-                const SizedBox(height: 20),
-
-                // Question text
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    question.questions,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+              // Question text
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  question.questions,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
+              ),
 
-                // Answer options
-                // Answer options
-                if (question.answerType == "Yes/No") ...[
-                  ...["Yes", "No"].map((option) {
-                    final isSelected = selected == option;
-                    return GestureDetector(
-                      onTap: () => controller.selectAnswer(option),
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 16),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 16),
-                        decoration: BoxDecoration(
-                          color: isSelected
-                              ? const Color(0xFF0D4D54).withOpacity(0.05)
-                              : Colors.white,
-                          border: Border.all(
-                            color: isSelected
-                                ? const Color(0xFF0D4D54)
-                                : Colors.grey.shade300,
-                          ),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Center(
-                          child: Text(
-                            option,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: isSelected
-                                  ? const Color(0xFF0D4D54)
-                                  : Colors.black87,
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-                ] else if (question.answerType == "MultipleChoice") ...[
-                  ...question.options!.map((option) {
-                    final selectedList =
-                    (selected is List<String>) ? selected : <String>[];
-                    final isSelected = selectedList.contains(option);
+              const SizedBox(height: 16),
 
-                    return GestureDetector(
-                      onTap: () => controller.selectAnswer(option),
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 16),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 16),
-                        decoration: BoxDecoration(
-                          color: isSelected
-                              ? const Color(0xFF0D4D54).withOpacity(0.05)
-                              : Colors.white,
-                          border: Border.all(
-                            color: isSelected
-                                ? const Color(0xFF0D4D54)
-                                : Colors.grey.shade300,
-                          ),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Center(
-                          child: Text(
-                            option,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: isSelected
-                                  ? const Color(0xFF0D4D54)
-                                  : Colors.black87,
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-                ] else if (question.answerType == "Text") ...[
+              // Answer options
+              if (question.answerType == "Yes/No")
+                ...["Yes", "No"].map(
+                      (option) => _buildOption(option, selected, controller),
+                )
+              else if (question.answerType == "MultipleChoice")
+                ...question.options!.map(
+                      (option) => _buildOption(option, selected, controller),
+                )
+              else if (question.answerType == "Text")
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: GetBuilder<PrimaryAssessmentController>(
-                      id: "textField_${question.id}", // unique id for rebuilds
+                      id: "textField_${question.id}",
                       builder: (_) {
                         final textController = TextEditingController(
                           text: controller.answers[question.id] ?? "",
                         );
-
-                        // Keep cursor at the end
                         textController.selection = TextSelection.fromPosition(
                           TextPosition(offset: textController.text.length),
                         );
@@ -182,71 +112,111 @@ class InitialAssessmentQuestion extends StatelessWidget {
                           controller: textController,
                           cursorColor: AppColors.appBarColor,
                           maxLines: 5,
-                          onChanged: (value) => controller.selectAnswer(value),
+                          onChanged: controller.selectAnswer,
                           decoration: InputDecoration(
                             hintText: "Write your answer here...",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: AppColors.borderColor),
+                              borderSide:
+                              BorderSide(color: AppColors.borderColor),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: AppColors.borderColor),
+                              borderSide:
+                              BorderSide(color: AppColors.borderColor),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: AppColors.borderColor),
+                              borderSide:
+                              BorderSide(color: AppColors.borderColor),
                             ),
                           ),
                         );
                       },
                     ),
                   ),
-                ],
 
-                Spacer(),
+              const Spacer(),
 
-                // Navigation buttons
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      if (controller.currentIndex.value > 0)
-                        ElevatedButton(
-                          onPressed: controller.goToPreviousQuestion,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.grey.shade300,
-                            foregroundColor: Colors.black,
-                          ),
-                          child: const Text("Previous"),
-                        )
-                      else
-                        const SizedBox(),
-
-
-
-                      ElevatedButton( onPressed: controller.answers[question.id] == null
-                          ? null : ()=>controller.goToNextQuestion(patient),
-                        style: ElevatedButton.styleFrom( backgroundColor: const Color(0xFF0D4D54), foregroundColor: Colors.white, ),
-                        child: Text( controller.currentIndex.value + 1 < controller.questions.length
-                            ? "Next" : "Finish", ), ),
-                    ],
-                  ),
+              // Navigation buttons
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if (controller.currentIndex.value > 0)
+                      ElevatedButton(
+                        onPressed: controller.goToPreviousQuestion,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey.shade300,
+                          foregroundColor: Colors.black,
+                        ),
+                        child: const Text("Previous"),
+                      )
+                    else
+                      const SizedBox(),
+                    ElevatedButton(
+                      onPressed: controller.answers[question.id] == null
+                          ? null
+                          : () =>
+                          controller.goToNextQuestion(patient, assessmentId),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF0D4D54),
+                        foregroundColor: Colors.white,
+                      ),
+                      child: Text(
+                        controller.currentIndex.value + 1 <
+                            controller.questions.length
+                            ? "Next"
+                            : "Finish",
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       }),
     );
   }
+
+  Widget _buildOption(String option, dynamic selected,
+      PrimaryAssessmentController controller) {
+    final isSelected = selected == option;
+    return GestureDetector(
+      onTap: () => controller.selectAnswer(option),
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? const Color(0xFF0D4D54).withOpacity(0.1)
+              : Colors.white,
+          border: Border.all(
+            color: isSelected ? const Color(0xFF0D4D54) : Colors.grey.shade300,
+          ),
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Center(
+          child: Text(
+            option,
+            style: TextStyle(
+              fontSize: 16,
+              color: isSelected ? const Color(0xFF0D4D54) : Colors.black87,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
-class QuestionSummary extends StatelessWidget {
+class InitialQuestionSummary extends StatelessWidget {
   final PrimaryAssessmentController controller;
   final int  patientId;
-  const QuestionSummary({super.key, required this.controller,  required this.patientId});
+  final int assessmentId;
+  const InitialQuestionSummary({super.key, required this.controller,  required this.patientId, required  this.assessmentId});
 
   @override
   Widget build(BuildContext context) {

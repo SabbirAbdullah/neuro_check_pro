@@ -17,7 +17,7 @@ class DashboardView extends StatelessWidget {
   DashboardView({super.key});
 
   final DashboardController controller = Get.put(DashboardController());
-  final OnboardingController onBoardingController = Get.find<OnboardingController>();
+  final SplashController splashController= Get.find<SplashController>();
 
 
   @override
@@ -35,9 +35,9 @@ class DashboardView extends StatelessWidget {
         elevation: 0,
       ),
       body: RefreshIndicator(
-        onRefresh: onBoardingController.fetchUserInfo,
+        onRefresh: splashController.fetchUserInfo,
         child:  Obx((){
-          final user = onBoardingController.user.value;
+          final user = splashController.user.value;
           if (user == null) {
             return Center(child: CustomLoading());
           }
@@ -51,12 +51,12 @@ class DashboardView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CircleAvatar(
-                      radius: 40,
+                      radius:35,
                       backgroundColor: Colors.blueAccent.shade100,
-                      child: onBoardingController.user.value!.image != null
+                      child: splashController.user.value!.image != null
                           ? ClipOval(
                         child: Image.network(
-                          onBoardingController.user.value!.image!,
+                          splashController.user.value!.image!,
                           fit: BoxFit.cover,
                           width: 80,
                           height: 80,
@@ -64,7 +64,7 @@ class DashboardView extends StatelessWidget {
                             // If image fails to load, show initials
                             return Center(
                               child: Text(
-                                onBoardingController.user.value!.name[0].toUpperCase(),
+                                splashController.user.value!.name[0].toUpperCase(),
                                 style: const TextStyle(
                                   fontSize: 32,
                                   fontWeight: FontWeight.bold,
@@ -76,7 +76,7 @@ class DashboardView extends StatelessWidget {
                         ),
                       )
                           : Text(
-                        onBoardingController.user.value!.name[0].toUpperCase(),
+                        splashController.user.value!.name[0].toUpperCase(),
                         style: const TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
@@ -136,9 +136,11 @@ class DashboardView extends StatelessWidget {
                 const SizedBox(height: 12),
 
                 GestureDetector(
-                  onTap: () => Get.to(() => const HeroPage()),
+                  onTap: (){
+                    Get.to(() =>  HeroPage());
+                  },
                   // replace with HeroPage()
-                  child: _assessmentCard(
+                  child: assessmentCard(
                     title: "Primary Self-Assessment",
                     desc:
                     "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
@@ -151,7 +153,7 @@ class DashboardView extends StatelessWidget {
                   onTap: (){
                     Get.to(()=>AssessmentView());
                   },
-                  child: _assessmentCard(
+                  child: assessmentCard(
                     title: "Clinical Assessment",
                     desc:
                     "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
@@ -163,10 +165,10 @@ class DashboardView extends StatelessWidget {
 
                 GestureDetector(
                   onTap: () {
-                    // Get.to(() => DiagnosisView());
-                    Get.snackbar("Soon!!", "Coming Soon");
+                    Get.to(() => ResumePage());
+                    // Get.snackbar("Soon!!", "Coming Soon");
                   },
-                  child: _assessmentCard(
+                  child: assessmentCard(
                     title: "Resume Diagnosis",
                     desc: "See all incomplete diagnosis",
                     color: const Color(0xFF114854),
@@ -261,7 +263,7 @@ class DashboardView extends StatelessWidget {
   }
 
   // Assessment Card Widget
-  Widget _assessmentCard({
+  Widget assessmentCard({
     required String title,
     required String desc,
     required Color color,

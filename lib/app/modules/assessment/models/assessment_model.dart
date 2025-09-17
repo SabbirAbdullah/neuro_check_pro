@@ -42,6 +42,7 @@ class AssessmentModel {
     );
   }
 }
+
 class QuestionnaireModel {
   final int id;
   final int assessmentId;

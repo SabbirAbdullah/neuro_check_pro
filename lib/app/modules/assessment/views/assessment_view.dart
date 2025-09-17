@@ -56,7 +56,7 @@ class AssessmentView extends StatelessWidget {
                                     style: const TextStyle(
                                         fontSize: 16, fontWeight: FontWeight.bold)),
                                 const SizedBox(height: 4),
-                                Text("${item.id}", style: const TextStyle(color: Colors.grey)),
+                                // Text("${item.id}", style: const TextStyle(color: Colors.grey)),
                                 Text(item.description, style: const TextStyle(color: Colors.grey)),
                               ],
                             ),

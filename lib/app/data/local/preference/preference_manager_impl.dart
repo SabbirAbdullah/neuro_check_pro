@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../modules/assessment/models/assessment_model.dart';
+import '../../../modules/resume_diagnosis/models/resume_model.dart';
 import 'preference_manager.dart';
 
 class PreferenceManagerImpl implements PreferenceManager {
@@ -75,27 +77,11 @@ class PreferenceManagerImpl implements PreferenceManager {
     return _preference.then((preference) => preference.clear());
   }
 
+  @override
+  Future<Set<String>> getKeys() async {
+    final prefs = await _preference;
+    return prefs.getKeys();
+  }
 
-  @override
-  Future<void> saveProgress(int assessmentId, int lastAnsweredIndex) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt("progress_$assessmentId", lastAnsweredIndex);
-  }
-  @override
-  Future<int> getProgress(int assessmentId) async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt("progress_$assessmentId") ?? 0;
-  }
-  @override
-  Future<void> saveAnswers(int assessmentId, Map<int, String> answers) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString("answers_$assessmentId", jsonEncode(answers));
-  }
-  @override
-  Future<Map<int, String>> getAnswers(int assessmentId) async {
-    final prefs = await SharedPreferences.getInstance();
-    final data = prefs.getString("answers_$assessmentId");
-    if (data == null) return {};
-    return Map<int, String>.from(jsonDecode(data));
-  }
+
 }

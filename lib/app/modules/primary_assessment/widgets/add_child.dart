@@ -7,7 +7,7 @@
 //
 // import '../../../core/values/app_colors.dart';
 // import '../controllers/primary_assessment_controller.dart';
-// import 'child_profile.dart';
+// import 'patient_profile.dart';
 //
 //
 // class NewProfileView extends StatelessWidget {

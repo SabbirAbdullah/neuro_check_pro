@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/data/repository/pref_repository.dart';
 import '../local/preference/preference_manager.dart';
@@ -59,6 +61,27 @@ class PrefRepositoryImpl implements PrefRepository{
     return await _prefSource.getBool('onboarding_shown', defaultValue: false);
   }
 
+  Future<void> saveDraft(int assessmentId, Map<int, dynamic> answers, int currentIndex) async {
+    final draftData = {
+      "answers": answers,
+      "currentIndex": currentIndex,
+    };
+    await _prefSource.setString("draft_$assessmentId", jsonEncode(draftData));
+  }
+
+  Future<Map<String, dynamic>?> getDraft(int assessmentId) async {
+    final jsonString = _prefSource.getString("draft_$assessmentId");
+    if (jsonString == null) return null;
+    return jsonDecode(await jsonString);
+  }
+
+  Future<void> removeDraft(int assessmentId) async {
+    await _prefSource.remove("draft_$assessmentId");
+  }
+
+
+  // New method
+  Future<Set<String>> getKeys() => _prefSource.getKeys();
 
   @override
   Future<bool> setBool(String key, bool value) {
@@ -90,4 +113,7 @@ return _prefSource.setString(key,value);
     throw UnimplementedError();
   }
 
+
 }
+
+

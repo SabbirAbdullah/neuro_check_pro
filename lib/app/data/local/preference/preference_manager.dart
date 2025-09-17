@@ -1,3 +1,6 @@
+
+import '../../../modules/assessment/models/assessment_model.dart';
+
 abstract class PreferenceManager {
   static const keyToken = "token";
 
@@ -26,10 +29,5 @@ abstract class PreferenceManager {
 
   Future<bool> clear();
 
-
-  Future<void> saveProgress(int assessmentId, int lastAnsweredIndex);
-  Future<int> getProgress(int assessmentId);
-  Future<void> saveAnswers(int assessmentId, Map<int, String> answers);
-  Future<Map<int, String>> getAnswers(int assessmentId);
-
+  Future<Set<String>> getKeys();
 }

@@ -1,24 +1,9 @@
 import 'package:get/get.dart';
-import '../models/diagnosis_model.dart';
+import '../../assessment/models/assessment_model.dart';
+import '../../billing_info/models/billing_info_model.dart' hide AssessmentModel;
+import '../models/resume_model.dart';
 
 
-class DiagnosisController extends GetxController {
-  final assessments = <AssessmentProgressModel>[
-    AssessmentProgressModel(
-      name: 'Oliver Bernett',
-      assessment: 'Child Autism Diagnosis',
-      date: '25th July, 2025',
-      status: 'Completed',
-      totalQuestions: 40,
-      answeredQuestions: 40,
-    ),
-    AssessmentProgressModel(
-      name: 'Oliver Bernett',
-      assessment: 'Child Autism Diagnosis',
-      date: '25th July, 2025',
-      status: 'Pending',
-      totalQuestions: 40,
-      answeredQuestions: 18,
-    ),
-  ].obs;
-}
+import 'package:get/get.dart';
+import 'package:neuro_check_pro/app/data/repository/pref_repository.dart';
+

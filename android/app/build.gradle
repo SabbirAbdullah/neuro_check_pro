@@ -2,7 +2,13 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("dev.flutter.flutter-gradle-plugin")
+    id("com.google.gms.google-services")
+
+
 }
+
+import java.util.regex.Pattern
+import java.util.regex.Matcher
 
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file("neuro_key.properties")
@@ -10,14 +16,37 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+// 🔹 Add getCurrentFlavor function (copied from File 2)
+def getCurrentFlavor() {
+    Gradle gradle = getGradle()
+    String tskReqStr = gradle.getStartParameter().getTaskRequests().toString()
+
+    Pattern pattern
+    if (tskReqStr.contains("assemble"))
+        pattern = Pattern.compile("assemble(\\w+)(Release|Debug)")
+    else if (tskReqStr.contains("bundle"))
+        pattern = Pattern.compile("bundle(\\w+)(Release|Debug)")
+    else
+        pattern = Pattern.compile("generate(\\w+)(Release|Debug)")
+
+    Matcher matcher = pattern.matcher(tskReqStr)
+
+    if (matcher.find())
+        return matcher.group(1).toLowerCase()
+    else {
+        println "NO MATCH FOUND"
+        return ""
+    }
+}
+
 android {
     namespace = "com.example.neuro_check_pro"
-    compileSdk = 36
+    compileSdkVersion  36
 
     defaultConfig {
         applicationId = "com.example.neuro_check_pro"
-        minSdk = 26
-        targetSdk = 36
+        minSdkVersion 26
+        targetSdkVersion 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         multiDexEnabled = true
@@ -27,8 +56,8 @@ android {
     productFlavors {
         dev {
             dimension = "env"
-            applicationIdSuffix = ".dev"
-            versionNameSuffix = "-dev"
+//            applicationIdSuffix = ".dev"
+//            versionNameSuffix = "-dev"
             resValue("string", "app_name", "TestApp Dev")
         }
         prod {
@@ -51,32 +80,37 @@ android {
             signingConfig = signingConfigs.release
             minifyEnabled = false
             shrinkResources = false
-            // Optional: enable proguard if needed
-            // proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            // Optional: enable debug signing if needed
             signingConfig = signingConfigs.release
         }
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 
 flutter {
     source = "../.."
+    // 🔹 Add dynamic entry point based on flavor
+    target = "lib/main_" + getCurrentFlavor() + ".dart"
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.25"
     implementation "androidx.multidex:multidex:2.0.1"
+    implementation platform('com.google.firebase:firebase-bom:34.2.0')
+    implementation 'com.google.android.gms:play-services-auth:21.4.0'
+    implementation 'com.google.firebase:firebase-analytics'
+//    implementation 'com.facebook.android:facebook-login:latest.release'
+
+
 }
 
 

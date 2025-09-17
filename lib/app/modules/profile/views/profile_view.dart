@@ -14,15 +14,14 @@ import '../widgets/account_info.dart';
 
 class ProfileView extends StatelessWidget {
   final ProfileController controller = Get.put(ProfileController());
-  // final SplashController splashController = Get.find<SplashController>();
+  final SplashController splashController = Get.find<SplashController>();
 
-   final OnboardingController onboardingController = Get.find<OnboardingController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: RefreshIndicator(
-        onRefresh:onboardingController.fetchUserInfo,
+        onRefresh:splashController.fetchUserInfo,
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -36,7 +35,7 @@ class ProfileView extends StatelessWidget {
                 _sectionTitle("User information"),
                 GestureDetector(
                   onTap: (){
-                    Get.to(()=>AccountInfo(user: onboardingController.user.value!,),);
+                    Get.to(()=>AccountInfo(user: splashController.user.value!,),);
                   },
                     child: _infoTile("Account information")),
                 GestureDetector(
@@ -77,10 +76,10 @@ class ProfileView extends StatelessWidget {
             CircleAvatar(
               radius: 40,
               backgroundColor: Colors.blueAccent.shade100,
-              child: onboardingController.user.value!.image != null
+              child: splashController.user.value!.image != null
                   ? ClipOval(
                 child: Image.network(
-                  onboardingController.user.value!.image!,
+                  splashController.user.value!.image!,
                   fit: BoxFit.cover,
                   width: 80,
                   height: 80,
@@ -88,7 +87,7 @@ class ProfileView extends StatelessWidget {
                     // If image fails to load, show initials
                     return Center(
                       child: Text(
-                        onboardingController.user.value!.name[0].toUpperCase(),
+                        splashController.user.value!.name[0].toUpperCase(),
                         style: const TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
@@ -100,7 +99,7 @@ class ProfileView extends StatelessWidget {
                 ),
               )
                   : Text(
-                onboardingController.user.value!.name[0].toUpperCase(),
+                splashController.user.value!.name[0].toUpperCase(),
                 style: const TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
@@ -117,7 +116,7 @@ class ProfileView extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
-                onboardingController.user.value!.role,
+                splashController.user.value!.role,
                 style: const TextStyle(fontSize: 12, color: Colors.black),
               ),
             )
@@ -136,14 +135,14 @@ class ProfileView extends StatelessWidget {
               ),
             ),
             Text(
-             "${onboardingController.user.value!.name}",
+             "${splashController.user.value!.name}",
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
-              onboardingController.user.value!.email,
+              splashController.user.value!.email,
               style: const TextStyle(
                 color: Colors.black54,
               ),

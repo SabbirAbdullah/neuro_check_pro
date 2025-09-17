@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "145142242234",
+    "project_id": "neuro-check-pro",
+    "storage_bucket": "neuro-check-pro.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:145142242234:android:1a7db8ab50448d1aeadb83",
+        "android_client_info": {
+          "package_name": "com.example.neuro_check_pro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "145142242234-ev051jenidqu380hu6oshbkspv9ri8dj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.neuro_check_pro",
+            "certificate_hash": "138694c149d16958a1c6eacbf46e3d20c330ee43"
+          }
+        },
+        {
+          "client_id": "145142242234-tlvoi6e4lsen89jejlktv31se6te3npv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.neuro_check_pro",
+            "certificate_hash": "76e90d571d69a508179494376ce00c66dd0811af"
+          }
+        },
+        {
+          "client_id": "145142242234-0iqpp3ufsp438j1enf2lk773naheikcn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWMAMBeXecvOOHsqGGufwSW0aMZK1tIO4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "145142242234-0iqpp3ufsp438j1enf2lk773naheikcn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "145142242234-a8ic297fqml4dgv0rahk3oa8d41dmvq7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.neuroCheckPro"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

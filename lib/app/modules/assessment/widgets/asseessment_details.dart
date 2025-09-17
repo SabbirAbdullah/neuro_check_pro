@@ -6,7 +6,7 @@ import 'package:neuro_check_pro/app/core/values/text_styles.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_appbar.dart';
 import '../../primary_assessment/widgets/child_profile.dart';
 import '../models/assessment_model.dart';
-import 'child_profile.dart';
+import 'patient_profile.dart';
 
 class AssessmentDetailPage extends StatelessWidget {
   final AssessmentModel model;
@@ -23,7 +23,8 @@ class AssessmentDetailPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: 180,
+
+              child: Image.asset('assets/images/carousul.png',),
               decoration: BoxDecoration(
                 color: const Color(0xFFFFF4DC),
                 borderRadius: BorderRadius.circular(20),
@@ -34,9 +35,9 @@ class AssessmentDetailPage extends StatelessWidget {
             const SizedBox(height: 16),
             Row(
               children: [
-                _infoTag(Icons.description, model.type),
+                infoTag(Icons.description, model.type),
                 const SizedBox(width: 16),
-                _infoTag(Icons.access_time, "${model.totalTime}"),
+                infoTag(Icons.access_time, "${model.totalTime}"),
               ],
             ),
             const SizedBox(height: 20),
@@ -54,7 +55,7 @@ class AssessmentDetailPage extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  Get.to(()=>ChildProfile(model: model,));
+                  Get.to(()=>PatientProfile(model: model,));
                 },
                 child: const Text("Start assessment", style: textButton_white),
               ),
@@ -65,7 +66,7 @@ class AssessmentDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _infoTag(IconData icon, String label) {
+  Widget infoTag(IconData icon, String label) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(

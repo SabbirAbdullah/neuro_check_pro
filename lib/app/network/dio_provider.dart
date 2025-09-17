@@ -5,7 +5,7 @@ import 'request_headers.dart';
 import '/flavors/build_config.dart';
 
 class DioProvider {
-  static final String baseUrl = BuildConfig.instance.config.baseUrl;
+  static final String baseUrl = BuildConfig.config.baseUrl;
 
   static Dio? _instance;
 
@@ -13,7 +13,7 @@ class DioProvider {
   static final _prettyDioLogger = PrettyDioLogger(
       requestHeader: true,
       requestBody: true,
-      responseBody: BuildConfig.instance.environment == Environment.PRODUCTION,
+      responseBody: BuildConfig.instance.environment == Environment.DEVELOPMENT,
       responseHeader: false,
       error: true,
       compact: true,

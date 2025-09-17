@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'flavors/build_config.dart';
 import 'flavors/env_config.dart';
 import 'flavors/environment.dart';
-import 'my_app.dart';
+import 'app/my_app.dart';
 
 
 

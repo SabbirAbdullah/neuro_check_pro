@@ -11,7 +11,7 @@ class InitialBinding implements Bindings {
     RepositoryBindings().dependencies();
     RemoteSourceBindings().dependencies();
     LocalSourceBindings().dependencies();
-    Get.lazyPut<OnboardingController>(() => OnboardingController(), fenix: true);
+    Get.lazyPut<SplashController>(() => SplashController(), fenix: true);
 
   }
 }

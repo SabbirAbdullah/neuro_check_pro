@@ -13,8 +13,4 @@ abstract class AssessmentRepository {
   // Future<Map<String, dynamic>> submitAnswer(AnswerModel answer, String token);
   Future<PatientResponse> fetchPatient(int patientId, String token);
 
-  Future<int> getSavedProgress(int assessmentId);
-  Future<void> saveProgress(int assessmentId, int lastAnsweredIndex);
-  Future<void> saveAnswers(int assessmentId, Map<int, String> answers);
-  Future<Map<int, String>> getAnswers(int assessmentId);
 }

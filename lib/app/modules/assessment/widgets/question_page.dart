@@ -6,21 +6,18 @@ import 'package:neuro_check_pro/app/core/widgets/custom_button.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_loading.dart';
 
 import '../../../core/values/app_colors.dart';
-import '../../../core/widgets/expended_text.dart';
-import '../../bottom_navigation/controllers/bottom_navigation_controller.dart';
-import '../../bottom_navigation/views/bottom_navigation_view.dart';
-import '../../onboardings/controllers/onboarding_controller.dart';
+
 import '../../patient_profile/models/patient_profile_model.dart';
 import '../controllers/assessment_controller.dart';
 import '../models/assessment_model.dart';
 
 class QuestionPage extends StatelessWidget {
   final AssessmentModel model;
-  final PatientModel patient;
+  final  int patientId ;
   final AssessmentController controller = Get.put(AssessmentController());
 
   QuestionPage({
-    super.key, required this.patient, required this.model,
+    super.key, required this.patientId, required this.model,
   });
 
   @override
@@ -30,8 +27,8 @@ class QuestionPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: controller.goToPreviousQuestion,
+          icon:  Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: ()=> controller.goToPreviousQuestion(model.id,patientId, model.name)
         ),
         elevation: 0,
       ),
@@ -91,7 +88,7 @@ class QuestionPage extends StatelessWidget {
                   ...["Yes", "No"].map((option) {
                     final isSelected = selected == option;
                     return GestureDetector(
-                      onTap: () => controller.selectAnswer(option),
+                      onTap: () => controller.selectAnswer(option,patientId, model.name),
                       child: Container(
                         margin: const EdgeInsets.symmetric(
                             vertical: 8, horizontal: 16),
@@ -129,7 +126,7 @@ class QuestionPage extends StatelessWidget {
                     final isSelected = selectedList.contains(option);
 
                     return GestureDetector(
-                      onTap: () => controller.selectAnswer(option),
+                      onTap: () => controller.selectAnswer(option,patientId, model.name),
                       child: Container(
                         margin: const EdgeInsets.symmetric(
                             vertical: 8, horizontal: 16),
@@ -179,7 +176,7 @@ class QuestionPage extends StatelessWidget {
                           controller: textController,
                           cursorColor: AppColors.appBarColor,
                           maxLines: 5,
-                          onChanged: (value) => controller.selectAnswer(value),
+                          onChanged: (value) => controller.selectAnswer(value,patientId,model.name),
                           decoration: InputDecoration(
                             hintText: "Write your answer here...",
                             border: OutlineInputBorder(
@@ -211,7 +208,7 @@ class QuestionPage extends StatelessWidget {
                     children: [
                       if (controller.currentIndex.value > 0)
                         ElevatedButton(
-                          onPressed: controller.goToPreviousQuestion,
+                          onPressed: ()=>controller.goToPreviousQuestion(model.id, patientId, model.name),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.grey.shade300,
                             foregroundColor: Colors.black,
@@ -224,7 +221,7 @@ class QuestionPage extends StatelessWidget {
 
 
                       ElevatedButton( onPressed: controller.answers[question.id] == null
-                          ? null : ()=>controller.goToNextQuestion(patient.id,model.id),
+                          ? null : ()=>controller.goToNextQuestion(patientId,model.id,model.name),
                         style: ElevatedButton.styleFrom( backgroundColor: const Color(0xFF0D4D54), foregroundColor: Colors.white, ),
                         child: Text( controller.currentIndex.value + 1 < controller.questions.length
                             ? "Next" : "Finish", ), ),
@@ -240,121 +237,3 @@ class QuestionPage extends StatelessWidget {
   }
 }
 
-class QuestionSummary extends StatelessWidget {
-  final AssessmentController controller;
-  final int  patientId;
-  final int assessmentId;
-  const QuestionSummary({super.key, required this.controller,  required this.patientId, required this.assessmentId});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(title: "Summary"),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: controller.questions.length,
-                itemBuilder: (context, index) {
-                  final q = controller.questions[index];
-                  final ans = controller.answers[q.id] ?? "Not answered";
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.grey.shade300),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(q.questions,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 15)),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Icon(Icons.circle, color: AppColors.appBarColor,size: 12,),
-                            const SizedBox(width: 6),
-                            Expanded(
-                              child: ExpandableText(formatAnswer(ans)), // ✅ always string
-                            ),
-
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-            Obx((){
-              if (controller.isLoading.value) {
-                return Center(child: CustomLoading());
-              }
-              return  CustomButton(text: "Submit All", onPressed:  () async {
-
-                await controller.submitAllAnswers(patientId, assessmentId);
-              },);
-            })
-
-            // ElevatedButton(
-            //   onPressed: () async {
-            //     controller.submitAllAnswers(patientId:patient.id );
-            //   },
-            //   style: ElevatedButton.styleFrom(
-            //     backgroundColor: const Color(0xFF0D4D54),
-            //   ),
-            //   child: const Padding(
-            //     padding: EdgeInsets.symmetric(vertical: 12),
-            //     child: Text("Submit All", style: TextStyle(color: Colors.white)),
-            //   ),
-            // )
-
-          ],
-        ),
-      ),
-    );
-  }
-  String formatAnswer(dynamic ans) {
-    if (ans is List) {
-      return ans.join(", "); // join list items with comma or space
-    } else {
-      return ans.toString(); // if already a string
-    }
-  }
-
-}
-
-class SubmitSuccessPage extends StatelessWidget {
-   SubmitSuccessPage({super.key});
-
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.check_circle, color: Colors.green, size: 80),
-            const SizedBox(height: 20),
-            const Text("Submission Successful!",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 20),
-            CupertinoButton.filled(
-              color: Colors.grey.shade200,
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-              child:  Text("Go To Dashboard",style: TextStyle(color: Colors.black),),
-              onPressed: () {
-
-                Get.offAll(()=>BottomNavigationView());
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

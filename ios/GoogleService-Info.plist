@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>145142242234-a8ic297fqml4dgv0rahk3oa8d41dmvq7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.145142242234-a8ic297fqml4dgv0rahk3oa8d41dmvq7</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>145142242234-tlvoi6e4lsen89jejlktv31se6te3npv.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyC1nfrX25n0F5LegEwJaFG05cV-WKXtpcg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>145142242234</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.neuroCheckPro</string>
+	<key>PROJECT_ID</key>
+	<string>neuro-check-pro</string>
+	<key>STORAGE_BUCKET</key>
+	<string>neuro-check-pro.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:145142242234:ios:86493b9aacd150bbeadb83</string>
+</dict>
+</plist>

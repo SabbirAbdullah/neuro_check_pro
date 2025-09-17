@@ -27,7 +27,5 @@ abstract class PrefRepository{
   Future<bool> remove(String key);
 
   Future<bool> clear();
-
-
-
+  Future<Set<String>> getKeys();
 }

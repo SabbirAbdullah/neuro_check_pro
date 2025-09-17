@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/core/values/text_styles.dart';
+import 'package:neuro_check_pro/app/modules/primary_assessment/controllers/primary_assessment_controller.dart';
 import 'package:neuro_check_pro/app/modules/primary_assessment/views/primary_assessment.dart';
 
 import '../../../core/widgets/custom_appbar.dart';
-import '../../assessment/widgets/child_profile.dart';
+import '../../assessment/widgets/patient_profile.dart';
+import '../../patient_profile/controllers/patient_profile_controller.dart';
 import 'child_profile.dart';
 
 class HeroPage extends StatelessWidget {
-  const HeroPage({super.key});
-
+   HeroPage({super.key});
+  final PrimaryAssessmentController primaryAssessmentController = Get.put(PrimaryAssessmentController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +60,7 @@ class HeroPage extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  Get.to(()=>AssessmentChildSelectPage());
+                  Get.to(()=>AssessmentChildSelectPage(assessmentId: primaryAssessmentController.assessments[0].id,));
                 },
                 child: const Text(
                   'Start assessment',

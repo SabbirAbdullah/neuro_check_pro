@@ -4,6 +4,7 @@ import 'package:neuro_check_pro/app/core/widgets/custom_appbar.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_loading.dart';
 import 'package:neuro_check_pro/app/modules/assessment/widgets/assessment_payment_page.dart';
 import 'package:neuro_check_pro/app/modules/assessment/widgets/paymet_checkout.dart';
+import 'package:neuro_check_pro/app/modules/assessment/widgets/question_page.dart';
 
 import '../../patient_profile/controllers/patient_profile_controller.dart';
 import '../../patient_profile/widgets/add_patient_form.dart';
@@ -14,10 +15,10 @@ import '../models/assessment_model.dart';
 
 
 
-class ChildProfile extends StatelessWidget {
+class PatientProfile extends StatelessWidget {
   final AssessmentModel ? model;
 
-  ChildProfile({super.key,  this.model});
+  PatientProfile({super.key,  this.model});
 final AssessmentController controller = Get.put(AssessmentController());
   final PatientProfileController patientProfileController = Get.put(PatientProfileController());
   @override
@@ -60,17 +61,18 @@ final AssessmentController controller = Get.put(AssessmentController());
                          // Show snackbar immediately
                          Get.snackbar('Selected', 'You selected ${patient.name}');
 
-
+                         controller.loadQuestions(model!.id, patient.id);
+                         Get.off(()=>QuestionPage(patientId: patient.id, model: model!));
                          // Check assessment
-                         bool hasAssessment = await controller.checkAssessmentForUI(patient.id,model!.id);
+                         // bool hasAssessment = await controller.checkAssessmentForUI(patient.id,model!.id);
 
 
                          // Navigate based on result
-                         if (hasAssessment) {
-                           Get.to(() => PaymentSuccessPage(patient: patient, model: model!));
-                         } else {
-                           Get.to(() => AssessmentPaymentPage(patient: patient, model: model!));
-                         }
+                         // if (hasAssessment) {
+                         //   Get.to(() => PaymentSuccessPage(patient: patient, model: model!));
+                         // } else {
+                         //   Get.to(() => AssessmentPaymentPage(patient: patient, model: model!));
+                         // }
 
                        },
                        child: Column(

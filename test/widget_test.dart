@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:neuro_check_pro/main.dart';
-import 'package:neuro_check_pro/my_app.dart';
+import 'package:neuro_check_pro/app/my_app.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

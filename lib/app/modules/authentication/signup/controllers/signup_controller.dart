@@ -11,6 +11,7 @@ import 'package:neuro_check_pro/app/modules/authentication/signup/widgets/phone/
 import '../../../../core/values/text_styles.dart';
 import '../../../../data/repository/auth_repository.dart';
 import '../../../../data/repository/pref_repository.dart';
+import '../../../welcome/controllers/splash_controller.dart';
 import '../models/otp_model.dart';
 import '../models/signup_model.dart';
 
@@ -21,6 +22,7 @@ class SignupController extends GetxController {
   final postcodeController = TextEditingController();
   final addressController = TextEditingController();
   final emailController = TextEditingController();
+  final phoneController = TextEditingController();
 
   // Dropdown Selections
   final roleList = ["Parent", "Carer"];
@@ -76,7 +78,7 @@ class SignupController extends GetxController {
         state: stateController.text.trim(),
         postCode: postcodeController.text.trim(),
         street: addressController.text.trim(),
-        role: selectedRole.value ?? "user",
+        role: "user",
         knowHow: selectedOption.value ?? "Friend",
         identifier: identifier.value,
         otp: otpCode.value,
@@ -89,6 +91,8 @@ class SignupController extends GetxController {
         await _prefRepository.setInt('id', response.user.id);
         Get.snackbar("Success", response.message);
         showUKUserAlertDialog();
+        // final user = Get.put(SplashController());
+        // await user.fetchUserInfo();
       } else {
         Get.snackbar("Error", response.message);
       }
@@ -179,7 +183,7 @@ class SignupController extends GetxController {
 
   void bottomNavigation() {
     // Navigate to phone signup page
-    Get.toNamed('/bottom_navigation_view');
+    Get.offAllNamed('/bottom_navigation_view');
   }
 
   // Handle email signup

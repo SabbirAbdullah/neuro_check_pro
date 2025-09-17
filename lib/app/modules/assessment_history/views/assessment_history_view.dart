@@ -5,6 +5,7 @@ import 'package:neuro_check_pro/app/core/widgets/custom_appbar.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_loading.dart';
 import 'package:neuro_check_pro/app/modules/assessment_history/controllers/assessment_history_controller.dart';
 import 'package:neuro_check_pro/app/modules/assessment_history/widgets/assessment_history_details.dart';
+import 'package:intl/intl.dart';
 
 class AssessmentHistoryView extends StatelessWidget {
   AssessmentHistoryView({super.key});
@@ -81,32 +82,53 @@ final AssessmentHistoryController controller = Get.put(AssessmentHistoryControll
                             style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400,fontSize: 12),
                           ),
                           const SizedBox(width: 8),
-                          Text(
-                            "${submission.createdAt}",
-                            style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400,fontSize: 12),
-                          ),
+
                         ],
                       ),
                       const SizedBox(height: 20),
                       // View Details Button
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF0B4A55),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.grey.shade300,),
+                              SizedBox(width: 6,),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(submission.patient.name),
+                                  Text(
+                                    DateFormat("d MMMM, yyyy").format(submission.createdAt),
+                                    style: const TextStyle(
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12,
+                                    ),
+                                  )
+
+                                ],
+                              )
+
+
+
+                            ],
+                          ),
+                          SizedBox(
+                            child: TextButton(
+
+                              onPressed: () {
+                                // Handle button action
+                                Get.to(AssessmentHistoryDetails(data: submission,));
+                                // Get.snackbar("On Progress" ," In next Update" );
+                              },
+                              child: Text("View details",style: textButton,
+                              ),
                             ),
                           ),
-                          onPressed: () {
-                            // Handle button action
-                            // Get.to(AssessmentHistoryDetails());
-                            Get.snackbar("On Progress" ," In next Update" );
-                          },
-                          child: Text(
-                            "View details",style: textButton_white,
-                          ),
-                        ),
+                        ],
                       ),
                     ],
                   ),

@@ -18,6 +18,11 @@ const textButton_blue = TextStyle(
   fontWeight: FontWeight.w400,
   color: Colors.blue,
 );
+const textButton = TextStyle(
+  fontSize: 17,
+  fontWeight: FontWeight.w600,
+  color: AppColors.appBarColor,
+);
 const textButton_red = TextStyle(
   fontSize: 17,
   fontWeight: FontWeight.w400,
