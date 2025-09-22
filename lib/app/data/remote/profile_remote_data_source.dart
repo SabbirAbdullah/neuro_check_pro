@@ -1,5 +1,6 @@
 import 'package:neuro_check_pro/app/modules/assessment_history/models/assessment_history_model.dart';
 
+import '../../modules/assessment_history/models/answers_history_model.dart';
 import '../model/user_info_model.dart';
 
 abstract class ProfileRemoteDataSource {
@@ -7,4 +8,9 @@ abstract class ProfileRemoteDataSource {
   Future<AssessmentHistoryModel> getSubmissions(int userId, String token);
   Future<List<dynamic>> getBlogs(String token);
   Future<List<dynamic>> getBillingInfo(String token,int userId);
+
+  Future<AnswerHistoryResponse> getAnswers({ required int assessmentId,
+    required int patientId,
+    required String token,
+  });
 }

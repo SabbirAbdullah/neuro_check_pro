@@ -55,7 +55,6 @@ class BottomNavigationView extends StatelessWidget {
                 color: Colors.grey,
                 tabs:  [
                   GButton(
-
                     icon: CupertinoIcons.home,
                     text: 'Home',
                   ),

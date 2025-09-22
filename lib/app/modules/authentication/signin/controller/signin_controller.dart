@@ -1,5 +1,7 @@
 // controllers/signin_controller.dart
 
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -25,9 +27,9 @@ class SignInController extends GetxController {
   var loginMethod = "Email".obs; // Default
 
   final AuthenticationRepository _repository =
-      Get.find(tag: (AuthenticationRepository).toString());
+  Get.find(tag: (AuthenticationRepository).toString());
   final PrefRepository _prefRepository =
-      Get.find(tag: (PrefRepository).toString());
+  Get.find(tag: (PrefRepository).toString());
 
   var isLoading = false.obs;
   var countryCode = "+44";
@@ -90,124 +92,13 @@ class SignInController extends GetxController {
     Get.toNamed('/forgot-password');
   }
 
-  ///////
 
-
-  // static const String serverClientId =
-  //     '145142242234-0iqpp3ufsp438j1enf2lk773naheikcn.apps.googleusercontent.com';
-  //
-  //
-  // final AuthService _authService = AuthService(
-  //   // Provide serverClientId if your Android needs the web client id (see note below)
-  //   serverClientId: '145142242234-0iqpp3ufsp438j1enf2lk773naheikcn.apps.googleusercontent.com',
-  // );
-
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
 
   var user = Rxn<User>();
 
-  @override
-  void onInit() {
-    super.onInit();
-    // user.bindStream(FirebaseAuth.instance.authStateChanges());
-  }
-  final _auth = FirebaseAuth.instance;
-  final _googleSignIn = GoogleSignIn();
-  /// Google
-  Future<void> signInWithGoogleAndSendToBackend() async {
 
-    final googleUser = await _googleSignIn.signIn();
-    if (googleUser == null) {
-      // user cancelled
-      return;
-    }
-    final googleAuth = await googleUser.authentication;
-
-    final credential = GoogleAuthProvider.credential(
-      // accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    final userCredential = await _auth.signInWithCredential(credential);
-    final idToken = await userCredential.user!.getIdToken();
-    print("idToken ${idToken}");
-
-    // send to backend
-    // final resp = await http.post(
-    //   Uri.parse('$backendUrl/auth/firebase'),
-    //   headers: {
-    //     'Authorization': 'Bearer $idToken',
-    //     'Content-Type': 'application/json',
-    //   },
-    // );
-    //
-    // if (resp.statusCode != 200) {
-    //   throw Exception('Backend auth error: ${resp.statusCode} ${resp.body}');
-    // }
-  }
-
-
-
-
-  // Future<void> signInWithFacebook() async {
-  //   try {
-  //     isLoading.value = true;
-  //
-  //     final fbResult = await FacebookSignInService.signInWithFacebook();
-  //
-  //     if (fbResult != null) {
-  //       fbToken.value = fbResult['accessToken'] ?? '';
-  //       fbName.value = fbResult['name'] ?? '';
-  //       fbEmail.value = fbResult['email'] ?? '';
-  //       fbPicture.value = fbResult['picture'] ?? '';
-  //
-  //       print("✅ FB Token: ${fbToken.value}");
-  //       print("✅ User Name: ${fbName.value}");
-  //       print("✅ User Email: ${fbEmail.value}");
-  //     } else {
-  //       print("⚠️ Facebook login cancelled or failed");
-  //     }
-  //   } catch (e) {
-  //     print("❌ Facebook login error: $e");
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  // }
-
-  /// Facebook logout
-  // Future<void> logoutFromFacebook() async {
-  //   await FacebookSignInService.signOut();
-  //   fbToken.value = '';
-  //   fbName.value = '';
-  //   fbEmail.value = '';
-  //   fbPicture.value = '';
-  //   print("✅ Logged out from Facebook");
-  // }
-
-  ///Apple
-  ///
-  /// final FirebaseAuth _auth = FirebaseAuth.instance;
-  //
-  //   Future<void> signInWithApple() async {
-  //     try {
-  //       final credential = await SignInWithApple.getAppleIDCredential(
-  //         scopes: [
-  //           AppleIDAuthorizationScopes.email,
-  //           AppleIDAuthorizationScopes.fullName,
-  //         ],
-  //       );
-  //
-  //       final oauthCredential = OAuthProvider("apple.com").credential(
-  //         idToken: credential.identityToken,
-  //         accessToken: credential.authorizationCode,
-  //       );
-  //
-  //       await _auth.signInWithCredential(oauthCredential);
-  //
-  //       Get.snackbar("Success", "Signed in with Apple");
-  //     } catch (e) {
-  //       Get.snackbar("Error", e.toString());
-  //     }
-  //   }
   Future<void> signInWithApple() async {
     try {
       final credential = await SignInWithApple.getAppleIDCredential(
@@ -215,58 +106,26 @@ class SignInController extends GetxController {
           AppleIDAuthorizationScopes.email,
           AppleIDAuthorizationScopes.fullName,
         ],
-
-        // 🔹 Web / Android specific
-        webAuthenticationOptions: WebAuthenticationOptions(
-          clientId: 'com.example.neuroCheckPro.service', // Your Service ID
-          redirectUri: Uri.parse(
-              'https://neuro-check-pro.firebaseapp.com/__/auth/handler'), // Firebase redirect URL
-        ),
       );
 
       final oauthCredential = OAuthProvider("apple.com").credential(
         idToken: credential.identityToken,
         accessToken: credential.authorizationCode,
       );
-      print("Apple Firebase ID Token: $oauthCredential");
 
-      final userCredential =
-          await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+      final userCredential = await _auth.signInWithCredential(oauthCredential);
 
+      // Firebase ID token
       final idToken = await userCredential.user?.getIdToken();
+
+      // Send idToken to your backend for verification
       print("Apple Firebase ID Token: $idToken");
+
     } catch (e) {
       print("Apple Sign-In Error: $e");
     }
   }
 
-  // Future<void> signInWithApple() async {
-  //   try {
-  //     final credential = await SignInWithApple.getAppleIDCredential(
-  //       scopes: [
-  //         AppleIDAuthorizationScopes.email,
-  //         AppleIDAuthorizationScopes.fullName,
-  //       ],
-  //     );
-  //
-  //     final oauthCredential = OAuthProvider("apple.com").credential(
-  //       idToken: credential.identityToken,
-  //       accessToken: credential.authorizationCode,
-  //     );
-  //
-  //     final userCredential = await _auth.signInWithCredential(oauthCredential);
-  //
-  //     // Firebase ID token
-  //     final idToken = await userCredential.user?.getIdToken();
-  //
-  //     // Send idToken to your backend for verification
-  //     print("Apple Firebase ID Token: $idToken");
-  //
-  //   } catch (e) {
-  //     print("Apple Sign-In Error: $e");
-  //   }
-  // }
-  //
 
   void goToSignUp() {
     Get.toNamed('/signup_view');
@@ -275,7 +134,6 @@ class SignInController extends GetxController {
   void goToSignUpForm() {
     Get.toNamed('/signup_form');
   }
-  /////
 
 
 

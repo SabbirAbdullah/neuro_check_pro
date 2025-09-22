@@ -121,7 +121,7 @@ final AssessmentHistoryController controller = Get.put(AssessmentHistoryControll
 
                               onPressed: () {
                                 // Handle button action
-                                Get.to(AssessmentHistoryDetails(data: submission,));
+                                Get.to(()=>AssessmentHistoryDetails(data: submission,));
                                 // Get.snackbar("On Progress" ," In next Update" );
                               },
                               child: Text("View details",style: textButton,

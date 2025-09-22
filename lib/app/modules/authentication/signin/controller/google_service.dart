@@ -1,172 +1,128 @@
-// Google Sign-In Service Class
-import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
-
 import 'package:google_sign_in/google_sign_in.dart';
 
-// services/auth_service.dart
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:neuro_check_pro/app/network/dio_provider.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-//
-// class AuthService {
-//   final FirebaseAuth _auth = FirebaseAuth.instance;
-//
-//   final GoogleSignIn _googleSignIn ;
-//
-//
-//   final List<String> _scopes;
-//
-//   // Optionally pass clientId/serverClientId when creating the service
-//   AuthService({
-//     String? clientId,
-//     String? serverClientId,
-//     List<String>? scopes,
-//   })  : _scopes = scopes ?? const ['email', 'profile', 'openid'],
-//         _googleSignIn = GoogleSignIn.instance;
-//
-//   /// Call once before attempting authentication flows.
-//   Future<void> init() async {
-//     // initialize must be awaited before other calls (v7+).
-//     await _googleSignIn.initialize();
-//   }
-//
-//   /// Interactive sign-in using the new `authenticate()` API.
-//   Future<UserCredential?> signInWithGoogle() async {
-//     await _googleSignIn.initialize();
-//
-//     GoogleSignInAccount? account;
-//
-//     // Try silent/lightweight first
-//     account = await _googleSignIn.attemptLightweightAuthentication(
-//       reportAllExceptions: true,
-//     );
-//
-//     // If no account, fallback to interactive authenticate()
-//     if (account == null) {
-//       if (_googleSignIn.supportsAuthenticate()) {
-//         account = await _googleSignIn.authenticate();
-//       } else {
-//         // Fallback: show error to user
-//         print('Google Sign-In not available on this platform');
-//         return null;
-//       }
-//     }
-//
-//     if (account == null) {
-//       // User cancelled or auth failed
-//       print('Google Sign-In returned null account');
-//       return null;
-//     }
-//
-//     // ID token for Firebase
-//     final auth = account.authentication;
-//     final idToken = auth.idToken;
-//     if (idToken == null) {
-//       print('Google ID token is null');
-//       return null;
-//     }
-//
-//     // Optional: access token for API calls
-//     String? accessToken;
-//     try {
-//       final authz = await account.authorizationClient.authorizationForScopes(['email','profile','openid']);
-//       accessToken = authz?.accessToken;
-//     } catch (e) {
-//       accessToken = null; // if platform blocks scopes
-//     }
-//
-//     final credential = GoogleAuthProvider.credential(
-//       idToken: idToken,
-//       accessToken: accessToken,
-//     );
-//     print("credential : ${credential}");
-//     return FirebaseAuth.instance.signInWithCredential(credential);
-//
-//   }
-//
-//
-//   /// A 'silent' sign-in attempt: use when you want to try without heavy UI.
-//   Future<UserCredential?> signInSilently() async {
-//     try {
-//       await init();
-//       final account =
-//       await _googleSignIn.attemptLightweightAuthentication(reportAllExceptions: true);
-//       if (account == null) return null;
-//
-//       final idToken = account.authentication.idToken;
-//       final accessToken = (await account.authorizationClient.authorizationForScopes(_scopes))?.accessToken;
-//
-//       if (idToken == null) return null;
-//
-//       final credential = GoogleAuthProvider.credential(idToken: idToken, accessToken: accessToken);
-//       return await _auth.signInWithCredential(credential);
-//     } catch (e) {
-//       rethrow;
-//     }
-//   }
-//
-//   Future<void> signOut() async {
-//     await _googleSignIn.signOut();
-//     await _auth.signOut();
-//   }
-//
-//   Future<void> disconnect() async {
-//     // revoke app authorization
-//     await _googleSignIn.disconnect();
-//     await _auth.signOut();
-//   }
-// }
-//
+// Google Sign-In Service Class
+class GoogleSignInService {
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+  static bool isInitialize = false;
+  static final  _dio = DioProvider.dioWithHeaderToken;
+
+  static Future<void> initSignIn() async {
+    if (!isInitialize) {
+      await _googleSignIn.initialize(
+        serverClientId:
+            '145142242234-0iqpp3ufsp438j1enf2lk773naheikcn.apps.googleusercontent.com',
+      );
+    }
+    isInitialize = true;
+  }
+
+  static Future<String?> signInWithGoogle() async {
+    try {
+      initSignIn();
+      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
+      final idToken = googleUser.authentication.idToken;
+      final authorizationClient = googleUser.authorizationClient;
+      GoogleSignInClientAuthorization? authorization = await authorizationClient.authorizationForScopes(['email', 'profile']);
+
+      final accessToken = authorization?.accessToken;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: accessToken,
+        idToken: idToken,
+      );
+      print("👉 Google idToken ${idToken}");
+      print("👉 Access token ${accessToken}");
 
 
-// class FacebookSignInService {
-//   static final FacebookAuth _facebookAuth = FacebookAuth.instance;
-//
-//   /// Sign in with Facebook
-//   static Future<Map<String, String>?> signInWithFacebook() async {
-//     try {
-//       // Trigger Facebook login
-//       final LoginResult result = await _facebookAuth.login(
-//         permissions: ['email', 'public_profile'],
-//       );
-//
-//       if (result.status == LoginStatus.success) {
-//         // Get the access token
-//         final AccessToken accessToken = result.accessToken!;
-//         print("✅ Facebook Access Token: ${accessToken.tokenString}");
-//
-//         // Optionally fetch user profile data
-//         final userData = await _facebookAuth.getUserData(
-//           fields: "id,name,email,picture.width(200)",
-//         );
-//         print("✅ Facebook User Data: $userData");
-//
-//         return {
-//           "accessToken": accessToken.tokenString,
-//           "userId": userData['id'] ?? '',
-//           "name": userData['name'] ?? '',
-//           "email": userData['email'] ?? '',
-//           "picture": userData['picture']['data']['url'] ?? '',
-//         };
-//       } else if (result.status == LoginStatus.cancelled) {
-//         print("⚠️ Facebook login cancelled by user");
-//         return null;
-//       } else {
-//         print("❌ Facebook login failed: ${result.message}");
-//         return null;
-//       }
-//     } catch (e) {
-//       print("❌ Facebook Sign-In Error: $e");
-//       return null;
-//     }
-//   }
-//
-//   /// Sign out
-//   static Future<void> signOut() async {
-//     await _facebookAuth.logOut();
-//     print("✅ Signed out from Facebook");
-//   }
-// }
+      final UserCredential userCredential =
+      await FirebaseAuth.instance.signInWithCredential(credential);
+
+      final User? user = userCredential.user;
+
+
+      final String? firebaseIdToken = await user?.getIdToken(true);
+
+      if (firebaseIdToken == null) return null;
+
+      print("✅ Firebase ID token: $firebaseIdToken");
+
+      // 4️⃣ Send token to your backend
+      final dio = Dio();
+      final response = await dio.post(
+        'https://neurocheckpro.com/api/auth/social-login',
+        data: {'idToken': firebaseIdToken}, // backend expects this field
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      print("Backend response: ${response.data}");
+      return firebaseIdToken;
+    } catch (e) {
+      print("Error: $e");
+      rethrow;
+    }
+  }
+
+
+
+
+  static Future<void> signOut() async {
+    try {
+      await _googleSignIn.signOut();
+      await _auth.signOut();
+    } catch (e) {
+      print('Error signing out: $e');
+      throw e;
+    }
+  }
+
+  // Get current user
+  static User? getCurrentUser() {
+    return _auth.currentUser;
+  }
+}
+
+
+
+
+class AppleAuthService {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<UserCredential?> signInWithApple() async {
+    try {
+      // Step 1: Request Apple credentials
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      // Step 2: Build OAuth credential for Firebase
+      final oauthCredential = OAuthProvider("apple.com").credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
+
+      // Step 3: Sign in to Firebase
+      final userCredential = await _auth.signInWithCredential(oauthCredential);
+
+      return userCredential;
+    } catch (e) {
+      print("Apple Sign-In error: $e");
+      return null;
+    }
+  }
+}
+

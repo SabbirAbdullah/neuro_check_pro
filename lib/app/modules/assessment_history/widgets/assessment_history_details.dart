@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:neuro_check_pro/app/core/values/app_colors.dart';
 import 'package:neuro_check_pro/app/core/values/text_styles.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_loading.dart';
 import 'package:neuro_check_pro/app/modules/assessment_history/widgets/appointment_details.dart';
 import 'package:neuro_check_pro/app/modules/assessment_history/widgets/assessment_report.dart';
+import 'package:neuro_check_pro/app/modules/assessment_history/widgets/submitted_answer.dart';
 
 import '../../../core/widgets/custom_appbar.dart';
 import '../controllers/assessment_history_controller.dart';
@@ -182,6 +184,7 @@ class AssessmentHistoryDetails extends StatelessWidget {
   AssessmentHistoryDetails({super.key, required this.data});
   final Submission data;
 
+  final AssessmentHistoryController controller = Get.put(AssessmentHistoryController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -217,12 +220,22 @@ class AssessmentHistoryDetails extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       GestureDetector(
-                        onTap: () {}, // TODO: open submitted assessment
-                        child: const Text(
-                          "Submitted assessment ↗ ",
-                          style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w500),
+                        onTap: () {
+                           controller.loadAnswers(data.assessmentId, data.patientId);
+                          Get.to(()=> SubmittedAnswerPage());
+                        },
+                        child: Row(
+                          children: [
+                             Text(
+                              "Submitted assessment",
+                              style: TextStyle(color: AppColors.appBarColor, fontWeight: FontWeight.w500),
+                            ),
+                            Icon(Icons.arrow_outward_rounded,size: 20,color: AppColors.appBarColor,)
+                          ],
                         ),
                       ),
+
+
                     ],
                   ),
                   Container(

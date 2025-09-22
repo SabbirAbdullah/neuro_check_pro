@@ -6,7 +6,8 @@ import '/flavors/env_config.dart';
 import '/flavors/environment.dart';
 import 'app/my_app.dart';
 import 'firebase_options.dart';
-// https://neurocheckpro.com/api
+
+// http://35.179.110.216:3000/api
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -14,7 +15,7 @@ void main()async {
   );
   EnvConfig devConfig = EnvConfig(
     appName: "",
-    baseUrl: "http://35.179.110.216:3000/api",
+    baseUrl: "https://neurocheckpro.com/api",
     shouldCollectCrashLog: true,
 
   );

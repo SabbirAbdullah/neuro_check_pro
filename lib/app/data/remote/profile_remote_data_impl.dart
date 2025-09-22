@@ -3,6 +3,7 @@ import 'package:neuro_check_pro/app/data/remote/profile_remote_data_source.dart'
 import 'package:neuro_check_pro/app/modules/assessment_history/models/assessment_history_model.dart';
 
 import '../../core/network/error_handle.dart';
+import '../../modules/assessment_history/models/answers_history_model.dart';
 import '../../network/dio_provider.dart';
 import '../model/user_info_model.dart';
 
@@ -35,7 +36,7 @@ class ProfileRemoteDataImpl implements ProfileRemoteDataSource {
     try {
       final response = await _dio.get(
         "/submissions",
-        queryParameters: {"userId": userId},
+        queryParameters: {"userId": userId,"limit":50},
         options: Options(
           headers: {"Authorization": "Bearer $token"},
         ),
@@ -86,4 +87,32 @@ class ProfileRemoteDataImpl implements ProfileRemoteDataSource {
       throw handleError(e.toString());
     }
   }
+
+
+  @override
+  Future<AnswerHistoryResponse> getAnswers({ required int assessmentId,
+    required int patientId,
+    required String token,
+  }) async {
+    try {
+      final response = await _dio.get(
+        "/answers",
+        queryParameters: {
+          "assessmentId": assessmentId,
+          "patientId": patientId,
+          "limit":1000,
+        },
+        options: Options(
+          headers: {"Authorization": "Bearer $token"},
+        ),
+      );
+
+      return AnswerHistoryResponse.fromJson(response.data);
+    } on DioException catch (dioError) {
+      throw handleDioError(dioError);
+    } catch (e) {
+      throw handleError(e.toString());
+    }
+  }
+
 }

@@ -1,7 +1,6 @@
-platform :ios, '15.6'
-use_frameworks!
-use_modular_headers!
-ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+platform :ios, '18.6'   # lower deployment target for better compatibility
+use_frameworks!          # required for some Firebase pods
+use_modular_headers!     # ensures Firebase modules integrate correctly
 
 project 'Runner', {
   'Debug' => :debug,
@@ -29,10 +28,10 @@ target 'Runner' do
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 
   # Firebase pods
-  pod 'FirebaseCore'
-  pod 'FirebaseAuth'
-  pod 'FirebaseMessaging'
-  pod 'FirebaseInAppMessaging'  # optional if you use it
+  pod 'Firebase/Core'
+  pod 'Firebase/Auth'
+  pod 'Firebase/Messaging'
+  # pod 'Firebase/InAppMessaging' # optional, uncomment if needed
 
   target 'RunnerTests' do
     inherit! :search_paths
@@ -44,7 +43,9 @@ post_install do |installer|
     flutter_additional_ios_build_settings(target)
 
     target.build_configurations.each do |config|
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.6'
+      # make sure all pods use the correct iOS target
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '18.6'
     end
   end
 end
+

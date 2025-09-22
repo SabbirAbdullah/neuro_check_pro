@@ -14,10 +14,86 @@ import '../controller/signin_controller.dart';
 import '../widgets/toggle_email_phone.dart';
 
 
-class SignInView extends StatelessWidget {
+class SignInView extends StatefulWidget {
   SignInView({super.key});
-  final SignInController controller = Get.put(SignInController(), permanent: true);
 
+  @override
+  State<SignInView> createState() => _SignInViewState();
+}
+
+class _SignInViewState extends State<SignInView> {
+  bool _loading = false;
+
+  Future<void> _handleGoogleSignIn() async {
+    setState(() => _loading = true);
+    try {
+      final String? userEmail = await GoogleSignInService.signInWithGoogle();
+
+      if (userEmail != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Signed in as $userEmail")),
+        );
+
+        // 👉 Navigate to home page or dashboard
+        // Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Sign-in was cancelled")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Sign-in failed: $e")),
+      );
+    } finally {
+      setState(() => _loading = false);
+    }
+  }
+
+  // Future<void> _handleGoogleSignIn() async {
+  //   setState(() => _loading = true);
+  //
+  //   try {
+  //     // Call the new service
+  //     final backendResponse = await GoogleSignInService.signInWithGoogle();
+  //
+  //     if (backendResponse != null) {
+  //       final user = backendResponse['user'];
+  //       final token = backendResponse['token'];
+  //
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           content: Text("Signed in as ${user?['name'] ?? 'Unknown'}"),
+  //         ),
+  //       );
+  //
+  //       // 👉 Store token locally if needed
+  //       // await SharedPreferences.getInstance()
+  //       //   ..setString('jwt', token);
+  //
+  //       // 👉 Navigate to home page or dashboard
+  //       // Navigator.pushReplacementNamed(context, '/home');
+  //     } else {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(content: Text("Sign-in cancelled")),
+  //       );
+  //     }
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text("Sign-in failed: $e")),
+  //     );
+  //   } finally {
+  //     setState(() => _loading = false);
+  //   }
+  // }
+  Future<void> _handleSignOut() async {
+    await GoogleSignInService.signOut();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Signed out")),
+    );
+  }
+
+  final SignInController controller = Get.put(SignInController(), permanent: true);
 
   @override
   Widget build(BuildContext context) {
@@ -222,8 +298,9 @@ class SignInView extends StatelessWidget {
 
             OutlinedButton.icon(
               onPressed: (){
-                controller.signInWithGoogleAndSendToBackend();
+                _handleGoogleSignIn();
                 // Get.to(()=>EmailLoginScreen());
+                // controller.signInWithGoogle();
               },
 
               icon: Image.asset('assets/google.png', height: 20),
@@ -237,8 +314,6 @@ class SignInView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-
-            // Apple Sign In
             OutlinedButton.icon(
               onPressed: controller.signInWithApple,
               icon: const Icon(Icons.apple, color: Colors.black),

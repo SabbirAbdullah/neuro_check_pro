@@ -17,7 +17,7 @@ void main()async {
   );
   EnvConfig devConfig = EnvConfig(
     appName: "",
-    baseUrl: "http://35.179.110.216:3000/api",
+    baseUrl: "https://neurocheckpro.com/api",
     shouldCollectCrashLog: true,
 
   );
