@@ -27,11 +27,11 @@ class _SignInViewState extends State<SignInView> {
   Future<void> _handleGoogleSignIn() async {
     setState(() => _loading = true);
     try {
-      final String? userEmail = await GoogleSignInService.signInWithGoogle();
+      final String? user= await GoogleSignInService.signInWithGoogle();
 
-      if (userEmail != null) {
+      if (user != null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Signed in as $userEmail")),
+          SnackBar(content: Text("Signed in as $user")),
         );
 
         // 👉 Navigate to home page or dashboard
