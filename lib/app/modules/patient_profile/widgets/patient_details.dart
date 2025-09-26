@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/values/app_colors.dart';
+import '../../../core/values/url.dart';
 import '../../../core/widgets/custom_appbar.dart';
 import '../../../core/widgets/custom_button.dart';
 import '../../../core/widgets/custom_loading.dart';
@@ -18,11 +19,11 @@ import 'package:image_picker/image_picker.dart';
 
 class PatientDetailPage extends StatelessWidget {
   final PatientModel patient;
-  const PatientDetailPage({super.key, required this.patient});
-
+   PatientDetailPage({super.key, required this.patient});
+final PatientProfileController controller = Get.put(PatientProfileController());
   @override
   Widget build(BuildContext context) {
-    final Rx<File?> pickedImage = Rx<File?>(null);
+
 
     void _showEditOptions() {
       showCupertinoModalPopup(
@@ -33,28 +34,15 @@ class PatientDetailPage extends StatelessWidget {
             CupertinoActionSheetAction(
               onPressed: () async {
                 Navigator.pop(context);
-                final ImagePicker picker = ImagePicker();
-                final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-                if (image != null) {
-                  pickedImage.value = File(image.path);
-                  // TODO: upload to server here
-                }
-              },
-              child: const Text('Upload Image'),
+                controller.pickAndUploadImage(patient.id);
+                },
+              child: const Text('Upload Image',style:TextStyle(fontSize: 14,color: Colors.blue),),
             ),
-            CupertinoActionSheetAction(
-              isDestructiveAction: true,
-              onPressed: () {
-                Navigator.pop(context);
-                pickedImage.value = null;
-                // TODO: call API to delete image from server
-              },
-              child: const Text('Delete Image'),
-            ),
+
           ],
           cancelButton: CupertinoActionSheetAction(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: const Text('Cancel',style: TextStyle(fontSize: 14,color: Colors.red),),
           ),
         ),
       );
@@ -71,21 +59,41 @@ class PatientDetailPage extends StatelessWidget {
             Center(
               child: Stack(
                 children: [
-                  Obx(() {
-                    return CircleAvatar(
-                      radius: 48,
+                 CircleAvatar(
+                      radius: 40,
                       backgroundColor: Colors.blueAccent.shade100,
-                      backgroundImage: pickedImage.value != null
-                          ? FileImage(pickedImage.value!)
-                          : (patient.imageUrl != null
-                          ? NetworkImage(patient.imageUrl!) as ImageProvider
-                          : null),
-                      child: (pickedImage.value == null && patient.imageUrl == null)
-                          ? Text(patient.initials('child'),
-                          style: const TextStyle(fontSize: 28, color: Colors.white))
-                          : null,
-                    );
-                  }),
+                      child: patient.image != null
+                          ? ClipOval(
+                        child: Image.network(
+                          ImageURL.imageURL + patient.image!,
+                          fit: BoxFit.cover,
+                          width: 80,
+                          height: 80,
+                          errorBuilder: (context, error, stackTrace) {
+                            // If image fails to load, show initials
+                            return Center(
+                              child: Text(
+                                patient.name[0].toUpperCase(),
+                                style: const TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                          : Text(
+                        patient.name[0].toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+
                   Positioned(
                     bottom: 0,
                     right: 0,
@@ -94,11 +102,11 @@ class PatientDetailPage extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          color: Colors.blueAccent,
+                          color: AppColors.appBarColor,
                           shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2),
+
                         ),
-                        child: const Icon(Icons.edit, size: 18, color: Colors.white),
+                        child: const Icon(Icons.camera_alt_outlined, size: 18, color: Colors.white),
                       ),
                     ),
                   ),
@@ -121,7 +129,6 @@ class PatientDetailPage extends StatelessWidget {
                   Tab(text: 'Assessment History')
                 ],
               ),
-            
             // Tab content
             Expanded(
               child: TabBarView(

@@ -22,33 +22,7 @@ class SignInView extends StatefulWidget {
 }
 
 class _SignInViewState extends State<SignInView> {
-  bool _loading = false;
 
-  Future<void> _handleGoogleSignIn() async {
-    setState(() => _loading = true);
-    try {
-      final String? user= await GoogleSignInService.signInWithGoogle();
-
-      if (user != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Signed in as $user")),
-        );
-
-        // 👉 Navigate to home page or dashboard
-        // Navigator.pushReplacementNamed(context, '/home');
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Sign-in was cancelled")),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Sign-in failed: $e")),
-      );
-    } finally {
-      setState(() => _loading = false);
-    }
-  }
 
   // Future<void> _handleGoogleSignIn() async {
   //   setState(() => _loading = true);
@@ -296,39 +270,39 @@ class _SignInViewState extends State<SignInView> {
             const Center(child: Text("Or", style: TextStyle(color: Colors.grey))),
             const SizedBox(height: 20),
 
-            OutlinedButton.icon(
-              onPressed: (){
-                _handleGoogleSignIn();
-                // Get.to(()=>EmailLoginScreen());
-                // controller.signInWithGoogle();
-              },
-
-              icon: Image.asset('assets/google.png', height: 20),
-              label: const Text("Sign in with Google",style: signInOptionTextButton,),
-              style: OutlinedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30,),
-                  ),
-                  side: BorderSide(color: AppColors.borderColor)
-              ),
-            ),
-            const SizedBox(height: 12),
-            OutlinedButton.icon(
-              onPressed: controller.signInWithApple,
-              icon: const Icon(Icons.apple, color: Colors.black),
-              label: const Text("Sign in with Apple",style: signInOptionTextButton,),
-              style: OutlinedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                side:  BorderSide(
-                  color: AppColors.borderColor, // ✅ border color here
-                  // optional thickness
-                ),
-              ),
-            ),
+            // OutlinedButton.icon(
+            //   onPressed: (){
+            //     controller. handleGoogleSignIn();
+            //     // Get.to(()=>EmailLoginScreen());
+            //     // controller.signInWithGoogle();
+            //   },
+            //
+            //   icon: Image.asset('assets/google.png', height: 20),
+            //   label: const Text("Sign in with Google",style: signInOptionTextButton,),
+            //   style: OutlinedButton.styleFrom(
+            //       minimumSize: const Size(double.infinity, 50),
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(30,),
+            //       ),
+            //       side: BorderSide(color: AppColors.borderColor)
+            //   ),
+            // ),
+            // const SizedBox(height: 12),
+            // OutlinedButton.icon(
+            //   onPressed: controller.signInWithApple,
+            //   icon: const Icon(Icons.apple, color: Colors.black),
+            //   label: const Text("Sign in with Apple",style: signInOptionTextButton,),
+            //   style: OutlinedButton.styleFrom(
+            //     minimumSize: const Size(double.infinity, 50),
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(30),
+            //     ),
+            //     side:  BorderSide(
+            //       color: AppColors.borderColor, // ✅ border color here
+            //       // optional thickness
+            //     ),
+            //   ),
+            // ),
             const SizedBox(height: 12),
 
             // Facebook Sign In
@@ -351,7 +325,7 @@ class _SignInViewState extends State<SignInView> {
             //   ),
             // ),
 
-            const SizedBox(height: 30),
+
 
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

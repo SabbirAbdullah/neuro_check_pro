@@ -1,11 +1,9 @@
 
 import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:http/http.dart' as http;
+
 
 
 import 'package:neuro_check_pro/app/network/dio_provider.dart';
@@ -29,96 +27,97 @@ class GoogleSignInService {
     isInitialize = true;
   }
 
-  // static Future<String?> signInWithGoogle() async {
-  //   try {
-  //     initSignIn();
-  //     final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
-  //     final idToken = googleUser.authentication.idToken;
-  //     final authorizationClient = googleUser.authorizationClient;
-  //     GoogleSignInClientAuthorization? authorization = await authorizationClient
-  //         .authorizationForScopes(['email', 'profile']);
-  //     final accessToken = authorization?.accessToken;
-  //     if (accessToken == null) {
-  //       final authorization2 = await authorizationClient.authorizationForScopes(
-  //         ['email', 'profile'],
-  //       );
-  //       if (authorization2?.accessToken == null) {
-  //         throw FirebaseAuthException(code: "error", message: "error");
-  //       }
-  //       authorization = authorization2;
-  //     }
-  //     final credential = GoogleAuthProvider.credential(
-  //       accessToken: accessToken,
-  //       idToken: idToken,
-  //     );
-  //     final UserCredential userCredential = await FirebaseAuth.instance
-  //         .signInWithCredential(credential);
-  //
-  //     // Step 3: Get Firebase ID Token (THIS is what backend needs)
-  //     final firebaseIdToken = await userCredential.user!.getIdToken();
-  //
-  //     // Step 4: Send Firebase ID Token to backend
-  //     final response = await _dio.post(
-  //             'https://neurocheckpro.com/api/auth/social-login',
-  //             data: jsonEncode({'idToken': firebaseIdToken}),
-  //
-  //           );
-  //           print(firebaseIdToken);
-  //     print("idToken : $firebaseIdToken");
-  //
-  //     print("Backend response: ${response.data}");
-  //     return firebaseIdToken;
-  //   } catch (e) {
-  //     print('Error: $e');
-  //     rethrow;
-  //   }
-  // }
   static Future<String?> signInWithGoogle() async {
     try {
       initSignIn();
       final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
       final idToken = googleUser.authentication.idToken;
       final authorizationClient = googleUser.authorizationClient;
-      GoogleSignInClientAuthorization? authorization = await authorizationClient.authorizationForScopes(['email', 'profile']);
-
+      GoogleSignInClientAuthorization? authorization = await authorizationClient
+          .authorizationForScopes(['email', 'profile']);
       final accessToken = authorization?.accessToken;
-
+      if (accessToken == null) {
+        final authorization2 = await authorizationClient.authorizationForScopes(
+          ['email', 'profile'],
+        );
+        if (authorization2?.accessToken == null) {
+          throw FirebaseAuthException(code: "error", message: "error");
+        }
+        authorization = authorization2;
+      }
       final credential = GoogleAuthProvider.credential(
         accessToken: accessToken,
         idToken: idToken,
       );
-      print("👉 Google idToken $idToken");
-      print("👉 Access token $accessToken");
-      print("👉 Credential token $credential");
+      final UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithCredential(credential);
 
-      final UserCredential userCredential =
-      await FirebaseAuth.instance.signInWithCredential(credential);
-
-      final User? user = userCredential.user;
-
-
-      final String? firebaseIdToken = await user?.getIdToken();
-
-      if (firebaseIdToken == null) return null;
-
-      print(jsonEncode({'idToken': firebaseIdToken}));
-
+      // Step 3: Get Firebase ID Token (THIS is what backend needs)
+      final firebaseIdToken = await userCredential.user!.getIdToken();
+      print("FirebaseIdToken : $firebaseIdToken");
 
       final response = await _dio.post(
-        'https://neurocheckpro.com/api/auth/social-login',
-        data: jsonEncode({'idToken': firebaseIdToken}),
-        options: Options(headers: {'Content-Type': 'application/json'}),
-      );
+              'https://neurocheckpro.com/api/auth/social-login',
+              data: {'idToken': firebaseIdToken},
+
+            );
 
       print("Backend response: ${response.data}");
-
       return firebaseIdToken;
-
     } catch (e) {
-      print("Error: $e");
+      print('Error: $e');
       rethrow;
     }
   }
+  // static Future<String?> signInWithGoogle() async {
+  //   try {
+  //     initSignIn();
+  //
+  //
+  //
+  //     final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
+  //     final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
+  //
+  //     // final authorizationClient = googleUser.authorizationClient;
+  //     // GoogleSignInClientAuthorization? authorization = await authorizationClient
+  //     //         .authorizationForScopes(['email', 'profile']);
+  //
+  //     final AuthCredential credential = GoogleAuthProvider.credential(
+  //       idToken: googleAuth.idToken,
+  //     );
+  //     print("Credential : ${credential}")
+  //     final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+  //
+  //     print("UserCredential : ${userCredential}")
+  //     // print("👉 Google idToken $idToken");
+  //     // print("👉 Access token $accessToken");
+  //     // print("👉 Credential token $credential");
+  //
+  //
+  //     final String? firebaseIdToken = await userCredential.user?.getIdToken();
+  //
+  //     if (firebaseIdToken != null) {
+  //       // Send this firebaseIdToken to your backend
+  //       // for verification and user login.
+  //     }
+  //     print('FirebaseIdToken : ${firebaseIdToken}');
+  //
+  //
+  //     // final response = await _dio.post(
+  //     //   'https://neurocheckpro.com/api/auth/social-login',
+  //     //   data: jsonEncode({'idToken': firebaseIdToken}),
+  //     //   options: Options(headers: {'Content-Type': 'application/json'}),
+  //     // );
+  //
+  //     // print("Backend response: ${response.data}");
+  //
+  //     return firebaseIdToken;
+  //
+  //   } catch (e) {
+  //     print("Error: $e");
+  //     rethrow;
+  //   }
+  // }
 
 
 

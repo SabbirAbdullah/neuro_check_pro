@@ -91,11 +91,30 @@ class SignInController extends GetxController {
   void forgotPassword() {
     Get.toNamed('/forgot-password');
   }
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  bool loading = false;
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+  Future<void> handleGoogleSignIn() async {
+    loading = true;
+    try {
+      final String? user= await GoogleSignInService.signInWithGoogle();
 
+      if (user != null) {
+        Get.snackbar("Signed in as ", user);
+
+        // 👉 Navigate to home page or dashboard
+        // Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        Get.snackbar("Sign-in was cancelled",user!);
+      }
+    } catch (e) {
+      Get.snackbar("Sign-in failed", e.toString());
+
+    } finally {
+      loading = false;
+    }
+  }
   var user = Rxn<User>();
 
 

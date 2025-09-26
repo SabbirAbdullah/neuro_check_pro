@@ -2,6 +2,7 @@
 // pages/assessment_list_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:neuro_check_pro/app/core/widgets/custom_loading.dart';
 import '../controllers/assessment_controller.dart';
 import '../widgets/asseessment_details.dart';
 
@@ -34,7 +35,7 @@ class AssessmentView extends StatelessWidget {
                       () => RefreshIndicator(
                     onRefresh: controller.loadAssessments, // 👈 Pull-to-refresh
                     child: controller.isLoading.value && controller.assessments.isEmpty
-                        ? const Center(child: CircularProgressIndicator()) // Initial loading
+                        ? const Center(child: CustomLoading()) // Initial loading
                         : ListView.builder(
                       physics: const AlwaysScrollableScrollPhysics(), // 👈 Required for RefreshIndicator
                       itemCount: controller.assessments.length,

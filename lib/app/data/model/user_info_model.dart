@@ -31,6 +31,7 @@ class UserInfoModel {
   final String role;
   final String knowHow;
   final String ? image;
+  final String? password;
 
   UserInfoModel({
     required this.id,
@@ -44,7 +45,8 @@ class UserInfoModel {
     required this.street,
     required this.role,
     required this.knowHow,
-     this.image
+     this.image,
+    this.password
   });
 
   factory UserInfoModel.fromJson(Map<String, dynamic> json) => UserInfoModel(
@@ -60,5 +62,7 @@ class UserInfoModel {
     street: json['street'],
     role: json['role'],
     knowHow: json['knowHow'],
+    password:  json['password']??"",
+
   );
 }

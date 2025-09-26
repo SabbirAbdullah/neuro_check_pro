@@ -50,24 +50,31 @@ class HeroPage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 50,),
-            SizedBox(
-              height: 54,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF0D4D54),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
+            Obx(() {
+              return SizedBox(
+                height: 54,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF0D4D54),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                  ),
+                  onPressed: primaryAssessmentController.assessments.isNotEmpty
+                      ? () {
+                    Get.to(() => AssessmentChildSelectPage(
+                      assessmentId: primaryAssessmentController.assessments[0].id,
+                    ));
+                  }
+                      : null, // disable until loaded
+                  child: const Text(
+                    'Start assessment',
+                    style: textButton_white,
                   ),
                 ),
-                onPressed: () {
-                  Get.to(()=>AssessmentChildSelectPage(assessmentId: primaryAssessmentController.assessments[0].id,));
-                },
-                child: const Text(
-                  'Start assessment',
-                  style: textButton_white,
-                ),
-              ),
-            ),
+              );
+            }),
+
             const SizedBox(height: 24),
           ],
         ),

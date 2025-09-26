@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 class PatientModel {
   final int id;
   final String name;
-  final String ? imageUrl;
+  final String ? image;
   final String dateOfBirth;
   final String gender;
   final String relationshipToUser;
@@ -14,7 +14,7 @@ class PatientModel {
 
   PatientModel({
     required this.id,
-    this.imageUrl,
+    this.image,
     required this.name,
     required this.dateOfBirth,
     required this.gender,
@@ -28,7 +28,7 @@ class PatientModel {
     return PatientModel(
       id: json['id'],
       name: json['name'],
-      imageUrl: json["imageUrl"],
+      image: json["image"]??"",
       dateOfBirth: json['dateOfBirth'],
       gender: json['gender'],
       relationshipToUser: json['relationshipToUser'],
@@ -52,7 +52,7 @@ class PatientModel {
 class PatientProfileModel {
   final String id;
   final String name;
-  final String? imageUrl; // nullable if no image uploaded
+  final String? image; // nullable if no image uploaded
   final String gender;
   final DateTime dob;
   final String ? relation;
@@ -62,7 +62,7 @@ class PatientProfileModel {
   PatientProfileModel({
     required this.id,
     required this.name,
-    this.imageUrl,
+    this.image,
     this.relation,
     this.gp,
     this.tag,
@@ -78,7 +78,7 @@ class PatientProfileModel {
       relation: json['relation'] ?? '',
       gp: json['gp'] ?? '',
       tag: json['tag'] ?? '',
-      imageUrl: json['profileImageUrl'],
+      image: json['image'],
       gender: json['gender'] ?? '',
       dob: DateTime.tryParse(json['dob'] ?? '') ?? DateTime.now(),
     );
@@ -90,7 +90,7 @@ class PatientProfileModel {
       'id': id,
       'name': name,
       'relation':relation,
-      'imageUrl': imageUrl,
+      'image': image,
       'gender': gender,
       'dob': dob.toIso8601String(),
     };

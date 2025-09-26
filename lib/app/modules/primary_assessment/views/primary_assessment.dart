@@ -20,8 +20,7 @@ import '../widgets/quiz_results.dart';
 class InitialAssessmentQuestion extends StatelessWidget {
   final int patient;
   final int assessmentId;
-  final PrimaryAssessmentController controller =
-  Get.put(PrimaryAssessmentController());
+  final PrimaryAssessmentController controller = Get.put(PrimaryAssessmentController());
 
   InitialAssessmentQuestion({
     super.key,

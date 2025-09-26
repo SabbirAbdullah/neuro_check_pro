@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_appbar.dart';
 
+import '../../../core/values/url.dart';
 import '../../../core/widgets/custom_loading.dart';
 import '../../assessment/controllers/assessment_controller.dart';
 import '../../assessment/models/assessment_model.dart';
@@ -63,11 +64,38 @@ class AssessmentChildSelectPage extends StatelessWidget {
                         child: Column(
                           children: [
                             CircleAvatar(
-                                radius: 40,
-                                child: patient.imageUrl == null
-                                    ?Text(patient.initials('child'), style:  TextStyle(fontSize: 18, color: Colors.white))
-                                    :Image.network(patient.imageUrl!)
-
+                              radius: 35,
+                              backgroundColor: Colors.blueAccent.shade100,
+                              child: patient.image != null
+                                  ? ClipOval(
+                                child: Image.network(
+                                  ImageURL.imageURL + patient.image!,
+                                  fit: BoxFit.cover,
+                                  width: 80,
+                                  height: 80,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    // If image fails to load, show initials
+                                    return Center(
+                                      child: Text(
+                                        patient.name[0].toUpperCase(),
+                                        style: const TextStyle(
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              )
+                                  : Text(
+                                patient.name[0].toUpperCase(),
+                                style: const TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                             const SizedBox(height: 8),
                             Text(

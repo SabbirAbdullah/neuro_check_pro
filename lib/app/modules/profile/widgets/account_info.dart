@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:neuro_check_pro/app/core/values/app_colors.dart';
 import 'package:neuro_check_pro/app/core/values/text_styles.dart';
+import 'package:neuro_check_pro/app/core/values/url.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_appbar.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_loading.dart';
-import 'package:neuro_check_pro/app/modules/profile/widgets/account_info/email_update.dart';
+
 
 import '../../../data/model/user_info_model.dart';
 import '../../onboardings/controllers/onboarding_controller.dart';
@@ -34,15 +36,33 @@ class AccountInfo extends StatelessWidget {
             children: [
               const SizedBox(height: 20),
 
-
               Obx(() {
+                ImageProvider imageProvider;
+
+                if (controller.isLoading.value) {
+                  // Show loader while uploading
+                  return CircleAvatar(
+                    radius: 45,
+                    child: CustomLoading(),
+                  );
+                }
+
+                if (user.image!.isNotEmpty) {
+                  // Uploaded image from server
+                  imageProvider = NetworkImage(ImageURL.imageURL + user.image!);
+                } else if (controller.selectedImage.value != null) {
+                  // Local file (before upload complete)
+                  imageProvider = FileImage(controller.selectedImage.value!);
+                } else {
+                  // Default placeholder
+                  imageProvider = AssetImage("assets/images/user.png");
+                }
+
                 return Stack(
                   children: [
                     CircleAvatar(
                       radius: 45,
-                      backgroundImage: controller.selectedImage.value != null
-                          ? FileImage(controller.selectedImage.value!)
-                          : AssetImage("assets/images/user.png") as ImageProvider,
+                      backgroundImage: imageProvider,
                     ),
                     Positioned(
                       bottom: 0,
@@ -52,16 +72,17 @@ class AccountInfo extends StatelessWidget {
                         child: Container(
                           padding: EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: Colors.blue,
+                            color: AppColors.appBarColor,
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(Icons.edit, color: Colors.white, size: 18),
+                          child: Icon(Icons.camera_alt_outlined, color: Colors.white, size: 18),
                         ),
                       ),
                     ),
                   ],
                 );
               }),
+
               const SizedBox(height: 10),
               Text(user.name, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
               const SizedBox(height: 6),
@@ -305,19 +326,20 @@ class AccountInfo extends StatelessWidget {
         actions: [
           CupertinoActionSheetAction(
             onPressed: () {
+              Get.back();
+              controller!.pickAndUploadImage();
 
-              controller.pickImage();
             },
             child: Text("Upload Image",style: textButton_blue,),
           ),
-          CupertinoActionSheetAction(
-            isDestructiveAction: true,
-            onPressed: () {
-              Get.back();
-              controller.deleteImage();
-            },
-            child: Text("Delete Image",style: textButton_red,),
-          ),
+          // CupertinoActionSheetAction(
+          //   isDestructiveAction: true,
+          //   onPressed: () {
+          //     Get.back();
+          //     controller.deleteImage();
+          //   },
+          //   child: Text("Delete Image",style: textButton_red,),
+          // ),
         ],
         cancelButton: CupertinoActionSheetAction(
           onPressed: () => Get.back(),

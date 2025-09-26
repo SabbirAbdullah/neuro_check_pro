@@ -31,9 +31,9 @@ class PrivacySecurityView extends StatelessWidget {
                 },
                 child: infoTile('Change Password')),
 
-            GestureDetector(
-                onTap: _showDeleteAccountDialog,
-                child: infoTile('Delete My Account'))
+            // GestureDetector(
+            //     onTap: _showDeleteAccountDialog,
+            //     child: infoTile('Delete My Account'))
           ],
         ),
       ),
@@ -75,12 +75,21 @@ class PrivacySecurityView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildTextField(
-                "Current Password", controller.currentPasswordController),
-            const SizedBox(height: 14),
-            _buildTextField("New Password", controller.newPasswordController),
-            const SizedBox(height: 14),
+              "Current Password",
+              controller.currentPasswordController,
+              isHidden: controller.isCurrentPasswordHidden,
+            ),
             _buildTextField(
-                "Confirm Password", controller.confirmPasswordController),
+              "New Password",
+              controller.newPasswordController,
+              isHidden: controller.isNewPasswordHidden,
+            ),
+            _buildTextField(
+              "Confirm Password",
+              controller.confirmPasswordController,
+              isHidden: controller.isConfirmPasswordHidden,
+            ),
+
             const SizedBox(height: 20),
            Container(
              width: double.infinity,
@@ -107,7 +116,11 @@ class PrivacySecurityView extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(String label, TextEditingController textController) {
+  Widget _buildTextField(
+      String label,
+      TextEditingController textController, {
+        required RxBool isHidden,
+      }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -120,24 +133,33 @@ class PrivacySecurityView extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 6),
-        TextField(
-          cursorColor: AppColors.appBarColor,
-          controller: textController,
-          obscureText: true,
-          decoration: InputDecoration(
-            contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(25),
-              borderSide: BorderSide.none,
+        Obx(
+              () => TextField(
+            controller: textController,
+            cursorColor: AppColors.appBarColor,
+            obscureText: isHidden.value,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              filled: true,
+              fillColor: Colors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25),
+                borderSide: BorderSide.none,
+              ),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  isHidden.value ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                  color: Colors.grey,
+                ),
+                onPressed: () => isHidden.value = !isHidden.value,
+              ),
             ),
           ),
         ),
       ],
     );
   }
+
 
   void _showDeleteAccountDialog() {
     showCupertinoDialog(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:neuro_check_pro/app/core/values/url.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_appbar.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_loading.dart';
 import 'package:neuro_check_pro/app/modules/assessment/widgets/assessment_payment_page.dart';
@@ -15,10 +16,10 @@ import '../models/assessment_model.dart';
 
 
 
-class PatientProfile extends StatelessWidget {
+class AssessmentPatientProfile extends StatelessWidget {
   final AssessmentModel ? model;
 
-  PatientProfile({super.key,  this.model});
+  AssessmentPatientProfile({super.key,  this.model});
 final AssessmentController controller = Get.put(AssessmentController());
   final PatientProfileController patientProfileController = Get.put(PatientProfileController());
   @override
@@ -61,28 +62,53 @@ final AssessmentController controller = Get.put(AssessmentController());
                          // Show snackbar immediately
                          Get.snackbar('Selected', 'You selected ${patient.name}');
 
-                         controller.loadQuestions(model!.id, patient.id);
-                         Get.off(()=>QuestionPage(patientId: patient.id, model: model!));
+                         // controller.loadQuestions(model!.id, patient.id);
+                         // Get.off(()=>QuestionPage(patientId: patient.id, model: model!));
                          // Check assessment
-                         // bool hasAssessment = await controller.checkAssessmentForUI(patient.id,model!.id);
+                         bool hasAssessment = await controller.checkAssessmentForUI(patient.id,model!.id);
 
-
-                         // Navigate based on result
-                         // if (hasAssessment) {
-                         //   Get.to(() => PaymentSuccessPage(patient: patient, model: model!));
-                         // } else {
-                         //   Get.to(() => AssessmentPaymentPage(patient: patient, model: model!));
-                         // }
+                         if (hasAssessment) {
+                           Get.to(() => PaymentSuccessPage(patient: patient, model: model!));
+                         } else {
+                           Get.to(() => AssessmentPaymentPage(patient: patient, model: model!));
+                         }
 
                        },
                        child: Column(
                          children: [
                            CircleAvatar(
-                               radius: 40,
-                               child: patient.imageUrl == null
-                                   ?Text(patient.initials('child'), style:  TextStyle(fontSize: 18, color: Colors.white))
-                                   :Image.network(patient.imageUrl!)
-
+                             radius: 35,
+                             backgroundColor: Colors.blueAccent.shade100,
+                             child: patient.image != null
+                                 ? ClipOval(
+                               child: Image.network(
+                                 ImageURL.imageURL + patient.image!,
+                                 fit: BoxFit.cover,
+                                 width: 80,
+                                 height: 80,
+                                 errorBuilder: (context, error, stackTrace) {
+                                   // If image fails to load, show initials
+                                   return Center(
+                                     child: Text(
+                                       patient.name[0].toUpperCase(),
+                                       style: const TextStyle(
+                                         fontSize: 30,
+                                         fontWeight: FontWeight.bold,
+                                         color: Colors.white,
+                                       ),
+                                     ),
+                                   );
+                                 },
+                               ),
+                             )
+                                 : Text(
+                               patient.name[0].toUpperCase(),
+                               style: const TextStyle(
+                                 fontSize: 30,
+                                 fontWeight: FontWeight.bold,
+                                 color: Colors.white,
+                               ),
+                             ),
                            ),
                            const SizedBox(height: 8),
                            Text(

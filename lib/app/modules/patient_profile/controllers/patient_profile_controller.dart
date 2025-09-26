@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 
+import '../../../core/values/app_colors.dart';
 import '../../../data/repository/patient_repository.dart';
 import '../../../data/repository/pref_repository.dart';
+import '../../../data/repository/profile_repository.dart';
 import '../models/patient_form_model.dart';
 import '../models/patient_profile_model.dart';
 
@@ -21,7 +27,8 @@ class PatientProfileController extends GetxController {
       Get.find(tag: (PatientRepository).toString());
   final PrefRepository _prefRepository =
       Get.find(tag: (PrefRepository).toString());
-
+  final ProfileRepository profileRepository =
+  Get.find(tag: (ProfileRepository).toString());
   Future<void> submitNewChild() async {
     final id = await _prefRepository.getInt("id");
     final token = await _prefRepository.getString("token");
@@ -145,6 +152,74 @@ class PatientProfileController extends GetxController {
     }
   }
 
+  var selectedImage = Rx<File?>(null);
+
+  /// Open image picker and upload
+  Future<void> pickAndUploadImage(int id) async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      File? croppedImage = await _cropImage(File(pickedFile.path));
+
+      if (croppedImage != null) {
+        // Update the Rx value
+        selectedImage.value = File(croppedImage.path);
+
+        // Upload the actual File (unwrap from Rx)
+        final fileToUpload = selectedImage.value;
+        if (fileToUpload != null) {
+          await uploadImage(fileToUpload, id);
+        }
+      }}
+  }
+
+  Future<File?> _cropImage(File imageFile) async {
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
+      sourcePath: imageFile.path,
+      // cropStyle: CropStyle.rectangle, // Change to CropStyle.circle if needed
+      uiSettings: [
+        AndroidUiSettings(
+          toolbarTitle: 'Crop Image',
+          toolbarColor: AppColors.appBarColor,
+          toolbarWidgetColor: Colors.white,
+          initAspectRatio: CropAspectRatioPreset.original, // Set the initial aspect ratio
+          lockAspectRatio: false,
+        ),
+        IOSUiSettings(
+          title: 'Crop Image',
+        ),
+      ],
+      aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0), // Set the desired aspect ratio
+    );
+
+    if (croppedFile != null) {
+      return File(croppedFile.path);
+    }
+    return null;
+  }
+
+
+  /// Upload image file, then update user info
+  Future<void> uploadImage( File file, int id) async {
+    final token = await _prefRepository.getString('token');
+    try {
+      isLoading.value = true;
+
+      // 1. Upload file
+      final response = await profileRepository.uploadFile( token, file);
+      // 2. Get uploaded filename
+      final String uploadedFileName = response.payload.filename;
+
+      // 3. Update user info with filename
+      final Map<String, dynamic> data = {
+        "image": uploadedFileName,
+      };
+      await updatePatient(id, data);
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
   @override
   void onInit() {

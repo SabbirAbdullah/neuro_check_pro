@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:neuro_check_pro/app/modules/assessment_history/models/assessment_history_model.dart';
 
 import '../../modules/assessment_history/models/answers_history_model.dart';
+import '../model/upload_file_model.dart';
 import '../model/user_info_model.dart';
 
 abstract class ProfileRemoteDataSource {
@@ -13,4 +16,6 @@ abstract class ProfileRemoteDataSource {
     required int patientId,
     required String token,
   });
+
+  Future<UploadResponseModel> uploadFile(String token, File file);
 }

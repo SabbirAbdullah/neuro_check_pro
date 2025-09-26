@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:neuro_check_pro/app/core/values/url.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_appbar.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_button.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_loading.dart';
@@ -21,48 +22,51 @@ class PatientProfileView extends StatelessWidget {
 
     return Scaffold(
       appBar: CustomAppBar(title: "Patient Profile"),
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CustomLoading());
-        }
-        if (controller.patients.isEmpty) {
-          // Empty state
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: 120,
-                    child: Icon(CupertinoIcons.person_2_fill, size: 90, color: Colors.blueGrey[200]),
-                  ),
-                  const SizedBox(height: 18),
-                  const Text(
-                    'No child added',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Add a child profile to start tracking therapy, sessions and appointments.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: Colors.black54),
-                  ),
-                ],
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 50.0),
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(child: CustomLoading());
+          }
+          if (controller.patients.isEmpty) {
+            // Empty state
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 120,
+                      child: Icon(CupertinoIcons.person_2_fill, size: 90, color: Colors.blueGrey[200]),
+                    ),
+                    const SizedBox(height: 18),
+                    const Text(
+                      'No child added',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Add a child profile to start tracking therapy, sessions and appointments.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14, color: Colors.black54),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
-        }
+            );
+          }
 
-        // List of children
-        return ListView.builder(
-            itemCount: controller.patients.length,
-            itemBuilder:(context,index){
-              final patient = controller.patients[index];
-              return
-              ChildCard(patient: patient);
-            } );
-      }),
+          // List of children
+          return ListView.builder(
+              itemCount: controller.patients.length,
+              itemBuilder:(context,index){
+                final patient = controller.patients[index];
+                return
+                ChildCard(patient: patient);
+              } );
+        }),
+      ),
 
       // Floating add button
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat, // ✅ Center at bottom
@@ -97,11 +101,38 @@ class ChildCard extends StatelessWidget {
         child: Row(
           children: [
             CircleAvatar(
-              radius: 30 ,
+              radius: 35,
               backgroundColor: Colors.blueAccent.shade100,
-              child: patient.imageUrl == null
-                  ? Text(patient.initials('child'), style: const TextStyle(fontSize: 18, color: Colors.white))
-                  : null,
+              child: patient.image != null
+                  ? ClipOval(
+                child: Image.network(
+                  ImageURL.imageURL + patient.image!,
+                  fit: BoxFit.cover,
+                  width: 80,
+                  height: 80,
+                  errorBuilder: (context, error, stackTrace) {
+                    // If image fails to load, show initials
+                    return Center(
+                      child: Text(
+                       patient.name[0].toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              )
+                  : Text(
+                patient.name[0].toUpperCase(),
+                style: const TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
             ),
             SizedBox(width: 8,),
             Expanded(

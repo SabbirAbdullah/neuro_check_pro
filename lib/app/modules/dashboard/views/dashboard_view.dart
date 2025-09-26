@@ -10,6 +10,7 @@ import 'package:neuro_check_pro/app/modules/dashboard/widgets/blog_details_page.
 import 'package:neuro_check_pro/app/modules/primary_assessment/widgets/hero_page.dart';
 import 'package:neuro_check_pro/app/modules/resume_diagnosis/views/diagnosis_view.dart';
 import 'package:neuro_check_pro/app/modules/welcome/controllers/splash_controller.dart';
+import '../../../core/values/url.dart';
 import '../../bottom_navigation/controllers/bottom_navigation_controller.dart';
 import '../../onboardings/controllers/onboarding_controller.dart';
 import '../controllers/dashboard_controller.dart';
@@ -56,7 +57,7 @@ class DashboardView extends StatelessWidget {
                       child: splashController.user.value!.image != null
                           ? ClipOval(
                         child: Image.network(
-                          splashController.user.value!.image!,
+                          ImageURL.imageURL + splashController.user.value!.image!,
                           fit: BoxFit.cover,
                           width: 80,
                           height: 80,

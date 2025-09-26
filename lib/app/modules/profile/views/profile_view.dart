@@ -5,9 +5,13 @@ import 'package:neuro_check_pro/app/modules/billing_info/views/bill_info_view.da
 import 'package:neuro_check_pro/app/modules/bottom_navigation/controllers/bottom_navigation_controller.dart';
 import 'package:neuro_check_pro/app/modules/patient_profile/views/patient_profile_view.dart';
 import 'package:neuro_check_pro/app/modules/privacy_security/views/privacy_security_view.dart';
+import 'package:neuro_check_pro/app/modules/privacy_security/widgets/about_neurocheckpro.dart';
 import 'package:neuro_check_pro/app/modules/welcome/controllers/splash_controller.dart';
 
+import '../../../core/values/url.dart';
 import '../../onboardings/controllers/onboarding_controller.dart';
+import '../../privacy_security/widgets/privacy_policy.dart';
+import '../../privacy_security/widgets/terms_conditions.dart';
 import '../controllers/profile_controller.dart';
 import '../widgets/account_info.dart';
 
@@ -50,9 +54,15 @@ class ProfileView extends StatelessWidget {
                     child: _infoTile("Privacy and Security")),
                 const SizedBox(height: 24),
                 _sectionTitle("User policy"),
-                _linkText("Privacy policy", Colors.grey),
-                _linkText("Terms & conditions", Colors.grey),
-                _linkText("About Neurocheckpro",Colors.grey),
+                GestureDetector(
+                    onTap: ()=> Get.to(()=>PrivacyPolicyView()),
+                    child: _linkText("Privacy policy", Colors.grey)),
+                GestureDetector(
+                  onTap: ()=> Get.to(()=>TermsConditions()),
+                    child: _linkText("Terms & conditions", Colors.grey)),
+                GestureDetector(
+                    onTap: ()=>Get.to(()=>AboutNeuroCheckPro()),
+                    child: _linkText("About Neurocheckpro",Colors.grey)),
                 GestureDetector(
                   onTap: (){
                     controller.logout();
@@ -79,7 +89,7 @@ class ProfileView extends StatelessWidget {
               child: splashController.user.value!.image != null
                   ? ClipOval(
                 child: Image.network(
-                  splashController.user.value!.image!,
+                  ImageURL.imageURL + splashController.user.value!.image!,
                   fit: BoxFit.cover,
                   width: 80,
                   height: 80,

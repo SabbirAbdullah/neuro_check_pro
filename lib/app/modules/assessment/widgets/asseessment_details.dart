@@ -55,7 +55,7 @@ class AssessmentDetailPage extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  Get.to(()=>PatientProfile(model: model,));
+                  Get.to(()=>AssessmentPatientProfile(model: model,));
                 },
                 child: const Text("Start assessment", style: textButton_white),
               ),

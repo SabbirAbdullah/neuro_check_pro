@@ -1,15 +1,22 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide FormData, MultipartFile, Response;
+import 'package:http_parser/http_parser.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
 import 'package:neuro_check_pro/app/core/values/text_styles.dart';
 import 'package:neuro_check_pro/app/data/repository/profile_repository.dart';
 import 'package:neuro_check_pro/app/modules/onboardings/controllers/onboarding_controller.dart';
 
+import '../../../core/values/app_colors.dart';
+import '../../../data/model/upload_file_model.dart';
 import '../../../data/model/user_info_model.dart';
 import '../../../data/repository/auth_repository.dart';
 import '../../../data/repository/pref_repository.dart';
+import '../../welcome/controllers/splash_controller.dart';
 
 class ProfileController extends GetxController {
 
@@ -26,7 +33,7 @@ class ProfileController extends GetxController {
   TextEditingController stateController = TextEditingController();
   TextEditingController postcodeController = TextEditingController();
   TextEditingController addressController = TextEditingController();
-  final Rx<File?> selectedImage = Rx<File?>(null);
+
 
   var isLoading = false.obs;
   var user = Rxn<UserInfoModel>();
@@ -83,17 +90,147 @@ class ProfileController extends GetxController {
     Get.offAllNamed('/signin_view');
   }
 
-  /// Open image picker
-  Future<void> pickImage() async {
-    final pickedFile =
-    await ImagePicker().pickImage(source: ImageSource.gallery);
+
+
+  var selectedImage = Rx<File?>(null);
+
+  /// Open image picker and upload
+  Future<void> pickAndUploadImage() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      selectedImage.value = File(pickedFile.path);
-    }
+      File? croppedImage = await _cropImage(File(pickedFile.path));
+
+      if (croppedImage != null) {
+        // Update the Rx value
+        selectedImage.value = File(croppedImage.path);
+
+        // Upload the actual File (unwrap from Rx)
+        final fileToUpload = selectedImage.value;
+        if (fileToUpload != null) {
+          await uploadImage(fileToUpload);
+        }
+      }}
   }
 
-  /// Delete image
+  Future<File?> _cropImage(File imageFile) async {
+      CroppedFile? croppedFile = await ImageCropper().cropImage(
+        sourcePath: imageFile.path,
+        // cropStyle: CropStyle.rectangle, // Change to CropStyle.circle if needed
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Crop Image',
+            toolbarColor: AppColors.appBarColor,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original, // Set the initial aspect ratio
+            lockAspectRatio: false,
+          ),
+          IOSUiSettings(
+            title: 'Crop Image',
+          ),
+        ],
+        aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0), // Set the desired aspect ratio
+      );
+
+      if (croppedFile != null) {
+        return File(croppedFile.path);
+      }
+      return null;
+    }
+
+
+/// Upload image file, then update user info
+Future<void> uploadImage( File file) async {
+  final token = await _prefRepository.getString('token');
+  try {
+    isLoading.value = true;
+
+    // 1. Upload file
+    final response = await _repository.uploadFile( token, file);
+    // 2. Get uploaded filename
+    final String uploadedFileName = response.payload.filename;
+
+    // 3. Update user info with filename
+    final Map<String, dynamic> data = {
+      "image": uploadedFileName,
+    };
+    await updateUserInfo(data);
+  } catch (e) {
+    Get.snackbar("Error", e.toString());
+  } finally {
+    isLoading.value = false;
+  }
+}
+  //
+  // Future<UploadResponseModel> uploadFile( File file) async {
+  //   final token = await _prefRepository.getString('token');
+  //   try {
+  //     final fileName = file.path.split('/').last;
+  //
+  //     // Detect mime type safely
+  //     final mimeType = lookupMimeType(file.path) ?? 'application/octet-stream';
+  //     final mimeTypeParts = mimeType.split('/');
+  //
+  //     final formData = FormData.fromMap({
+  //       'file': await MultipartFile.fromFile(
+  //         file.path,
+  //         filename: fileName,
+  //         contentType: MediaType(mimeTypeParts[0], mimeTypeParts[1]),
+  //       ),
+  //     });
+  //
+  //     final response = await dio.post(
+  //       'https://neurocheckpro.com/api/upload', // replace with full URL if needed
+  //       data: formData,
+  //       options: Options(
+  //         headers: {
+  //           'Authorization': 'Bearer $token',
+  //           'Content-Type': 'multipart/form-data',
+  //         },
+  //       ),
+  //     );
+  //
+  //     if (response.statusCode == 200 || response.statusCode == 201) {
+  //       return UploadResponseModel.fromMap(response.data);
+  //     } else {
+  //       throw Exception(
+  //         response.data['message'] ?? 'Failed to upload file',
+  //       );
+  //     }
+  //   } on DioException catch (e) {
+  //     if (e.response != null) {
+  //       throw Exception(
+  //         e.response!.data['message'] ?? 'Dio error: ${e.message}',
+  //       );
+  //     } else {
+  //       throw Exception('Dio error: ${e.message}');
+  //     }
+  //   } catch (e) {
+  //     throw Exception('Error: $e');
+  //   }
+  // }
+
+
+
+
+
+
+
+
+  var uploadedImagePath = ''.obs; // server path
+  var uploadedFile = Rx<File?>(null); // local picked file
+
+  /// Picked file from gallery/camera will be stored here
+  void setPickedFile(File file) {
+    uploadedFile.value = file;
+  }
+
+
+
+/// Delete image
   void deleteImage() {
     selectedImage.value = null;
   }
+
+
+
 }

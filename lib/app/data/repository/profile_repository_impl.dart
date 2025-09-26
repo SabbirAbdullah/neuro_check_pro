@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/data/remote/profile_remote_data_source.dart';
 import 'package:neuro_check_pro/app/data/repository/profile_repository.dart';
@@ -8,6 +10,7 @@ import '../../modules/assessment_history/models/answers_history_model.dart';
 import '../../modules/billing_info/models/billing_info_model.dart';
 import '../../modules/dashboard/models/blog_model.dart';
 import '../local/preference/preference_manager.dart';
+import '../model/upload_file_model.dart';
 import '../model/user_info_model.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
@@ -37,7 +40,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
     final data = await _remote.getBillingInfo(token,userId);
     return data.map<BillingInfoModel>((json) => BillingInfoModel.fromJson(json)).toList();
   }
-
+  @override
   Future<List<AnswerHistoryModel>> fetchAnswers(int assessmentId, int patientId, String token) async {
     final response = await _remote.getAnswers(
       assessmentId: assessmentId,
@@ -47,5 +50,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
     return response.payload;
   }
 
+  @override
+  Future<UploadResponseModel> uploadFile(String token, File file ) {
+    return _remote.uploadFile(token, file);
+  }
 
 }

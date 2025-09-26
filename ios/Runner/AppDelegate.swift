@@ -1,5 +1,6 @@
 import UIKit
 import Flutter
+import FirebaseCore
 import FirebaseCore // ✅ Add this
 
 @main
