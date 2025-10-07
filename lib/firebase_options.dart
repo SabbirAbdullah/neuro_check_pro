@@ -27,10 +27,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -54,33 +51,43 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBWMAMBeXecvOOHsqGGufwSW0aMZK1tIO4',
-    appId: '1:145142242234:android:1a7db8ab50448d1aeadb83',
+    apiKey: 'AIzaSyBlZ21jZbQNmHPVOFbkH2Aj4PLZe61_lwI',
+    appId: '1:145142242234:android:5bf95029c6e83e20eadb83',
     messagingSenderId: '145142242234',
     projectId: 'neuro-check-pro',
     storageBucket: 'neuro-check-pro.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC1nfrX25n0F5LegEwJaFG05cV-WKXtpcg',
-    appId: '1:145142242234:ios:86493b9aacd150bbeadb83',
+    apiKey: 'AIzaSyALKb5xkQnflEMboYxX2G7hsuffwhE-R8g',
+    appId: '1:145142242234:ios:e1c05249365ca308eadb83',
     messagingSenderId: '145142242234',
     projectId: 'neuro-check-pro',
     storageBucket: 'neuro-check-pro.firebasestorage.app',
-    androidClientId: '145142242234-ev051jenidqu380hu6oshbkspv9ri8dj.apps.googleusercontent.com',
-    iosClientId: '145142242234-a8ic297fqml4dgv0rahk3oa8d41dmvq7.apps.googleusercontent.com',
-    iosBundleId: 'com.example.neuroCheckPro',
+    androidClientId: '145142242234-mcn4i179np03jo3t4smg6al0cpm8rt80.apps.googleusercontent.com',
+    iosClientId: '145142242234-5tib0b8vnco42k0l3if7an0bntg4mphe.apps.googleusercontent.com',
+    iosBundleId: 'com.neurocheckpro.app',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyC1nfrX25n0F5LegEwJaFG05cV-WKXtpcg',
-    appId: '1:145142242234:ios:86493b9aacd150bbeadb83',
+    apiKey: 'AIzaSyALKb5xkQnflEMboYxX2G7hsuffwhE-R8g',
+    appId: '1:145142242234:ios:e1c05249365ca308eadb83',
     messagingSenderId: '145142242234',
     projectId: 'neuro-check-pro',
     storageBucket: 'neuro-check-pro.firebasestorage.app',
-    androidClientId: '145142242234-ev051jenidqu380hu6oshbkspv9ri8dj.apps.googleusercontent.com',
-    iosClientId: '145142242234-a8ic297fqml4dgv0rahk3oa8d41dmvq7.apps.googleusercontent.com',
-    iosBundleId: 'com.example.neuroCheckPro',
+    androidClientId: '145142242234-mcn4i179np03jo3t4smg6al0cpm8rt80.apps.googleusercontent.com',
+    iosClientId: '145142242234-5tib0b8vnco42k0l3if7an0bntg4mphe.apps.googleusercontent.com',
+    iosBundleId: 'com.neurocheckpro.app',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyD6uIP2rpr1dZzjgM4i8e15rLxW_9t0c-w',
+    appId: '1:145142242234:web:de56e7507fe9c890eadb83',
+    messagingSenderId: '145142242234',
+    projectId: 'neuro-check-pro',
+    authDomain: 'neuro-check-pro.firebaseapp.com',
+    storageBucket: 'neuro-check-pro.firebasestorage.app',
+    measurementId: 'G-XRL33JQ26R',
   );
 
 }

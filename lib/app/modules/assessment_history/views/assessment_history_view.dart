@@ -82,7 +82,6 @@ final AssessmentHistoryController controller = Get.put(AssessmentHistoryControll
                             style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400,fontSize: 12),
                           ),
                           const SizedBox(width: 8),
-
                         ],
                       ),
                       const SizedBox(height: 20),
@@ -90,32 +89,63 @@ final AssessmentHistoryController controller = Get.put(AssessmentHistoryControll
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundColor: Colors.grey.shade300,),
-                              SizedBox(width: 6,),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(submission.patient.name),
-                                  Text(
-                                    DateFormat("d MMMM, yyyy").format(submission.createdAt),
-                                    style: const TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 12,
-                                    ),
-                                  )
-
-                                ],
-                              )
-
-
-
-                            ],
-                          ),
+                          // Row(
+                          //   children: [
+                          //     CircleAvatar(
+                          //       radius: 35,
+                          //       backgroundColor: Colors.blueAccent.shade100,
+                          //       child: patient.image != null
+                          //           ? ClipOval(
+                          //         child: Image.network(
+                          //           ImageURL.imageURL + patient.image!,
+                          //           fit: BoxFit.cover,
+                          //           width: 80,
+                          //           height: 80,
+                          //           errorBuilder: (context, error, stackTrace) {
+                          //             // If image fails to load, show initials
+                          //             return Center(
+                          //               child: Text(
+                          //                 patient.name[0].toUpperCase(),
+                          //                 style: const TextStyle(
+                          //                   fontSize: 30,
+                          //                   fontWeight: FontWeight.bold,
+                          //                   color: Colors.white,
+                          //                 ),
+                          //               ),
+                          //             );
+                          //           },
+                          //         ),
+                          //       )
+                          //           : Text(
+                          //         patient.name[0].toUpperCase(),
+                          //         style: const TextStyle(
+                          //           fontSize: 30,
+                          //           fontWeight: FontWeight.bold,
+                          //           color: Colors.white,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     SizedBox(width: 6,),
+                          //     Column(
+                          //       crossAxisAlignment: CrossAxisAlignment.start,
+                          //       children: [
+                          //         Text(submission.patient.name),
+                          //         Text(
+                          //           DateFormat("d MMMM, yyyy").format(submission.createdAt),
+                          //           style: const TextStyle(
+                          //             color: Colors.grey,
+                          //             fontWeight: FontWeight.w400,
+                          //             fontSize: 12,
+                          //           ),
+                          //         )
+                          //
+                          //       ],
+                          //     )
+                          //
+                          //
+                          //
+                          //   ],
+                          // ),
                           SizedBox(
                             child: TextButton(
 

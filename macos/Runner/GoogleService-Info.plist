@@ -3,19 +3,19 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>145142242234-a8ic297fqml4dgv0rahk3oa8d41dmvq7.apps.googleusercontent.com</string>
+	<string>145142242234-5tib0b8vnco42k0l3if7an0bntg4mphe.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.145142242234-a8ic297fqml4dgv0rahk3oa8d41dmvq7</string>
+	<string>com.googleusercontent.apps.145142242234-5tib0b8vnco42k0l3if7an0bntg4mphe</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>145142242234-ev051jenidqu380hu6oshbkspv9ri8dj.apps.googleusercontent.com</string>
+	<string>145142242234-mcn4i179np03jo3t4smg6al0cpm8rt80.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyC1nfrX25n0F5LegEwJaFG05cV-WKXtpcg</string>
+	<string>AIzaSyALKb5xkQnflEMboYxX2G7hsuffwhE-R8g</string>
 	<key>GCM_SENDER_ID</key>
 	<string>145142242234</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.neuroCheckPro</string>
+	<string>com.neurocheckpro.app</string>
 	<key>PROJECT_ID</key>
 	<string>neuro-check-pro</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:145142242234:ios:86493b9aacd150bbeadb83</string>
+	<string>1:145142242234:ios:e1c05249365ca308eadb83</string>
 </dict>
 </plist>

@@ -176,12 +176,12 @@ class ProfileView extends StatelessWidget {
           onTap: (){
             Get.to(()=>AssessmentHistoryView());
           },
-            child: _tileBox("Assessment\nhistory")),
+            child: _tileBox("Assessment\nhistory","assets/images/assessment_history.png")),
         GestureDetector(
             onTap: (){
               Get.to(()=>PatientProfileView());
             },
-            child: _tileBox("Patient\nprofiles")),
+            child: _tileBox("Patient\nprofiles", "assets/images/patient_profile.png")),
       ],
     );
   }
@@ -190,28 +190,49 @@ class ProfileView extends StatelessWidget {
     if (parts.length == 1) return parts[0][0].toUpperCase();
     return (parts[0][0] + parts[1][0]).toUpperCase();
   }
-  Widget _tileBox(String text) {
+
+  Widget _tileBox(String text, String image) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: const Color(0xFFFCEAE9),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Stack(
+        clipBehavior: Clip.none, // allows icon to overflow outside
         children: [
+          // Arrow icon (top-right)
           Positioned(
             right: 0,
             top: 0,
-            child: Icon(Icons.open_in_new, color: const Color(0xFF104E59), size: 18),
+            child: Icon(
+              Icons.arrow_outward,
+              color: const Color(0xFF104E59),
+              size: 22,
+            ),
           ),
+
+          // Text (top-left)
           Align(
             alignment: Alignment.topLeft,
             child: Text(
               text,
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
                 color: Color(0xFF8C5A5A),
               ),
+            ),
+          ),
+
+          // 3D custom icon (bottom-right)
+          Positioned(
+            right: -10,  // overflow effect
+            bottom: -20, // overflow effect
+            child: Image.asset(
+              image, // <-- your PNG
+              height: 80,
+              width: 80,
             ),
           ),
         ],

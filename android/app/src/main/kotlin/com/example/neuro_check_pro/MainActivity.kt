@@ -1,4 +1,4 @@
-package com.example.neuro_check_pro
+package com.neurocheckpro.app
 
 import io.flutter.embedding.android.FlutterActivity
 

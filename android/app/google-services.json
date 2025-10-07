@@ -7,26 +7,26 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:145142242234:android:1a7db8ab50448d1aeadb83",
+        "mobilesdk_app_id": "1:145142242234:android:5bf95029c6e83e20eadb83",
         "android_client_info": {
-          "package_name": "com.example.neuro_check_pro"
+          "package_name": "com.neurocheckpro.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "145142242234-ev051jenidqu380hu6oshbkspv9ri8dj.apps.googleusercontent.com",
+          "client_id": "145142242234-mcn4i179np03jo3t4smg6al0cpm8rt80.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.neuro_check_pro",
-            "certificate_hash": "138694c149d16958a1c6eacbf46e3d20c330ee43"
+            "package_name": "com.neurocheckpro.app",
+            "certificate_hash": "76e90d571d69a508179494376ce00c66dd0811af"
           }
         },
         {
-          "client_id": "145142242234-tlvoi6e4lsen89jejlktv31se6te3npv.apps.googleusercontent.com",
+          "client_id": "145142242234-od522doqqpblos9gf5a7erlrgqmopuhm.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.neuro_check_pro",
-            "certificate_hash": "76e90d571d69a508179494376ce00c66dd0811af"
+            "package_name": "com.neurocheckpro.app",
+            "certificate_hash": "138694c149d16958a1c6eacbf46e3d20c330ee43"
           }
         },
         {
@@ -36,7 +36,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBWMAMBeXecvOOHsqGGufwSW0aMZK1tIO4"
+          "current_key": "AIzaSyBlZ21jZbQNmHPVOFbkH2Aj4PLZe61_lwI"
         }
       ],
       "services": {
@@ -47,10 +47,10 @@
               "client_type": 3
             },
             {
-              "client_id": "145142242234-a8ic297fqml4dgv0rahk3oa8d41dmvq7.apps.googleusercontent.com",
+              "client_id": "145142242234-5tib0b8vnco42k0l3if7an0bntg4mphe.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.neuroCheckPro"
+                "bundle_id": "com.neurocheckpro.app"
               }
             }
           ]

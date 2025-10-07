@@ -26,15 +26,9 @@ class _SplashViewState extends State<SplashView> {
             children: [
               const SizedBox(height: 20),
               CircleAvatar(
-                radius: 80,
+                radius: 150,
                 backgroundColor: Colors.white,
-                child: Text(
-                  "N",
-                  style: TextStyle(
-                    fontSize: 100,
-                    color: Color(0xFF114854),
-                  ),
-                ),
+                child: Image.asset("assets/images/splash.png",)
               ),
 
 

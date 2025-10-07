@@ -1,3 +1,3 @@
 class ImageURL{
-  static const String imageURL = "https://neurocheckpro.com/temp-uploads/";
+  static const String imageURL = "https://api.neurocheckpro.com/temp-uploads/";
 }

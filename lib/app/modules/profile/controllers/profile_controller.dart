@@ -1,22 +1,17 @@
 import 'dart:io';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart' hide FormData, MultipartFile, Response;
-import 'package:http_parser/http_parser.dart';
+import 'package:get/get.dart';
+
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mime/mime.dart';
-import 'package:neuro_check_pro/app/core/values/text_styles.dart';
-import 'package:neuro_check_pro/app/data/repository/profile_repository.dart';
-import 'package:neuro_check_pro/app/modules/onboardings/controllers/onboarding_controller.dart';
 
-import '../../../core/values/app_colors.dart';
-import '../../../data/model/upload_file_model.dart';
+import 'package:neuro_check_pro/app/data/repository/profile_repository.dart';
+import 'package:neuro_check_pro/app/modules/welcome/controllers/splash_controller.dart';
 import '../../../data/model/user_info_model.dart';
 import '../../../data/repository/auth_repository.dart';
 import '../../../data/repository/pref_repository.dart';
-import '../../welcome/controllers/splash_controller.dart';
+import '../../../core/values/app_colors.dart';
+
 
 class ProfileController extends GetxController {
 
@@ -46,10 +41,10 @@ class ProfileController extends GetxController {
 
       final updatedUser = await _repository.updateUser(userId, data, token);
       user.value = updatedUser;
-
       Get.back();
-      Get.snackbar("Success", "Profile updated successfully");
 
+      Get.snackbar("Success", "Profile updated successfully");
+      await fetchUserInfo();
     } catch (e) {
       Get.snackbar("Error", e.toString());
     } finally {
@@ -58,29 +53,29 @@ class ProfileController extends GetxController {
   }
 
 
-  // Future<bool> fetchUserInfo() async {
-  //   final token = await _prefRepository.getString('token');
-  //   final id = await _prefRepository.getInt('id');
-  //   if (token.isEmpty || id == null) return false;
-  //
-  //   try {
-  //     isLoading.value = true;
-  //     final response = await authenticationRepository.getUserById(id, token);
-  //
-  //     if (response.statusCode == 201) {
-  //       user.value = response.payload;
-  //       return true;
-  //     } else {
-  //       Get.snackbar("Error", response.message);
-  //       return false;
-  //     }
-  //   } catch (e) {
-  //     Get.snackbar("Error", e.toString());
-  //     return false;
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  // }
+  Future<bool> fetchUserInfo() async {
+    final token = await _prefRepository.getString('token');
+    final id = await _prefRepository.getInt('id');
+    if (token.isEmpty || id == null) return false;
+
+    try {
+      isLoading.value = true;
+      final response = await authenticationRepository.getUserById(id, token);
+
+      if (response.statusCode == 201) {
+        user.value = response.payload;
+        return true;
+      } else {
+        Get.snackbar("Error", response.message);
+        return false;
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+      return false;
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
   Future<void> logout() async {
     await _prefRepository.remove('token');

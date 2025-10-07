@@ -1,20 +1,25 @@
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'firebase_options.dart';
 import 'flavors/build_config.dart';
 import 'flavors/env_config.dart';
 import 'flavors/environment.dart';
 import 'app/my_app.dart';
 
 
-
-void main() {
+void main()async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   EnvConfig prodConfig = EnvConfig(
     appName: "",
-    baseUrl: "https://neurocheckpro.com/api",
+    baseUrl: "https://api.neurocheckpro.com",
     shouldCollectCrashLog: true,
+
   );
   BuildConfig.instantiate(
     envType: Environment.PRODUCTION,

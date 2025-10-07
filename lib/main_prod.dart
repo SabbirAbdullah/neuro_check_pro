@@ -13,16 +13,17 @@ void main()async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  EnvConfig devConfig = EnvConfig(
+  EnvConfig prodConfig = EnvConfig(
     appName: "",
-    baseUrl: "https://neurocheckpro.com/api",
+    baseUrl: "https://api.neurocheckpro.com",
     shouldCollectCrashLog: true,
 
   );
   BuildConfig.instantiate(
     envType: Environment.PRODUCTION,
-    envConfig: devConfig,
+    envConfig: prodConfig,
   );
 
   runApp(const MyApp());
 }
+

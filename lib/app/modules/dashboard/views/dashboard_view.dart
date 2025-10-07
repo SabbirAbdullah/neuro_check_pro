@@ -187,7 +187,7 @@ class DashboardView extends StatelessWidget {
 
                 Obx(() {
                   if (controller.isLoading.value) {
-                    return Center(child: CustomLoading());
+                    return const Center(child: CustomLoading());
                   }
 
                   if (controller.error.isNotEmpty) {
@@ -195,63 +195,85 @@ class DashboardView extends StatelessWidget {
                   }
 
                   if (controller.blogs.isEmpty) {
-                    return Center(child: Text("No blogs available"));
+                    return const Center(child: Text("No blogs available"));
                   }
 
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height * .15, // fixed height
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      padding: EdgeInsets.only(right: 16),
-                      itemCount: controller.blogs.length,
-                      itemBuilder: (context, index) {
-                        final blog = controller.blogs[index];
-                        return GestureDetector(
-                          onTap: (){
-                            Get.to(()=>BlogDetailsPage(blog: blog));
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * .65,
-                            margin: EdgeInsets.only(right: 8),
-                            padding: EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Color(0x1F050222),
-                                  Color(0x1fa49fd4),
-                                  Color(0x1fa49fd4),
-                                ],
-                              ),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "🧠 ${blog.heading}",
-                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                                ),
-                                SizedBox(height: 6),
-                                Text(
-                                  blog.description,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 3,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w400,
+                  return LayoutBuilder(
+                    builder: (context, constraints) {
+                      final screenWidth = constraints.maxWidth;
+                      final screenHeight = MediaQuery.of(context).size.height;
+
+                      // Responsive card width
+                      double cardWidth = screenWidth * 0.65;
+                      if (screenWidth > 800) {
+                        cardWidth = screenWidth * 0.4;
+                      } else if (screenWidth > 1200) {
+                        cardWidth = screenWidth * 0.3;
+                      }
+
+                      return SizedBox(
+                        height: screenHeight * 0.18, // responsive height
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.only(right: 16),
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: controller.blogs.length,
+                          itemBuilder: (context, index) {
+                            final blog = controller.blogs[index];
+
+                            return GestureDetector(
+                              onTap: () {
+                                Get.to(() => BlogDetailsPage(blog: blog));
+                              },
+                              child: Container(
+                                width: cardWidth,
+                                margin: const EdgeInsets.only(right: 8),
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      Color(0x1F050222),
+                                      Color(0x1fa49fd4),
+                                      Color(0x1fa49fd4),
+                                    ],
                                   ),
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "🧠 ${blog.heading}",
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      blog.description,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 3,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
                   );
-                }),
+                })
+
 
 
               ],

@@ -4,13 +4,19 @@ import 'package:get/get.dart';
 import 'package:neuro_check_pro/app/core/values/app_colors.dart';
 import 'package:neuro_check_pro/app/core/values/text_styles.dart';
 import 'package:neuro_check_pro/app/core/widgets/custom_appbar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/privacy_security_controller.dart';
 
 
-class PrivacySecurityView extends StatelessWidget {
+class PrivacySecurityView extends StatefulWidget {
   PrivacySecurityView({super.key});
 
+  @override
+  State<PrivacySecurityView> createState() => _PrivacySecurityViewState();
+}
+
+class _PrivacySecurityViewState extends State<PrivacySecurityView> {
   final PrivacySecurityController controller =
   Get.put(PrivacySecurityController());
 
@@ -31,9 +37,9 @@ class PrivacySecurityView extends StatelessWidget {
                 },
                 child: infoTile('Change Password')),
 
-            // GestureDetector(
-            //     onTap: _showDeleteAccountDialog,
-            //     child: infoTile('Delete My Account'))
+            GestureDetector(
+                onTap: _showDeleteAccountDialog,
+                child: infoTile('Delete My Account'))
           ],
         ),
       ),
@@ -160,13 +166,12 @@ class PrivacySecurityView extends StatelessWidget {
     );
   }
 
-
   void _showDeleteAccountDialog() {
     showCupertinoDialog(
       context: Get.context!,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
-          title: Text(
+          title: const Text(
             "Are you sure you want to permanently delete your account and all related data?",
             style: TextStyle(
               fontSize: 18,
@@ -177,13 +182,11 @@ class PrivacySecurityView extends StatelessWidget {
           actions: [
             CupertinoDialogAction(
               isDefaultAction: true,
-              onPressed: () {
-                // Handle delete logic
-                Get.back(); // Close dialog
-                Get.snackbar("Deleted", "Your account has been deleted",
-                    snackPosition: SnackPosition.BOTTOM);
+              onPressed: () async {
+                // Get.back(); // Close dialog
+                controller.sendDeleteRequest();
               },
-              child: Text(
+              child: const Text(
                 "Delete",
                 style: TextStyle(
                   color: CupertinoColors.activeBlue,
@@ -194,9 +197,9 @@ class PrivacySecurityView extends StatelessWidget {
             ),
             CupertinoDialogAction(
               onPressed: () {
-                Get.back(); // Close dialog
+                Get.back();
               },
-              child: Text(
+              child: const Text(
                 "Cancel",
                 style: TextStyle(
                   color: CupertinoColors.activeBlue,
@@ -210,5 +213,4 @@ class PrivacySecurityView extends StatelessWidget {
       },
     );
   }
-
 }

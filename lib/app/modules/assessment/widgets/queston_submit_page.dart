@@ -69,7 +69,7 @@ class PaidQuestionSummary extends StatelessWidget {
               if (controller.isLoading.value) {
                 return Center(child: CustomLoading());
               }
-              return  CustomButton(text: "Submit All", onPressed:  () async {
+              return  CustomButton(text: "Submit All" , onPressed:  () async {
 
                 await controller.submitAllAnswers(patientId, assessmentId);
               },);
