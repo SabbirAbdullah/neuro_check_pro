@@ -47,10 +47,10 @@
               "client_type": 3
             },
             {
-              "client_id": "145142242234-5tib0b8vnco42k0l3if7an0bntg4mphe.apps.googleusercontent.com",
+              "client_id": "145142242234-hapugqc7ju41pdim176ac5djbsjajl0n.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.neurocheckpro.app"
+                "bundle_id": "com.neurocheckpro.ios"
               }
             }
           ]
